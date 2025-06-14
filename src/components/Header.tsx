@@ -13,41 +13,41 @@ export const Header = () => {
   return (
     <header className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-200 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex items-center">
-            <Link to="/" className="text-2xl font-bold text-orange-600">
+        <div className="flex justify-between items-center h-14 sm:h-16">
+          <div className="flex items-center min-w-0">
+            <Link to="/" className="text-lg sm:text-2xl font-bold text-orange-600 truncate">
               Gestibud
             </Link>
           </div>
           
-          <nav className="hidden md:flex space-x-8">
-            <Link to="/#features" className="text-gray-700 hover:text-orange-600 transition-colors">
+          <nav className="hidden md:flex space-x-6 lg:space-x-8">
+            <Link to="/#features" className="text-gray-700 hover:text-orange-600 transition-colors text-sm lg:text-base">
               {t('features')}
             </Link>
-            <Link to="/#pricing" className="text-gray-700 hover:text-orange-600 transition-colors">
+            <Link to="/#pricing" className="text-gray-700 hover:text-orange-600 transition-colors text-sm lg:text-base">
               {t('pricing')}
             </Link>
-            <Link to="/#testimonials" className="text-gray-700 hover:text-orange-600 transition-colors">
+            <Link to="/#testimonials" className="text-gray-700 hover:text-orange-600 transition-colors text-sm lg:text-base">
               {t('testimonials')}
             </Link>
           </nav>
 
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-2 lg:space-x-4 min-w-0">
             {user ? (
               <Link to="/dashboard">
-                <Button className="bg-orange-600 hover:bg-orange-700">
+                <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-sm">
                   {t('dashboard')}
                 </Button>
               </Link>
             ) : (
               <>
                 <Link to="/auth">
-                  <Button variant="ghost" className="text-gray-700 hover:text-orange-600">
+                  <Button variant="ghost" size="sm" className="text-gray-700 hover:text-orange-600 text-sm">
                     {t('login')}
                   </Button>
                 </Link>
                 <Link to="/auth">
-                  <Button className="bg-orange-600 hover:bg-orange-700">
+                  <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-sm">
                     {t('sign_up')}
                   </Button>
                 </Link>
@@ -61,8 +61,9 @@ export const Header = () => {
               variant="ghost"
               size="sm"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="p-2"
             >
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </Button>
@@ -71,25 +72,25 @@ export const Header = () => {
 
         {/* Mobile menu */}
         {isMenuOpen && (
-          <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t">
+          <div className="md:hidden border-t border-gray-200">
+            <div className="px-2 pt-2 pb-3 space-y-1 bg-white">
               <Link 
                 to="/#features" 
-                className="block px-3 py-2 text-gray-700 hover:text-orange-600"
+                className="block px-3 py-2 text-gray-700 hover:text-orange-600 text-sm"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {t('features')}
               </Link>
               <Link 
                 to="/#pricing" 
-                className="block px-3 py-2 text-gray-700 hover:text-orange-600"
+                className="block px-3 py-2 text-gray-700 hover:text-orange-600 text-sm"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {t('pricing')}
               </Link>
               <Link 
                 to="/#testimonials" 
-                className="block px-3 py-2 text-gray-700 hover:text-orange-600"
+                className="block px-3 py-2 text-gray-700 hover:text-orange-600 text-sm"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {t('testimonials')}
@@ -97,23 +98,23 @@ export const Header = () => {
               {user ? (
                 <Link 
                   to="/dashboard"
-                  className="block px-3 py-2 text-orange-600 font-medium"
+                  className="block px-3 py-2 text-orange-600 font-medium text-sm"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {t('dashboard')}
                 </Link>
               ) : (
-                <div className="space-y-1">
+                <div className="space-y-1 pt-2 border-t border-gray-100">
                   <Link 
                     to="/auth"
-                    className="block px-3 py-2 text-gray-700 hover:text-orange-600"
+                    className="block px-3 py-2 text-gray-700 hover:text-orange-600 text-sm"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     {t('login')}
                   </Link>
                   <Link 
                     to="/auth"
-                    className="block px-3 py-2 text-orange-600 font-medium"
+                    className="block px-3 py-2 text-orange-600 font-medium text-sm"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     {t('sign_up')}
