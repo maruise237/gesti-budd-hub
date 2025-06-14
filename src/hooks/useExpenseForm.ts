@@ -1,5 +1,15 @@
 
 import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+
+export interface ExpenseFormData {
+  description: string;
+  amount: string;
+  category: string;
+  date: string;
+  project_id: string;
+  receipt_url: string;
+}
 
 interface Expense {
   id: string;
@@ -9,51 +19,68 @@ interface Expense {
   date: string;
   project_id: string | null;
   receipt_url: string | null;
+  created_at: string;
 }
 
 interface UseExpenseFormProps {
-  expense: Expense | null;
-  open: boolean;
+  expense?: Expense | null;
+  onSubmit: (data: ExpenseFormData) => void;
 }
 
-export const useExpenseForm = ({ expense, open }: UseExpenseFormProps) => {
-  const [formData, setFormData] = useState({
-    description: "",
-    amount: "",
-    category: "Matériaux",
-    date: new Date().toISOString().split('T')[0],
-    project_id: "no_project",
-    receipt_url: "",
+export const useExpenseForm = ({ expense, onSubmit }: UseExpenseFormProps) => {
+  const [receiptUrl, setReceiptUrl] = useState<string | null>(null);
+
+  const form = useForm<ExpenseFormData>({
+    defaultValues: {
+      description: "",
+      amount: "",
+      category: "Matériaux",
+      date: new Date().toISOString().split('T')[0],
+      project_id: "",
+      receipt_url: "",
+    },
   });
 
   useEffect(() => {
     if (expense) {
-      setFormData({
-        description: expense.description || "",
+      form.reset({
+        description: expense.description,
         amount: expense.amount.toString(),
-        category: expense.category || "Matériaux",
-        date: expense.date || new Date().toISOString().split('T')[0],
-        project_id: expense.project_id || "no_project",
+        category: expense.category,
+        date: expense.date,
+        project_id: expense.project_id || "",
         receipt_url: expense.receipt_url || "",
       });
+      setReceiptUrl(expense.receipt_url);
     } else {
-      setFormData({
+      form.reset({
         description: "",
         amount: "",
         category: "Matériaux",
         date: new Date().toISOString().split('T')[0],
-        project_id: "no_project",
+        project_id: "",
         receipt_url: "",
       });
+      setReceiptUrl(null);
     }
-  }, [expense, open]);
+  }, [expense, form]);
 
-  const updateFormData = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+  const handleSubmit = (data: ExpenseFormData) => {
+    onSubmit({
+      ...data,
+      receipt_url: receiptUrl || "",
+    });
+  };
+
+  const handleReceiptChange = (url: string | null) => {
+    setReceiptUrl(url);
+    form.setValue("receipt_url", url || "");
   };
 
   return {
-    formData,
-    updateFormData,
+    form,
+    receiptUrl,
+    handleSubmit,
+    handleReceiptChange,
   };
 };
