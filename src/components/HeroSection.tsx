@@ -1,8 +1,11 @@
 
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Users } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export const HeroSection = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="container mx-auto px-4 py-24 text-center">
       <div className="max-w-4xl mx-auto">
@@ -26,6 +29,7 @@ export const HeroSection = () => {
           <Button 
             size="lg" 
             className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-lg px-8 py-6 rounded-xl"
+            onClick={() => navigate("/auth")}
           >
             Commencer l'essai gratuit
             <ArrowRight className="ml-2 w-5 h-5" />
@@ -34,6 +38,7 @@ export const HeroSection = () => {
             variant="outline" 
             size="lg" 
             className="text-lg px-8 py-6 rounded-xl border-2 hover:bg-gray-50"
+            onClick={() => navigate("/auth")}
           >
             Voir la démo
           </Button>
