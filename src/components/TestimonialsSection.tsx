@@ -11,7 +11,7 @@ export const TestimonialsSection = () => {
       name: "Marie Dubois",
       role: "Directrice de projet",
       company: "Construction Pro",
-      content: "BuildPro a révolutionné notre façon de gérer nos chantiers. Nous avons gagné 30% en efficacité.",
+      content: "Gestibud a révolutionné notre façon de gérer nos chantiers. Nous avons gagné 30% en efficacité.",
       avatar: "/placeholder.svg"
     },
     {
@@ -25,7 +25,7 @@ export const TestimonialsSection = () => {
       name: "Sophie Laurent",
       role: "Gestionnaire de projets",
       company: "Rénovation Plus",
-      content: "Le suivi des coûts et des délais n'a jamais été aussi simple. Je recommande vivement BuildPro !",
+      content: "Le suivi des coûts et des délais n'a jamais été aussi simple. Je recommande vivement Gestibud !",
       avatar: "/placeholder.svg"
     }
   ];
@@ -38,7 +38,7 @@ export const TestimonialsSection = () => {
             {t('testimonials')}
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Découvrez ce que nos clients disent de BuildPro
+            Découvrez ce que nos clients disent de Gestibud
           </p>
         </div>
         

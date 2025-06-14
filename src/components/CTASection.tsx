@@ -16,7 +16,7 @@ export const CTASection = () => {
           Prêt à transformer votre gestion de projets ?
         </h2>
         <p className="text-xl text-orange-100 mb-8 max-w-2xl mx-auto">
-          Rejoignez des milliers d'entreprises qui font confiance à BuildPro pour gérer leurs projets de construction.
+          Rejoignez des milliers d'entreprises qui font confiance à Gestibud pour gérer leurs projets de construction.
         </p>
         <Link to={user ? "/dashboard" : "/auth"}>
           <Button size="lg" variant="secondary" className="bg-white text-orange-600 hover:bg-gray-50">

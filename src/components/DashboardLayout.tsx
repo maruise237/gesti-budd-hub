@@ -82,7 +82,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
                   <span className="text-white font-bold text-sm">GB</span>
                 </div>
-                <span className="text-xl font-bold text-gray-900">GestiBuld</span>
+                <span className="text-xl font-bold text-gray-900">Gestibud</span>
               </div>
             </div>
             <NavItems />
@@ -97,7 +97,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
                   <span className="text-white font-bold text-sm">GB</span>
                 </div>
-                <span className="text-xl font-bold text-gray-900">GestiBuld</span>
+                <span className="text-xl font-bold text-gray-900">Gestibud</span>
               </div>
             </div>
             <NavItems />
