@@ -1,7 +1,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DollarSign } from "lucide-react";
-import { useUserPreferences } from "@/contexts/UserPreferencesContext";
+import { useCurrency } from "@/hooks/useCurrency";
 import { useTranslation } from "@/hooks/useTranslation";
 
 interface ExpenseStatsProps {
@@ -10,7 +10,7 @@ interface ExpenseStatsProps {
 }
 
 export const ExpenseStats = ({ totalExpenses, expenseCount }: ExpenseStatsProps) => {
-  const { formatCurrency } = useUserPreferences();
+  const { formatCurrency } = useCurrency();
   const { t } = useTranslation();
 
   return (

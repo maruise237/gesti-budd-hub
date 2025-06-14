@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, DollarSign, FolderOpen, Edit, Trash2 } from "lucide-react";
-import { useUserPreferences } from "@/contexts/UserPreferencesContext";
+import { useCurrency } from "@/hooks/useCurrency";
 import { useTranslation } from "@/hooks/useTranslation";
 
 interface Expense {
@@ -30,7 +30,7 @@ interface ExpenseCardProps {
 }
 
 export const ExpenseCard = ({ expense, projects, onEdit, onDelete }: ExpenseCardProps) => {
-  const { formatCurrency } = useUserPreferences();
+  const { formatCurrency } = useCurrency();
   const { t } = useTranslation();
 
   const getCategoryColor = (category: string) => {
