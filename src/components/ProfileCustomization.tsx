@@ -25,6 +25,54 @@ interface ProfileData {
   currency: string | null;
 }
 
+const AFRICAN_CURRENCIES = [
+  { value: 'XOF', label: 'Franc CFA BCEAO (XOF)', countries: 'Bénin, Burkina Faso, Côte d\'Ivoire, Guinée-Bissau, Mali, Niger, Sénégal, Togo' },
+  { value: 'XAF', label: 'Franc CFA BEAC (XAF)', countries: 'Cameroun, République centrafricaine, Tchad, République du Congo, Guinée équatoriale, Gabon' },
+  { value: 'MAD', label: 'Dirham marocain (MAD)', countries: 'Maroc' },
+  { value: 'DZD', label: 'Dinar algérien (DZD)', countries: 'Algérie' },
+  { value: 'TND', label: 'Dinar tunisien (TND)', countries: 'Tunisie' },
+  { value: 'EGP', label: 'Livre égyptienne (EGP)', countries: 'Égypte' },
+  { value: 'ZAR', label: 'Rand sud-africain (ZAR)', countries: 'Afrique du Sud' },
+  { value: 'NGN', label: 'Naira nigérian (NGN)', countries: 'Nigeria' },
+  { value: 'GHS', label: 'Cedi ghanéen (GHS)', countries: 'Ghana' },
+  { value: 'KES', label: 'Shilling kényan (KES)', countries: 'Kenya' },
+  { value: 'UGX', label: 'Shilling ougandais (UGX)', countries: 'Ouganda' },
+  { value: 'TZS', label: 'Shilling tanzanien (TZS)', countries: 'Tanzanie' },
+  { value: 'RWF', label: 'Franc rwandais (RWF)', countries: 'Rwanda' },
+  { value: 'ETB', label: 'Birr éthiopien (ETB)', countries: 'Éthiopie' },
+  { value: 'MZN', label: 'Metical mozambicain (MZN)', countries: 'Mozambique' },
+  { value: 'BWP', label: 'Pula botswanais (BWP)', countries: 'Botswana' },
+  { value: 'SZL', label: 'Lilangeni eswatinien (SZL)', countries: 'Eswatini' },
+  { value: 'LSL', label: 'Loti lesothien (LSL)', countries: 'Lesotho' },
+  { value: 'NAD', label: 'Dollar namibien (NAD)', countries: 'Namibie' },
+  { value: 'AOA', label: 'Kwanza angolais (AOA)', countries: 'Angola' },
+  { value: 'MWK', label: 'Kwacha malawien (MWK)', countries: 'Malawi' },
+  { value: 'ZMW', label: 'Kwacha zambien (ZMW)', countries: 'Zambie' },
+  { value: 'ZWL', label: 'Dollar zimbabwéen (ZWL)', countries: 'Zimbabwe' },
+  { value: 'MGA', label: 'Ariary malgache (MGA)', countries: 'Madagascar' },
+  { value: 'MUR', label: 'Roupie mauricienne (MUR)', countries: 'Maurice' },
+  { value: 'SCR', label: 'Roupie seychelloise (SCR)', countries: 'Seychelles' },
+  { value: 'KMF', label: 'Franc comorien (KMF)', countries: 'Comores' },
+  { value: 'DJF', label: 'Franc djiboutien (DJF)', countries: 'Djibouti' },
+  { value: 'SOS', label: 'Shilling somalien (SOS)', countries: 'Somalie' },
+  { value: 'ERN', label: 'Nafka érythréen (ERN)', countries: 'Érythrée' },
+  { value: 'SLL', label: 'Leone sierra-léonais (SLL)', countries: 'Sierra Leone' },
+  { value: 'GMD', label: 'Dalasi gambien (GMD)', countries: 'Gambie' },
+  { value: 'GNF', label: 'Franc guinéen (GNF)', countries: 'Guinée' },
+  { value: 'LRD', label: 'Dollar libérien (LRD)', countries: 'Liberia' },
+  { value: 'CVE', label: 'Escudo cap-verdien (CVE)', countries: 'Cap-Vert' },
+  { value: 'STN', label: 'Dobra santoméen (STN)', countries: 'São Tomé-et-Príncipe' },
+  { value: 'SHP', label: 'Livre de Sainte-Hélène (SHP)', countries: 'Sainte-Hélène' }
+];
+
+const OTHER_CURRENCIES = [
+  { value: 'EUR', label: 'Euro (€)', countries: 'Zone Euro' },
+  { value: 'USD', label: 'Dollar américain ($)', countries: 'États-Unis' },
+  { value: 'GBP', label: 'Livre sterling (£)', countries: 'Royaume-Uni' },
+  { value: 'CAD', label: 'Dollar canadien (CAD)', countries: 'Canada' },
+  { value: 'CHF', label: 'Franc suisse (CHF)', countries: 'Suisse' }
+];
+
 export const ProfileCustomization = () => {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -50,6 +98,7 @@ export const ProfileCustomization = () => {
 
   const fetchProfile = async () => {
     try {
+      console.log('Fetching profile for user:', user?.id);
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -61,6 +110,7 @@ export const ProfileCustomization = () => {
       }
 
       if (data) {
+        console.log('Profile data fetched:', data);
         setProfile(data);
       }
     } catch (error) {
@@ -120,6 +170,7 @@ export const ProfileCustomization = () => {
     setLoading(true);
 
     try {
+      console.log('Saving profile data:', profile);
       const { error } = await supabase
         .from('profiles')
         .upsert({
@@ -130,6 +181,7 @@ export const ProfileCustomization = () => {
 
       if (error) throw error;
 
+      console.log('Profile saved successfully');
       toast({
         title: "Succès",
         description: "Profil mis à jour avec succès",
@@ -254,7 +306,10 @@ export const ProfileCustomization = () => {
               <Label htmlFor="theme">Thème</Label>
               <Select
                 value={profile.theme || "light"}
-                onValueChange={(value) => setProfile(prev => ({ ...prev, theme: value }))}
+                onValueChange={(value) => {
+                  console.log('Theme changed to:', value);
+                  setProfile(prev => ({ ...prev, theme: value }));
+                }}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Sélectionner un thème" />
@@ -271,17 +326,34 @@ export const ProfileCustomization = () => {
               <Label htmlFor="currency">Devise</Label>
               <Select
                 value={profile.currency || "EUR"}
-                onValueChange={(value) => setProfile(prev => ({ ...prev, currency: value }))}
+                onValueChange={(value) => {
+                  console.log('Currency changed to:', value);
+                  setProfile(prev => ({ ...prev, currency: value }));
+                }}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Sélectionner une devise" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="EUR">Euro (€)</SelectItem>
-                  <SelectItem value="USD">Dollar américain ($)</SelectItem>
-                  <SelectItem value="GBP">Livre sterling (£)</SelectItem>
-                  <SelectItem value="CAD">Dollar canadien (CAD)</SelectItem>
-                  <SelectItem value="CHF">Franc suisse (CHF)</SelectItem>
+                <SelectContent className="max-h-[300px]">
+                  <div className="px-2 py-1 text-sm font-semibold text-muted-foreground">
+                    Devises internationales
+                  </div>
+                  {OTHER_CURRENCIES.map((currency) => (
+                    <SelectItem key={currency.value} value={currency.value}>
+                      {currency.label}
+                    </SelectItem>
+                  ))}
+                  <div className="px-2 py-1 text-sm font-semibold text-muted-foreground border-t mt-2 pt-2">
+                    Devises africaines
+                  </div>
+                  {AFRICAN_CURRENCIES.map((currency) => (
+                    <SelectItem key={currency.value} value={currency.value}>
+                      <div className="flex flex-col">
+                        <span>{currency.label}</span>
+                        <span className="text-xs text-muted-foreground">{currency.countries}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -311,7 +383,10 @@ export const ProfileCustomization = () => {
                 <Label htmlFor="timezone">Fuseau horaire</Label>
                 <Select
                   value={profile.timezone || "Europe/Paris"}
-                  onValueChange={(value) => setProfile(prev => ({ ...prev, timezone: value }))}
+                  onValueChange={(value) => {
+                    console.log('Timezone changed to:', value);
+                    setProfile(prev => ({ ...prev, timezone: value }));
+                  }}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Sélectionner un fuseau horaire" />
@@ -330,7 +405,10 @@ export const ProfileCustomization = () => {
                 <Label htmlFor="language">Langue</Label>
                 <Select
                   value={profile.language || "fr"}
-                  onValueChange={(value) => setProfile(prev => ({ ...prev, language: value }))}
+                  onValueChange={(value) => {
+                    console.log('Language changed to:', value);
+                    setProfile(prev => ({ ...prev, language: value }));
+                  }}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Sélectionner une langue" />
