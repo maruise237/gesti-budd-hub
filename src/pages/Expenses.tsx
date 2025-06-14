@@ -15,6 +15,7 @@ import { useExpenses } from "@/hooks/useExpenses";
 import { useProjects } from "@/hooks/useProjects";
 import { useExpenseFilters } from "@/hooks/useExpenseFilters";
 import { useExpensesExport } from "@/hooks/useExpensesExport";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface Expense {
   id: string;
@@ -28,6 +29,7 @@ interface Expense {
 }
 
 const Expenses = () => {
+  const { t } = useTranslation();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [exportDialogOpen, setExportDialogOpen] = useState(false);
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
@@ -80,9 +82,9 @@ const Expenses = () => {
         <div className="space-y-6">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Dépenses</h1>
+              <h1 className="text-3xl font-bold text-gray-900">{t('expenses')}</h1>
               <p className="text-gray-600">
-                Gérez les dépenses de vos projets
+                {t('manage_project_expenses')}
               </p>
             </div>
             <div className="flex gap-2">
@@ -92,14 +94,14 @@ const Expenses = () => {
                 disabled={expenses.length === 0}
               >
                 <FileDown className="h-4 w-4 mr-2" />
-                Exporter
+                {t('export')}
               </Button>
               <Button 
                 onClick={handleCreateExpense}
                 className="bg-orange-600 hover:bg-orange-700"
               >
                 <Plus className="h-4 w-4 mr-2" />
-                Nouvelle dépense
+                {t('new_expense')}
               </Button>
             </div>
           </div>

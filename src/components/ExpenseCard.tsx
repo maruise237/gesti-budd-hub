@@ -3,6 +3,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, DollarSign, FolderOpen, Edit, Trash2 } from "lucide-react";
+import { useUserPreferences } from "@/contexts/UserPreferencesContext";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface Expense {
   id: string;
@@ -28,6 +30,9 @@ interface ExpenseCardProps {
 }
 
 export const ExpenseCard = ({ expense, projects, onEdit, onDelete }: ExpenseCardProps) => {
+  const { formatCurrency } = useUserPreferences();
+  const { t } = useTranslation();
+
   const getCategoryColor = (category: string) => {
     const colors: { [key: string]: string } = {
       "Matériaux": "bg-blue-100 text-blue-800",
@@ -42,9 +47,22 @@ export const ExpenseCard = ({ expense, projects, onEdit, onDelete }: ExpenseCard
   };
 
   const getProjectName = (projectId: string | null) => {
-    if (!projectId) return "Aucun projet";
+    if (!projectId) return t('no_project') || "Aucun projet";
     const project = projects.find(p => p.id === projectId);
-    return project ? project.name : "Projet inconnu";
+    return project ? project.name : t('unknown_project') || "Projet inconnu";
+  };
+
+  const getCategoryTranslation = (category: string) => {
+    const categoryMap: { [key: string]: string } = {
+      "Matériaux": "materials_category",
+      "Main-d'œuvre": "labor_category",
+      "Transport": "transport_category",
+      "Équipement": "equipment_category",
+      "Permis": "permits_category",
+      "Assurance": "insurance_category",
+      "Autre": "other_category"
+    };
+    return t(categoryMap[category]) || category;
   };
 
   return (
@@ -58,7 +76,7 @@ export const ExpenseCard = ({ expense, projects, onEdit, onDelete }: ExpenseCard
             </CardDescription>
           </div>
           <Badge className={getCategoryColor(expense.category)}>
-            {expense.category}
+            {getCategoryTranslation(expense.category)}
           </Badge>
         </div>
       </CardHeader>
@@ -66,7 +84,7 @@ export const ExpenseCard = ({ expense, projects, onEdit, onDelete }: ExpenseCard
         <div className="space-y-3">
           <div className="flex items-center text-lg font-semibold text-orange-600">
             <DollarSign className="h-5 w-5 mr-1" />
-            <span>{expense.amount.toLocaleString()} €</span>
+            <span>{formatCurrency(expense.amount)}</span>
           </div>
           
           <div className="flex items-center text-sm text-gray-600">
@@ -91,7 +109,7 @@ export const ExpenseCard = ({ expense, projects, onEdit, onDelete }: ExpenseCard
             onClick={() => onEdit(expense)}
           >
             <Edit className="h-4 w-4 mr-1" />
-            Modifier
+            {t('edit')}
           </Button>
           <Button
             variant="outline"
@@ -100,7 +118,7 @@ export const ExpenseCard = ({ expense, projects, onEdit, onDelete }: ExpenseCard
             className="text-red-600 hover:text-red-700"
           >
             <Trash2 className="h-4 w-4 mr-1" />
-            Supprimer
+            {t('delete')}
           </Button>
         </div>
       </CardContent>

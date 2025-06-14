@@ -45,6 +45,10 @@ const translations: Translations = {
   'insurance_category': { fr: 'Assurance', en: 'Insurance', es: 'Seguro', de: 'Versicherung', it: 'Assicurazione', pt: 'Seguro' },
   'other_category': { fr: 'Autre', en: 'Other', es: 'Otro', de: 'Andere', it: 'Altro', pt: 'Outro' },
 
+  // Additional translations
+  'no_project': { fr: 'Aucun projet', en: 'No project', es: 'Sin proyecto', de: 'Kein Projekt', it: 'Nessun progetto', pt: 'Nenhum projeto' },
+  'unknown_project': { fr: 'Projet inconnu', en: 'Unknown project', es: 'Proyecto desconocido', de: 'Unbekanntes Projekt', it: 'Progetto sconosciuto', pt: 'Projeto desconhecido' },
+
   // Messages
   'manage_project_expenses': { fr: 'Gérez les dépenses de vos projets', en: 'Manage your project expenses', es: 'Gestiona los gastos de tus proyectos', de: 'Verwalten Sie Ihre Projektausgaben', it: 'Gestisci le spese dei tuoi progetti', pt: 'Gerencie as despesas dos seus projetos' }
 };

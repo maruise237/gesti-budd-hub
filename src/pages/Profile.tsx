@@ -4,13 +4,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ProfileCustomization } from "@/components/ProfileCustomization";
 import { CollaboratorInvitations } from "@/components/CollaboratorInvitations";
 import { User, Users } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
 
 const Profile = () => {
+  const { t } = useTranslation();
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Profil</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('profile')}</h1>
           <p className="text-muted-foreground">
             Gérez votre profil et votre équipe
           </p>

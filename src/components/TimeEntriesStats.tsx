@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TimeEntriesStatsCards } from "./TimeEntriesStatsCards";
 import { TimeEntriesCharts } from "./TimeEntriesCharts";
 import { useTimeEntriesStats } from "@/hooks/useTimeEntriesStats";
+import { useTranslation } from "@/hooks/useTranslation";
 import { TrendingUp } from "lucide-react";
 
 interface TimeEntry {
@@ -28,6 +29,7 @@ interface TimeEntriesStatsProps {
 }
 
 export const TimeEntriesStats = ({ timeEntries }: TimeEntriesStatsProps) => {
+  const { t } = useTranslation();
   const stats = useTimeEntriesStats(timeEntries);
 
   if (timeEntries.length === 0) {

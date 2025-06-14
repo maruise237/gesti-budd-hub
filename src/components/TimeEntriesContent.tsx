@@ -5,6 +5,7 @@ import { TimeEntriesStats } from "@/components/TimeEntriesStats";
 import { TimeEntriesTabContent } from "@/components/TimeEntriesTabContent";
 import { TimeEntriesExportDialog } from "@/components/TimeEntriesExportDialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface TimeEntry {
   id: string;
@@ -70,6 +71,8 @@ export const TimeEntriesContent = ({
   onCloseExportDialog,
   onExport,
 }: TimeEntriesContentProps) => {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-6">
       <TimeEntriesHeader 
@@ -79,7 +82,7 @@ export const TimeEntriesContent = ({
 
       <Tabs defaultValue="entries" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="entries">Entrées de temps</TabsTrigger>
+          <TabsTrigger value="entries">{t('time_entries')}</TabsTrigger>
           <TabsTrigger value="stats">Statistiques</TabsTrigger>
         </TabsList>
         
