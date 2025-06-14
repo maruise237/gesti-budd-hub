@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { DashboardLayout } from "@/components/DashboardLayout";
@@ -10,7 +11,9 @@ import { TimeEntriesHeader } from "@/components/TimeEntriesHeader";
 import { TimeEntriesList } from "@/components/TimeEntriesList";
 import { EmptyTimeEntriesState } from "@/components/EmptyTimeEntriesState";
 import { TimeEntriesFilters } from "@/components/TimeEntriesFilters";
+import { TimeEntriesStats } from "@/components/TimeEntriesStats";
 import { useTimeEntriesFilters } from "@/hooks/useTimeEntriesFilters";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface TimeEntry {
   id: string;
@@ -205,38 +208,51 @@ const TimeEntries = () => {
         <div className="space-y-6">
           <TimeEntriesHeader onCreateEntry={handleOpenDialog} />
 
-          <TimeEntriesFilters
-            searchTerm={searchTerm}
-            onSearchTermChange={setSearchTerm}
-            selectedProject={selectedProject}
-            onProjectChange={setSelectedProject}
-            selectedEmployee={selectedEmployee}
-            onEmployeeChange={setSelectedEmployee}
-            selectedStatus={selectedStatus}
-            onStatusChange={setSelectedStatus}
-            projects={projects || []}
-            employees={employees || []}
-            onClearFilters={clearAllFilters}
-            activeFiltersCount={activeFiltersCount}
-          />
+          <Tabs defaultValue="entries" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="entries">Entrées de temps</TabsTrigger>
+              <TabsTrigger value="stats">Statistiques</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="entries" className="space-y-6">
+              <TimeEntriesFilters
+                searchTerm={searchTerm}
+                onSearchTermChange={setSearchTerm}
+                selectedProject={selectedProject}
+                onProjectChange={setSelectedProject}
+                selectedEmployee={selectedEmployee}
+                onEmployeeChange={setSelectedEmployee}
+                selectedStatus={selectedStatus}
+                onStatusChange={setSelectedStatus}
+                projects={projects || []}
+                employees={employees || []}
+                onClearFilters={clearAllFilters}
+                activeFiltersCount={activeFiltersCount}
+              />
 
-          {filteredTimeEntries && filteredTimeEntries.length > 0 ? (
-            <TimeEntriesList
-              timeEntries={filteredTimeEntries}
-              onEditEntry={handleEditEntry}
-              onDeleteEntry={handleDeleteEntry}
-              onStopTimer={handleStopTimer}
-              isStoppingTimer={stopTimerMutation.isPending}
-            />
-          ) : timeEntries && timeEntries.length > 0 ? (
-            <div className="text-center py-8">
-              <p className="text-gray-600">
-                Aucune entrée ne correspond à vos critères de recherche.
-              </p>
-            </div>
-          ) : (
-            <EmptyTimeEntriesState onCreateEntry={handleOpenDialog} />
-          )}
+              {filteredTimeEntries && filteredTimeEntries.length > 0 ? (
+                <TimeEntriesList
+                  timeEntries={filteredTimeEntries}
+                  onEditEntry={handleEditEntry}
+                  onDeleteEntry={handleDeleteEntry}
+                  onStopTimer={handleStopTimer}
+                  isStoppingTimer={stopTimerMutation.isPending}
+                />
+              ) : timeEntries && timeEntries.length > 0 ? (
+                <div className="text-center py-8">
+                  <p className="text-gray-600">
+                    Aucune entrée ne correspond à vos critères de recherche.
+                  </p>
+                </div>
+              ) : (
+                <EmptyTimeEntriesState onCreateEntry={handleOpenDialog} />
+              )}
+            </TabsContent>
+            
+            <TabsContent value="stats" className="space-y-6">
+              <TimeEntriesStats timeEntries={timeEntries || []} />
+            </TabsContent>
+          </Tabs>
         </div>
 
         <TimeEntryDialog
