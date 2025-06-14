@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,9 +6,11 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { Plus, Edit, Trash2, Mail, Phone, Calendar, DollarSign } from "lucide-react";
+import { Plus, Edit, Trash2, Mail, Phone, Calendar, DollarSign, Download } from "lucide-react";
 import { EmployeeDialog } from "@/components/EmployeeDialog";
+import { EmployeesExportDialog } from "@/components/EmployeesExportDialog";
 import { useToast } from "@/hooks/use-toast";
+import { useEmployeesExport } from "@/hooks/useEmployeesExport";
 
 interface Employee {
   id: string;
@@ -29,8 +30,10 @@ const Employees = () => {
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null);
+  const [exportDialogOpen, setExportDialogOpen] = useState(false);
   const { user } = useAuth();
   const { toast } = useToast();
+  const { handleExport } = useEmployeesExport();
 
   useEffect(() => {
     if (user) {
@@ -138,16 +141,27 @@ const Employees = () => {
                 Gérez votre équipe de construction
               </p>
             </div>
-            <Button 
-              onClick={() => {
-                setEditingEmployee(null);
-                setDialogOpen(true);
-              }}
-              className="bg-orange-600 hover:bg-orange-700"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Nouvel employé
-            </Button>
+            <div className="flex gap-2">
+              {employees.length > 0 && (
+                <Button
+                  variant="outline"
+                  onClick={() => setExportDialogOpen(true)}
+                >
+                  <Download className="h-4 w-4 mr-2" />
+                  Exporter
+                </Button>
+              )}
+              <Button 
+                onClick={() => {
+                  setEditingEmployee(null);
+                  setDialogOpen(true);
+                }}
+                className="bg-orange-600 hover:bg-orange-700"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Nouvel employé
+              </Button>
+            </div>
           </div>
 
           {employees.length === 0 ? (
@@ -284,6 +298,13 @@ const Employees = () => {
             setDialogOpen(false);
             setEditingEmployee(null);
           }}
+        />
+        
+        <EmployeesExportDialog
+          open={exportDialogOpen}
+          onOpenChange={setExportDialogOpen}
+          employees={employees}
+          onExport={handleExport}
         />
       </DashboardLayout>
     </ProtectedRoute>

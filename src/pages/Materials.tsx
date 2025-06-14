@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,10 +6,12 @@ import { Badge } from "@/components/ui/badge";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { MaterialDialog } from "@/components/MaterialDialog";
+import { MaterialsExportDialog } from "@/components/MaterialsExportDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
-import { Package, Plus, Search, Edit, Trash2, AlertTriangle } from "lucide-react";
+import { useMaterialsExport } from "@/hooks/useMaterialsExport";
+import { Package, Plus, Search, Edit, Trash2, AlertTriangle, Download } from "lucide-react";
 
 interface Material {
   id: string;
@@ -32,8 +33,10 @@ const Materials = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null);
+  const [exportDialogOpen, setExportDialogOpen] = useState(false);
   const { user } = useAuth();
   const { toast } = useToast();
+  const { handleExport } = useMaterialsExport();
 
   useEffect(() => {
     if (user) {
@@ -150,13 +153,24 @@ const Materials = () => {
                 Gérez votre inventaire et suivez vos stocks
               </p>
             </div>
-            <Button
-              onClick={() => setDialogOpen(true)}
-              className="bg-orange-600 hover:bg-orange-700"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Nouveau matériau
-            </Button>
+            <div className="flex gap-2">
+              {materials.length > 0 && (
+                <Button
+                  variant="outline"
+                  onClick={() => setExportDialogOpen(true)}
+                >
+                  <Download className="h-4 w-4 mr-2" />
+                  Exporter
+                </Button>
+              )}
+              <Button
+                onClick={() => setDialogOpen(true)}
+                className="bg-orange-600 hover:bg-orange-700"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Nouveau matériau
+              </Button>
+            </div>
           </div>
 
           {/* Search Bar */}
@@ -276,6 +290,13 @@ const Materials = () => {
             onOpenChange={handleDialogClose}
             material={selectedMaterial}
             onMaterialSaved={fetchMaterials}
+          />
+          
+          <MaterialsExportDialog
+            open={exportDialogOpen}
+            onOpenChange={setExportDialogOpen}
+            materials={materials}
+            onExport={handleExport}
           />
         </div>
       </DashboardLayout>
