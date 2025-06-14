@@ -3,6 +3,7 @@ import { TimeEntryDialog } from "@/components/TimeEntryDialog";
 import { TimeEntriesHeader } from "@/components/TimeEntriesHeader";
 import { TimeEntriesStats } from "@/components/TimeEntriesStats";
 import { TimeEntriesTabContent } from "@/components/TimeEntriesTabContent";
+import { TimeEntriesExportDialog } from "@/components/TimeEntriesExportDialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface TimeEntry {
@@ -46,6 +47,10 @@ interface TimeEntriesContentProps {
   onCreateEntry: () => void;
   onCloseDialog: () => void;
   isStoppingTimer: boolean;
+  isExportDialogOpen: boolean;
+  onOpenExportDialog: () => void;
+  onCloseExportDialog: () => void;
+  onExport: (entries: TimeEntry[], options: { format: 'csv' | 'pdf' }) => void;
 }
 
 export const TimeEntriesContent = ({
@@ -60,10 +65,17 @@ export const TimeEntriesContent = ({
   onCreateEntry,
   onCloseDialog,
   isStoppingTimer,
+  isExportDialogOpen,
+  onOpenExportDialog,
+  onCloseExportDialog,
+  onExport,
 }: TimeEntriesContentProps) => {
   return (
     <div className="space-y-6">
-      <TimeEntriesHeader onCreateEntry={onCreateEntry} />
+      <TimeEntriesHeader 
+        onCreateEntry={onCreateEntry} 
+        onExport={onOpenExportDialog}
+      />
 
       <Tabs defaultValue="entries" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
@@ -93,6 +105,15 @@ export const TimeEntriesContent = ({
         open={isDialogOpen}
         onOpenChange={onCloseDialog}
         timeEntry={editingEntry}
+      />
+
+      <TimeEntriesExportDialog
+        open={isExportDialogOpen}
+        onOpenChange={onCloseExportDialog}
+        timeEntries={timeEntries || []}
+        projects={projects || []}
+        employees={employees || []}
+        onExport={onExport}
       />
     </div>
   );

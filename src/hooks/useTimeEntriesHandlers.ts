@@ -1,6 +1,8 @@
 
 import { useTimeEntriesMutations } from "./useTimeEntriesMutations";
 import { useTimeEntriesDialog } from "./useTimeEntriesDialog";
+import { useTimeEntriesExport } from "./useTimeEntriesExport";
+import { useState } from "react";
 
 interface TimeEntry {
   id: string;
@@ -29,6 +31,9 @@ export const useTimeEntriesHandlers = (timeEntries: TimeEntry[] | undefined) => 
     handleOpenDialog, 
     handleCloseDialog 
   } = useTimeEntriesDialog();
+  
+  const { handleExport } = useTimeEntriesExport();
+  const [isExportDialogOpen, setIsExportDialogOpen] = useState(false);
 
   const handleDeleteEntry = (entryId: string) => {
     if (confirm("Êtes-vous sûr de vouloir supprimer cette entrée ?")) {
@@ -40,6 +45,14 @@ export const useTimeEntriesHandlers = (timeEntries: TimeEntry[] | undefined) => 
     stopTimerMutation.mutate(entryId);
   };
 
+  const handleOpenExportDialog = () => {
+    setIsExportDialogOpen(true);
+  };
+
+  const handleCloseExportDialog = () => {
+    setIsExportDialogOpen(false);
+  };
+
   return {
     // Dialog state
     isDialogOpen,
@@ -47,6 +60,12 @@ export const useTimeEntriesHandlers = (timeEntries: TimeEntry[] | undefined) => 
     handleEditEntry,
     handleOpenDialog,
     handleCloseDialog,
+    
+    // Export state
+    isExportDialogOpen,
+    handleOpenExportDialog,
+    handleCloseExportDialog,
+    handleExport,
     
     // Entry actions
     handleDeleteEntry,

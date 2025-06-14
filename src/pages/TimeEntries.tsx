@@ -17,6 +17,10 @@ const TimeEntries = () => {
     handleDeleteEntry,
     handleStopTimer,
     isStoppingTimer,
+    isExportDialogOpen,
+    handleOpenExportDialog,
+    handleCloseExportDialog,
+    handleExport,
   } = useTimeEntriesHandlers(timeEntries);
 
   if (isLoading) {
@@ -38,6 +42,10 @@ const TimeEntries = () => {
           onCreateEntry={handleOpenDialog}
           onCloseDialog={handleCloseDialog}
           isStoppingTimer={isStoppingTimer}
+          isExportDialogOpen={isExportDialogOpen}
+          onOpenExportDialog={handleOpenExportDialog}
+          onCloseExportDialog={handleCloseExportDialog}
+          onExport={handleExport}
         />
       </DashboardLayout>
     </ProtectedRoute>
