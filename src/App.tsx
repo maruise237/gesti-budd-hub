@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { UserPreferencesProvider } from "@/contexts/UserPreferencesContext";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
@@ -23,24 +24,26 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <AuthProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/dashboard/projects" element={<Projects />} />
-            <Route path="/dashboard/employees" element={<Employees />} />
-            <Route path="/dashboard/materials" element={<Materials />} />
-            <Route path="/dashboard/tasks" element={<Tasks />} />
-            <Route path="/dashboard/time-entries" element={<TimeEntries />} />
-            <Route path="/dashboard/expenses" element={<Expenses />} />
-            <Route path="/dashboard/profile" element={<Profile />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
+        <UserPreferencesProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/dashboard/projects" element={<Projects />} />
+              <Route path="/dashboard/employees" element={<Employees />} />
+              <Route path="/dashboard/materials" element={<Materials />} />
+              <Route path="/dashboard/tasks" element={<Tasks />} />
+              <Route path="/dashboard/time-entries" element={<TimeEntries />} />
+              <Route path="/dashboard/expenses" element={<Expenses />} />
+              <Route path="/dashboard/profile" element={<Profile />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </UserPreferencesProvider>
       </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>

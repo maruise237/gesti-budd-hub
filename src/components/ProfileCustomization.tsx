@@ -1,14 +1,13 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/contexts/AuthContext";
+import { useUserPreferences } from "@/contexts/UserPreferencesContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Upload, User, Palette, Globe } from "lucide-react";
@@ -19,10 +18,7 @@ interface ProfileData {
   bio: string | null;
   avatar_url: string | null;
   timezone: string | null;
-  language: string | null;
   company_name: string | null;
-  theme: string | null;
-  currency: string | null;
 }
 
 const AFRICAN_CURRENCIES = [
@@ -75,6 +71,7 @@ const OTHER_CURRENCIES = [
 
 export const ProfileCustomization = () => {
   const { user } = useAuth();
+  const { preferences, updatePreferences } = useUserPreferences();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -84,10 +81,7 @@ export const ProfileCustomization = () => {
     bio: "",
     avatar_url: "",
     timezone: "Europe/Paris",
-    language: "fr",
-    company_name: "",
-    theme: "light",
-    currency: "EUR"
+    company_name: ""
   });
 
   useEffect(() => {
@@ -101,7 +95,7 @@ export const ProfileCustomization = () => {
       console.log('Fetching profile for user:', user?.id);
       const { data, error } = await supabase
         .from('profiles')
-        .select('*')
+        .select('first_name, last_name, bio, avatar_url, timezone, company_name')
         .eq('id', user?.id)
         .single();
 
@@ -195,6 +189,23 @@ export const ProfileCustomization = () => {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handlePreferenceChange = async (key: keyof typeof preferences, value: string) => {
+    try {
+      await updatePreferences({ [key]: value });
+      toast({
+        title: "Succès",
+        description: `${key === 'currency' ? 'Devise' : key === 'language' ? 'Langue' : 'Thème'} mis à jour avec succès`,
+      });
+    } catch (error) {
+      console.error(`Error updating ${key}:`, error);
+      toast({
+        title: "Erreur",
+        description: `Impossible de mettre à jour ${key === 'currency' ? 'la devise' : key === 'language' ? 'la langue' : 'le thème'}`,
+        variant: "destructive",
+      });
     }
   };
 
@@ -300,68 +311,56 @@ export const ProfileCustomization = () => {
             Personnalisez l'apparence de l'application
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="theme">Thème</Label>
-              <Select
-                value={profile.theme || "light"}
-                onValueChange={(value) => {
-                  console.log('Theme changed to:', value);
-                  setProfile(prev => ({ ...prev, theme: value }));
-                }}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Sélectionner un thème" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="light">Clair</SelectItem>
-                  <SelectItem value="dark">Sombre</SelectItem>
-                  <SelectItem value="system">Système</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="theme">Thème</Label>
+            <Select
+              value={preferences.theme}
+              onValueChange={(value) => handlePreferenceChange('theme', value)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Sélectionner un thème" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="light">Clair</SelectItem>
+                <SelectItem value="dark">Sombre</SelectItem>
+                <SelectItem value="system">Système</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="currency">Devise</Label>
-              <Select
-                value={profile.currency || "EUR"}
-                onValueChange={(value) => {
-                  console.log('Currency changed to:', value);
-                  setProfile(prev => ({ ...prev, currency: value }));
-                }}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Sélectionner une devise" />
-                </SelectTrigger>
-                <SelectContent className="max-h-[300px]">
-                  <div className="px-2 py-1 text-sm font-semibold text-muted-foreground">
-                    Devises internationales
-                  </div>
-                  {OTHER_CURRENCIES.map((currency) => (
-                    <SelectItem key={currency.value} value={currency.value}>
-                      {currency.label}
-                    </SelectItem>
-                  ))}
-                  <div className="px-2 py-1 text-sm font-semibold text-muted-foreground border-t mt-2 pt-2">
-                    Devises africaines
-                  </div>
-                  {AFRICAN_CURRENCIES.map((currency) => (
-                    <SelectItem key={currency.value} value={currency.value}>
-                      <div className="flex flex-col">
-                        <span>{currency.label}</span>
-                        <span className="text-xs text-muted-foreground">{currency.countries}</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <Button type="submit" disabled={loading} className="w-full">
-              {loading ? "Mise à jour..." : "Sauvegarder les préférences"}
-            </Button>
-          </form>
+          <div className="space-y-2">
+            <Label htmlFor="currency">Devise</Label>
+            <Select
+              value={preferences.currency}
+              onValueChange={(value) => handlePreferenceChange('currency', value)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Sélectionner une devise" />
+              </SelectTrigger>
+              <SelectContent className="max-h-[300px]">
+                <div className="px-2 py-1 text-sm font-semibold text-muted-foreground">
+                  Devises internationales
+                </div>
+                {OTHER_CURRENCIES.map((currency) => (
+                  <SelectItem key={currency.value} value={currency.value}>
+                    {currency.label}
+                  </SelectItem>
+                ))}
+                <div className="px-2 py-1 text-sm font-semibold text-muted-foreground border-t mt-2 pt-2">
+                  Devises africaines
+                </div>
+                {AFRICAN_CURRENCIES.map((currency) => (
+                  <SelectItem key={currency.value} value={currency.value}>
+                    <div className="flex flex-col">
+                      <span>{currency.label}</span>
+                      <span className="text-xs text-muted-foreground">{currency.countries}</span>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </CardContent>
       </Card>
 
@@ -376,59 +375,47 @@ export const ProfileCustomization = () => {
             Configurez votre langue et fuseau horaire
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="timezone">Fuseau horaire</Label>
-                <Select
-                  value={profile.timezone || "Europe/Paris"}
-                  onValueChange={(value) => {
-                    console.log('Timezone changed to:', value);
-                    setProfile(prev => ({ ...prev, timezone: value }));
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Sélectionner un fuseau horaire" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Europe/Paris">Europe/Paris (GMT+1)</SelectItem>
-                    <SelectItem value="Europe/London">Europe/London (GMT+0)</SelectItem>
-                    <SelectItem value="America/New_York">America/New_York (GMT-5)</SelectItem>
-                    <SelectItem value="America/Los_Angeles">America/Los_Angeles (GMT-8)</SelectItem>
-                    <SelectItem value="Asia/Tokyo">Asia/Tokyo (GMT+9)</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="language">Langue</Label>
-                <Select
-                  value={profile.language || "fr"}
-                  onValueChange={(value) => {
-                    console.log('Language changed to:', value);
-                    setProfile(prev => ({ ...prev, language: value }));
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Sélectionner une langue" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="fr">Français</SelectItem>
-                    <SelectItem value="en">English</SelectItem>
-                    <SelectItem value="es">Español</SelectItem>
-                    <SelectItem value="de">Deutsch</SelectItem>
-                    <SelectItem value="it">Italiano</SelectItem>
-                    <SelectItem value="pt">Português</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="timezone">Fuseau horaire</Label>
+              <Select
+                value={profile.timezone || "Europe/Paris"}
+                onValueChange={(value) => setProfile(prev => ({ ...prev, timezone: value }))}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Sélectionner un fuseau horaire" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Europe/Paris">Europe/Paris (GMT+1)</SelectItem>
+                  <SelectItem value="Europe/London">Europe/London (GMT+0)</SelectItem>
+                  <SelectItem value="America/New_York">America/New_York (GMT-5)</SelectItem>
+                  <SelectItem value="America/Los_Angeles">America/Los_Angeles (GMT-8)</SelectItem>
+                  <SelectItem value="Asia/Tokyo">Asia/Tokyo (GMT+9)</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
-            <Button type="submit" disabled={loading} className="w-full">
-              {loading ? "Mise à jour..." : "Sauvegarder les préférences"}
-            </Button>
-          </form>
+            <div className="space-y-2">
+              <Label htmlFor="language">Langue</Label>
+              <Select
+                value={preferences.language}
+                onValueChange={(value) => handlePreferenceChange('language', value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Sélectionner une langue" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="fr">Français</SelectItem>
+                  <SelectItem value="en">English</SelectItem>
+                  <SelectItem value="es">Español</SelectItem>
+                  <SelectItem value="de">Deutsch</SelectItem>
+                  <SelectItem value="it">Italiano</SelectItem>
+                  <SelectItem value="pt">Português</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </div>
