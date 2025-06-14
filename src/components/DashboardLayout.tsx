@@ -86,53 +86,53 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             <NavItems />
           </div>
         </SheetContent>
-      </Sheet>
 
-      {/* Desktop sidebar */}
-      <div className="hidden md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col">
-        <div className="flex flex-col flex-grow bg-white border-r border-gray-200">
-          <div className="flex h-16 items-center px-4 border-b">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">GB</span>
+        {/* Desktop sidebar */}
+        <div className="hidden md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col">
+          <div className="flex flex-col flex-grow bg-white border-r border-gray-200">
+            <div className="flex h-16 items-center px-4 border-b">
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">GB</span>
+                </div>
+                <span className="text-xl font-bold text-gray-900">GestiBuld</span>
               </div>
-              <span className="text-xl font-bold text-gray-900">GestiBuld</span>
             </div>
+            <NavItems />
           </div>
-          <NavItems />
         </div>
-      </div>
 
-      {/* Main content */}
-      <div className="md:pl-64">
-        {/* Top header */}
-        <div className="sticky top-0 z-10 bg-white border-b border-gray-200">
-          <div className="flex h-16 items-center justify-between px-4">
-            <div className="flex items-center">
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="sm" className="md:hidden">
-                  <Menu className="h-5 w-5" />
+        {/* Main content */}
+        <div className="md:pl-64">
+          {/* Top header */}
+          <div className="sticky top-0 z-10 bg-white border-b border-gray-200">
+            <div className="flex h-16 items-center justify-between px-4">
+              <div className="flex items-center">
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="sm" className="md:hidden">
+                    <Menu className="h-5 w-5" />
+                  </Button>
+                </SheetTrigger>
+              </div>
+              
+              <div className="flex items-center space-x-4">
+                <span className="text-sm text-gray-600">
+                  Bonjour, {user?.user_metadata?.first_name || user?.email}
+                </span>
+                <Button variant="ghost" size="sm" onClick={handleSignOut}>
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Déconnexion
                 </Button>
-              </SheetTrigger>
-            </div>
-            
-            <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600">
-                Bonjour, {user?.user_metadata?.first_name || user?.email}
-              </span>
-              <Button variant="ghost" size="sm" onClick={handleSignOut}>
-                <LogOut className="h-4 w-4 mr-2" />
-                Déconnexion
-              </Button>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Page content */}
-        <main className="flex-1 p-6">
-          {children}
-        </main>
-      </div>
+          {/* Page content */}
+          <main className="flex-1 p-6">
+            {children}
+          </main>
+        </div>
+      </Sheet>
     </div>
   );
 };
