@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { DashboardLayout } from "@/components/DashboardLayout";
@@ -6,7 +5,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Clock, User, Calendar, Play, Stop } from "lucide-react";
+import { Plus, Clock, User, Calendar, Play, stop } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { TimeEntryDialog } from "@/components/TimeEntryDialog";
@@ -253,7 +252,7 @@ const TimeEntries = () => {
                           onClick={() => handleStopTimer(entry.id)}
                           disabled={stopTimerMutation.isPending}
                         >
-                          <Stop className="h-3 w-3 mr-1" />
+                          <stop className="h-3 w-3 mr-1" />
                           Arrêter
                         </Button>
                       )}
