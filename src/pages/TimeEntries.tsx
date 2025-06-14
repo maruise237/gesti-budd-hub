@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { DashboardLayout } from "@/components/DashboardLayout";
@@ -10,6 +9,8 @@ import { toast } from "@/hooks/use-toast";
 import { TimeEntriesHeader } from "@/components/TimeEntriesHeader";
 import { TimeEntriesList } from "@/components/TimeEntriesList";
 import { EmptyTimeEntriesState } from "@/components/EmptyTimeEntriesState";
+import { TimeEntriesFilters } from "@/components/TimeEntriesFilters";
+import { useTimeEntriesFilters } from "@/hooks/useTimeEntriesFilters";
 
 interface TimeEntry {
   id: string;
@@ -52,6 +53,51 @@ const TimeEntries = () => {
     },
     enabled: !!user,
   });
+
+  const { data: projects } = useQuery({
+    queryKey: ["projects"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("projects")
+        .select("id, name")
+        .eq("user_id", user?.id)
+        .order("name");
+
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!user,
+  });
+
+  const { data: employees } = useQuery({
+    queryKey: ["employees"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("employees")
+        .select("id, first_name, last_name")
+        .eq("user_id", user?.id)
+        .eq("is_active", true)
+        .order("first_name");
+
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!user,
+  });
+
+  const {
+    searchTerm,
+    setSearchTerm,
+    selectedProject,
+    setSelectedProject,
+    selectedEmployee,
+    setSelectedEmployee,
+    selectedStatus,
+    setSelectedStatus,
+    filteredTimeEntries,
+    activeFiltersCount,
+    clearAllFilters,
+  } = useTimeEntriesFilters(timeEntries || []);
 
   const deleteEntryMutation = useMutation({
     mutationFn: async (entryId: string) => {
@@ -159,14 +205,35 @@ const TimeEntries = () => {
         <div className="space-y-6">
           <TimeEntriesHeader onCreateEntry={handleOpenDialog} />
 
-          {timeEntries && timeEntries.length > 0 ? (
+          <TimeEntriesFilters
+            searchTerm={searchTerm}
+            onSearchTermChange={setSearchTerm}
+            selectedProject={selectedProject}
+            onProjectChange={setSelectedProject}
+            selectedEmployee={selectedEmployee}
+            onEmployeeChange={setSelectedEmployee}
+            selectedStatus={selectedStatus}
+            onStatusChange={setSelectedStatus}
+            projects={projects || []}
+            employees={employees || []}
+            onClearFilters={clearAllFilters}
+            activeFiltersCount={activeFiltersCount}
+          />
+
+          {filteredTimeEntries && filteredTimeEntries.length > 0 ? (
             <TimeEntriesList
-              timeEntries={timeEntries}
+              timeEntries={filteredTimeEntries}
               onEditEntry={handleEditEntry}
               onDeleteEntry={handleDeleteEntry}
               onStopTimer={handleStopTimer}
               isStoppingTimer={stopTimerMutation.isPending}
             />
+          ) : timeEntries && timeEntries.length > 0 ? (
+            <div className="text-center py-8">
+              <p className="text-gray-600">
+                Aucune entrée ne correspond à vos critères de recherche.
+              </p>
+            </div>
           ) : (
             <EmptyTimeEntriesState onCreateEntry={handleOpenDialog} />
           )}
