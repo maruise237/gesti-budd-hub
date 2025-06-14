@@ -1,5 +1,7 @@
 
 import { TimeEntryCard } from "./TimeEntryCard";
+import { PaginationControls } from "./PaginationControls";
+import { useTimeEntriesPagination } from "@/hooks/useTimeEntriesPagination";
 
 interface TimeEntry {
   id: string;
@@ -34,18 +36,47 @@ export const TimeEntriesList = ({
   onStopTimer, 
   isStoppingTimer 
 }: TimeEntriesListProps) => {
+  const {
+    currentPage,
+    totalPages,
+    paginatedData,
+    itemsPerPage,
+    totalItems,
+    goToPage,
+    goToNextPage,
+    goToPreviousPage,
+    canGoPrevious,
+    canGoNext,
+  } = useTimeEntriesPagination(timeEntries, 9); // 9 items per page for a 3x3 grid
+
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {timeEntries.map((entry) => (
-        <TimeEntryCard
-          key={entry.id}
-          entry={entry}
-          onEdit={onEditEntry}
-          onDelete={onDeleteEntry}
-          onStopTimer={onStopTimer}
-          isStoppingTimer={isStoppingTimer}
+    <div className="space-y-6">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {paginatedData.map((entry) => (
+          <TimeEntryCard
+            key={entry.id}
+            entry={entry}
+            onEdit={onEditEntry}
+            onDelete={onDeleteEntry}
+            onStopTimer={onStopTimer}
+            isStoppingTimer={isStoppingTimer}
+          />
+        ))}
+      </div>
+      
+      {totalPages > 1 && (
+        <PaginationControls
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalItems={totalItems}
+          itemsPerPage={itemsPerPage}
+          onPageChange={goToPage}
+          onPreviousPage={goToPreviousPage}
+          onNextPage={goToNextPage}
+          canGoPrevious={canGoPrevious}
+          canGoNext={canGoNext}
         />
-      ))}
+      )}
     </div>
   );
 };
