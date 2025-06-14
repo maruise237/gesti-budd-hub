@@ -5,7 +5,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Clock, User, Calendar, Play, stop } from "lucide-react";
+import { Plus, Clock, User, Calendar, Play, Square } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { TimeEntryDialog } from "@/components/TimeEntryDialog";
@@ -252,7 +252,7 @@ const TimeEntries = () => {
                           onClick={() => handleStopTimer(entry.id)}
                           disabled={stopTimerMutation.isPending}
                         >
-                          <stop className="h-3 w-3 mr-1" />
+                          <Square className="h-3 w-3 mr-1" />
                           Arrêter
                         </Button>
                       )}
