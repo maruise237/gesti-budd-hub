@@ -47,7 +47,7 @@ export const ExpenseDialog = ({ open, onOpenChange, expense, projects, onExpense
     amount: "",
     category: "Matériaux",
     date: new Date().toISOString().split('T')[0],
-    project_id: "",
+    project_id: "no_project",
     receipt_url: "",
   });
   const { user } = useAuth();
@@ -70,7 +70,7 @@ export const ExpenseDialog = ({ open, onOpenChange, expense, projects, onExpense
         amount: expense.amount.toString(),
         category: expense.category || "Matériaux",
         date: expense.date || new Date().toISOString().split('T')[0],
-        project_id: expense.project_id || "",
+        project_id: expense.project_id || "no_project",
         receipt_url: expense.receipt_url || "",
       });
     } else {
@@ -79,7 +79,7 @@ export const ExpenseDialog = ({ open, onOpenChange, expense, projects, onExpense
         amount: "",
         category: "Matériaux",
         date: new Date().toISOString().split('T')[0],
-        project_id: "",
+        project_id: "no_project",
         receipt_url: "",
       });
     }
@@ -103,7 +103,7 @@ export const ExpenseDialog = ({ open, onOpenChange, expense, projects, onExpense
         amount: parseFloat(formData.amount),
         category: formData.category,
         date: formData.date,
-        project_id: formData.project_id || null,
+        project_id: formData.project_id === "no_project" ? null : formData.project_id,
         receipt_url: formData.receipt_url || null,
         user_id: user!.id,
       };
@@ -224,7 +224,7 @@ export const ExpenseDialog = ({ open, onOpenChange, expense, projects, onExpense
                   <SelectValue placeholder="Sélectionner un projet" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Aucun projet</SelectItem>
+                  <SelectItem value="no_project">Aucun projet</SelectItem>
                   {projects.map((project) => (
                     <SelectItem key={project.id} value={project.id}>
                       {project.name}
