@@ -15,7 +15,7 @@ const Profile = () => {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">{t('profile')}</h1>
           <p className="text-muted-foreground">
-            Gérez votre profil et votre équipe
+            {t('manage_profile_and_team')}
           </p>
         </div>
 
@@ -23,11 +23,11 @@ const Profile = () => {
           <TabsList>
             <TabsTrigger value="profile" className="flex items-center gap-2">
               <User className="w-4 h-4" />
-              Mon Profil
+              {t('my_profile')}
             </TabsTrigger>
             <TabsTrigger value="team" className="flex items-center gap-2">
               <Users className="w-4 h-4" />
-              Équipe
+              {t('team')}
             </TabsTrigger>
           </TabsList>
 

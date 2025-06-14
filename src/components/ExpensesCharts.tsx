@@ -1,7 +1,9 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { BarChart, Bar, XAxis, YAxis, PieChart, Pie, Cell, LineChart, Line, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, PieChart, Pie, Cell, LineChart, Line } from "recharts";
+import { useCurrency } from "@/hooks/useCurrency";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface Expense {
   id: string;
@@ -27,6 +29,9 @@ interface ExpensesChartsProps {
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D', '#FFC658'];
 
 export const ExpensesCharts = ({ expenses, projects }: ExpensesChartsProps) => {
+  const { formatCurrency } = useCurrency();
+  const { t } = useTranslation();
+
   // Données par catégorie
   const categoryData = expenses.reduce((acc, expense) => {
     const existing = acc.find(item => item.category === expense.category);
@@ -46,8 +51,8 @@ export const ExpensesCharts = ({ expenses, projects }: ExpensesChartsProps) => {
   // Données par projet
   const projectData = expenses.reduce((acc, expense) => {
     const projectName = expense.project_id 
-      ? projects.find(p => p.id === expense.project_id)?.name || 'Projet inconnu'
-      : 'Aucun projet';
+      ? projects.find(p => p.id === expense.project_id)?.name || t('unknown_project')
+      : t('no_project');
     
     const existing = acc.find(item => item.project === projectName);
     if (existing) {
@@ -65,10 +70,10 @@ export const ExpensesCharts = ({ expenses, projects }: ExpensesChartsProps) => {
 
   // Données par mois
   const monthlyData = expenses.reduce((acc, expense) => {
-    const month = new Date(expense.date).toLocaleDateString('fr-FR', { 
-      year: 'numeric', 
-      month: 'short' 
-    });
+    const month = new Date(expense.date).toLocaleDateString(
+      t('currentLanguage') === 'fr' ? 'fr-FR' : 'en-US', 
+      { year: 'numeric', month: 'short' }
+    );
     
     const existing = acc.find(item => item.month === month);
     if (existing) {
@@ -87,11 +92,24 @@ export const ExpensesCharts = ({ expenses, projects }: ExpensesChartsProps) => {
 
   const chartConfig = {
     amount: {
-      label: "Montant (€)",
+      label: t('amount'),
     },
     count: {
-      label: "Nombre",
+      label: t('count_label'),
     },
+  };
+
+  const getCategoryTranslation = (category: string) => {
+    const categoryMap: { [key: string]: string } = {
+      "Matériaux": "materials_category",
+      "Main-d'œuvre": "labor_category",
+      "Transport": "transport_category",
+      "Équipement": "equipment_category",
+      "Permis": "permits_category",
+      "Assurance": "insurance_category",
+      "Autre": "other_category"
+    };
+    return t(categoryMap[category]) || category;
   };
 
   return (
@@ -99,9 +117,9 @@ export const ExpensesCharts = ({ expenses, projects }: ExpensesChartsProps) => {
       {/* Graphique par catégorie (Camembert) */}
       <Card>
         <CardHeader>
-          <CardTitle>Répartition par catégorie</CardTitle>
+          <CardTitle>{t('expenses_by_category')}</CardTitle>
           <CardDescription>
-            Distribution des dépenses par catégorie
+            {t('expenses_distribution_by_category')}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -112,7 +130,7 @@ export const ExpensesCharts = ({ expenses, projects }: ExpensesChartsProps) => {
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={({ category, percent }) => `${category} ${(percent * 100).toFixed(0)}%`}
+                label={({ category, percent }) => `${getCategoryTranslation(category)} ${(percent * 100).toFixed(0)}%`}
                 outerRadius={80}
                 fill="#8884d8"
                 dataKey="amount"
@@ -123,7 +141,7 @@ export const ExpensesCharts = ({ expenses, projects }: ExpensesChartsProps) => {
               </Pie>
               <ChartTooltip 
                 content={<ChartTooltipContent />}
-                formatter={(value: number) => [`${value.toLocaleString()} €`, "Montant"]}
+                formatter={(value: number) => [formatCurrency(value), t('amount')]}
               />
             </PieChart>
           </ChartContainer>
@@ -133,9 +151,9 @@ export const ExpensesCharts = ({ expenses, projects }: ExpensesChartsProps) => {
       {/* Graphique par projet (Barres) */}
       <Card>
         <CardHeader>
-          <CardTitle>Dépenses par projet</CardTitle>
+          <CardTitle>{t('expenses_by_project')}</CardTitle>
           <CardDescription>
-            Montant total des dépenses par projet
+            {t('total_expenses_by_project')}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -151,7 +169,7 @@ export const ExpensesCharts = ({ expenses, projects }: ExpensesChartsProps) => {
               <YAxis />
               <ChartTooltip 
                 content={<ChartTooltipContent />}
-                formatter={(value: number) => [`${value.toLocaleString()} €`, "Montant"]}
+                formatter={(value: number) => [formatCurrency(value), t('amount')]}
               />
               <Bar dataKey="amount" fill="#8884d8" />
             </BarChart>
@@ -162,9 +180,9 @@ export const ExpensesCharts = ({ expenses, projects }: ExpensesChartsProps) => {
       {/* Évolution mensuelle (Ligne) */}
       <Card className="lg:col-span-2">
         <CardHeader>
-          <CardTitle>Évolution mensuelle des dépenses</CardTitle>
+          <CardTitle>{t('monthly_expenses_evolution')}</CardTitle>
           <CardDescription>
-            Tendance des dépenses au fil du temps
+            {t('expenses_trend_over_time')}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -174,7 +192,7 @@ export const ExpensesCharts = ({ expenses, projects }: ExpensesChartsProps) => {
               <YAxis />
               <ChartTooltip 
                 content={<ChartTooltipContent />}
-                formatter={(value: number) => [`${value.toLocaleString()} €`, "Montant"]}
+                formatter={(value: number) => [formatCurrency(value), t('amount')]}
               />
               <Line 
                 type="monotone" 

@@ -26,7 +26,7 @@ export const ExpenseStats = ({ totalExpenses, expenseCount }: ExpenseStatsProps)
           {formatCurrency(totalExpenses)}
         </div>
         <p className="text-sm text-gray-600 mt-1">
-          Sur {expenseCount} dépense(s)
+          {t('expense_count_text', { count: expenseCount })}
         </p>
       </CardContent>
     </Card>
