@@ -63,8 +63,8 @@ export const TimeEntriesExportDialog = ({
   const [format, setFormat] = useState<'csv' | 'pdf'>('csv');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [selectedProject, setSelectedProject] = useState('');
-  const [selectedEmployee, setSelectedEmployee] = useState('');
+  const [selectedProject, setSelectedProject] = useState('all');
+  const [selectedEmployee, setSelectedEmployee] = useState('all');
 
   const getFilteredEntries = () => {
     return timeEntries.filter(entry => {
@@ -72,8 +72,8 @@ export const TimeEntriesExportDialog = ({
       
       if (startDate && entryDate < startDate) return false;
       if (endDate && entryDate > endDate) return false;
-      if (selectedProject && entry.project_id !== selectedProject) return false;
-      if (selectedEmployee && entry.employee_id !== selectedEmployee) return false;
+      if (selectedProject && selectedProject !== 'all' && entry.project_id !== selectedProject) return false;
+      if (selectedEmployee && selectedEmployee !== 'all' && entry.employee_id !== selectedEmployee) return false;
       
       return true;
     });
@@ -149,7 +149,7 @@ export const TimeEntriesExportDialog = ({
                 <SelectValue placeholder="Tous les projets" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Tous les projets</SelectItem>
+                <SelectItem value="all">Tous les projets</SelectItem>
                 {projects.map((project) => (
                   <SelectItem key={project.id} value={project.id}>
                     {project.name}
@@ -166,7 +166,7 @@ export const TimeEntriesExportDialog = ({
                 <SelectValue placeholder="Tous les employés" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Tous les employés</SelectItem>
+                <SelectItem value="all">Tous les employés</SelectItem>
                 {employees.map((employee) => (
                   <SelectItem key={employee.id} value={employee.id}>
                     {employee.first_name} {employee.last_name}
