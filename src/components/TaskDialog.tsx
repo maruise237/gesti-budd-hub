@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -73,7 +72,7 @@ export const TaskDialog = ({ open, onOpenChange, task }: TaskDialogProps) => {
       estimated_hours: "",
       actual_hours: "",
       project_id: "",
-      assigned_to: "",
+      assigned_to: "unassigned",
     },
   });
 
@@ -119,7 +118,7 @@ export const TaskDialog = ({ open, onOpenChange, task }: TaskDialogProps) => {
         estimated_hours: data.estimated_hours ? parseFloat(data.estimated_hours) : null,
         actual_hours: data.actual_hours ? parseFloat(data.actual_hours) : null,
         project_id: data.project_id,
-        assigned_to: data.assigned_to || null,
+        assigned_to: data.assigned_to === "unassigned" ? null : data.assigned_to,
       };
 
       const { error } = await supabase
@@ -160,7 +159,7 @@ export const TaskDialog = ({ open, onOpenChange, task }: TaskDialogProps) => {
         estimated_hours: data.estimated_hours ? parseFloat(data.estimated_hours) : null,
         actual_hours: data.actual_hours ? parseFloat(data.actual_hours) : null,
         project_id: data.project_id,
-        assigned_to: data.assigned_to || null,
+        assigned_to: data.assigned_to === "unassigned" ? null : data.assigned_to,
         updated_at: new Date().toISOString(),
       };
 
@@ -201,7 +200,7 @@ export const TaskDialog = ({ open, onOpenChange, task }: TaskDialogProps) => {
         estimated_hours: task.estimated_hours?.toString() || "",
         actual_hours: task.actual_hours?.toString() || "",
         project_id: task.project_id,
-        assigned_to: task.assigned_to || "",
+        assigned_to: task.assigned_to || "unassigned",
       });
     } else {
       form.reset({
@@ -213,7 +212,7 @@ export const TaskDialog = ({ open, onOpenChange, task }: TaskDialogProps) => {
         estimated_hours: "",
         actual_hours: "",
         project_id: "",
-        assigned_to: "",
+        assigned_to: "unassigned",
       });
     }
   }, [task, form]);
@@ -310,7 +309,7 @@ export const TaskDialog = ({ open, onOpenChange, task }: TaskDialogProps) => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="">Aucun</SelectItem>
+                        <SelectItem value="unassigned">Aucun</SelectItem>
                         {employees?.map((employee) => (
                           <SelectItem key={employee.id} value={employee.id}>
                             {employee.first_name} {employee.last_name}
