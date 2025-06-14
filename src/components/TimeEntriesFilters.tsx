@@ -104,7 +104,7 @@ export const TimeEntriesFilters = ({
                   <SelectValue placeholder="Tous les projets" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Tous les projets</SelectItem>
+                  <SelectItem value="all">Tous les projets</SelectItem>
                   {projects.map((project) => (
                     <SelectItem key={project.id} value={project.id}>
                       {project.name}
@@ -123,7 +123,7 @@ export const TimeEntriesFilters = ({
                   <SelectValue placeholder="Tous les employés" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Tous les employés</SelectItem>
+                  <SelectItem value="all">Tous les employés</SelectItem>
                   {employees.map((employee) => (
                     <SelectItem key={employee.id} value={employee.id}>
                       {employee.first_name} {employee.last_name}
@@ -142,7 +142,7 @@ export const TimeEntriesFilters = ({
                   <SelectValue placeholder="Tous les statuts" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Tous les statuts</SelectItem>
+                  <SelectItem value="all">Tous les statuts</SelectItem>
                   <SelectItem value="in_progress">En cours</SelectItem>
                   <SelectItem value="completed">Terminé</SelectItem>
                 </SelectContent>

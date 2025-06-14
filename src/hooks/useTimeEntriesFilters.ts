@@ -21,9 +21,9 @@ interface TimeEntry {
 
 export const useTimeEntriesFilters = (timeEntries: TimeEntry[]) => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedProject, setSelectedProject] = useState("");
-  const [selectedEmployee, setSelectedEmployee] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState("");
+  const [selectedProject, setSelectedProject] = useState("all");
+  const [selectedEmployee, setSelectedEmployee] = useState("all");
+  const [selectedStatus, setSelectedStatus] = useState("all");
 
   const filteredTimeEntries = useMemo(() => {
     return timeEntries.filter((entry) => {
@@ -42,17 +42,17 @@ export const useTimeEntriesFilters = (timeEntries: TimeEntry[]) => {
       }
 
       // Filtre par projet
-      if (selectedProject && entry.project_id !== selectedProject) {
+      if (selectedProject && selectedProject !== "all" && entry.project_id !== selectedProject) {
         return false;
       }
 
       // Filtre par employé
-      if (selectedEmployee && entry.employee_id !== selectedEmployee) {
+      if (selectedEmployee && selectedEmployee !== "all" && entry.employee_id !== selectedEmployee) {
         return false;
       }
 
       // Filtre par statut
-      if (selectedStatus) {
+      if (selectedStatus && selectedStatus !== "all") {
         const isCompleted = entry.end_time !== null;
         if (selectedStatus === "completed" && !isCompleted) {
           return false;
@@ -69,17 +69,17 @@ export const useTimeEntriesFilters = (timeEntries: TimeEntry[]) => {
   const activeFiltersCount = useMemo(() => {
     let count = 0;
     if (searchTerm) count++;
-    if (selectedProject) count++;
-    if (selectedEmployee) count++;
-    if (selectedStatus) count++;
+    if (selectedProject && selectedProject !== "all") count++;
+    if (selectedEmployee && selectedEmployee !== "all") count++;
+    if (selectedStatus && selectedStatus !== "all") count++;
     return count;
   }, [searchTerm, selectedProject, selectedEmployee, selectedStatus]);
 
   const clearAllFilters = () => {
     setSearchTerm("");
-    setSelectedProject("");
-    setSelectedEmployee("");
-    setSelectedStatus("");
+    setSelectedProject("all");
+    setSelectedEmployee("all");
+    setSelectedStatus("all");
   };
 
   return {
