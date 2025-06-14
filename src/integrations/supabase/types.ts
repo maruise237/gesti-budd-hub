@@ -395,12 +395,14 @@ export type Database = {
           bio: string | null
           company_name: string | null
           created_at: string | null
+          currency: string | null
           first_name: string | null
           id: string
           language: string | null
           last_name: string | null
           phone: string | null
           role: string | null
+          theme: string | null
           timezone: string | null
           updated_at: string | null
         }
@@ -409,12 +411,14 @@ export type Database = {
           bio?: string | null
           company_name?: string | null
           created_at?: string | null
+          currency?: string | null
           first_name?: string | null
           id: string
           language?: string | null
           last_name?: string | null
           phone?: string | null
           role?: string | null
+          theme?: string | null
           timezone?: string | null
           updated_at?: string | null
         }
@@ -423,12 +427,14 @@ export type Database = {
           bio?: string | null
           company_name?: string | null
           created_at?: string | null
+          currency?: string | null
           first_name?: string | null
           id?: string
           language?: string | null
           last_name?: string | null
           phone?: string | null
           role?: string | null
+          theme?: string | null
           timezone?: string | null
           updated_at?: string | null
         }
