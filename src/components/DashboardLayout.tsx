@@ -14,6 +14,7 @@ import {
   Menu,
   LogOut,
   Home,
+  CheckSquare,
 } from "lucide-react";
 
 interface DashboardLayoutProps {
@@ -25,6 +26,7 @@ const navigation = [
   { name: "Projets", href: "/dashboard/projects", icon: FolderOpen },
   { name: "Employés", href: "/dashboard/employees", icon: Users },
   { name: "Matériaux", href: "/dashboard/materials", icon: Package },
+  { name: "Tâches", href: "/dashboard/tasks", icon: CheckSquare },
   { name: "Temps de travail", href: "/dashboard/time-entries", icon: Clock },
   { name: "Dépenses", href: "/dashboard/expenses", icon: CreditCard },
 ];
