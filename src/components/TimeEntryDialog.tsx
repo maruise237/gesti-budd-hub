@@ -8,27 +8,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
+import { Form } from "@/components/ui/form";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
+import { TimeEntryFormFields } from "./TimeEntryFormFields";
+import { TimeEntryTimeFields } from "./TimeEntryTimeFields";
+import { TimeEntryDescriptionField } from "./TimeEntryDescriptionField";
+import { TimeEntryDialogActions } from "./TimeEntryDialogActions";
 
 interface TimeEntryDialogProps {
   open: boolean;
@@ -208,6 +195,12 @@ export const TimeEntryDialog = ({ open, onOpenChange, timeEntry }: TimeEntryDial
     }
   };
 
+  const handleCancel = () => {
+    onOpenChange(false);
+  };
+
+  const isSubmitting = createTimeEntryMutation.isPending || updateTimeEntryMutation.isPending;
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px]">
@@ -219,148 +212,21 @@ export const TimeEntryDialog = ({ open, onOpenChange, timeEntry }: TimeEntryDial
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="project_id"
-                rules={{ required: "Le projet est requis" }}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Projet *</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Sélectionner un projet" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {projects?.map((project) => (
-                          <SelectItem key={project.id} value={project.id}>
-                            {project.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="employee_id"
-                rules={{ required: "L'employé est requis" }}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Employé *</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Sélectionner un employé" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {employees?.map((employee) => (
-                          <SelectItem key={employee.id} value={employee.id}>
-                            {employee.first_name} {employee.last_name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="start_time"
-                rules={{ required: "L'heure de début est requise" }}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Heure de début *</FormLabel>
-                    <FormControl>
-                      <Input type="datetime-local" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="end_time"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Heure de fin</FormLabel>
-                    <FormControl>
-                      <Input type="datetime-local" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <FormField
-              control={form.control}
-              name="hours_worked"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Heures travaillées</FormLabel>
-                  <FormControl>
-                    <Input 
-                      type="number" 
-                      step="0.25"
-                      min="0"
-                      placeholder="Ex: 8.5"
-                      {...field} 
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+            <TimeEntryFormFields 
+              form={form} 
+              projects={projects} 
+              employees={employees} 
             />
+            
+            <TimeEntryTimeFields form={form} />
+            
+            <TimeEntryDescriptionField form={form} />
 
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Textarea 
-                      placeholder="Description du travail effectué" 
-                      rows={3}
-                      {...field} 
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+            <TimeEntryDialogActions 
+              onCancel={handleCancel}
+              isSubmitting={isSubmitting}
+              isEditing={!!timeEntry}
             />
-
-            <div className="flex justify-end space-x-2 pt-4">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => onOpenChange(false)}
-              >
-                Annuler
-              </Button>
-              <Button 
-                type="submit"
-                disabled={createTimeEntryMutation.isPending || updateTimeEntryMutation.isPending}
-              >
-                {createTimeEntryMutation.isPending || updateTimeEntryMutation.isPending
-                  ? "Sauvegarde..."
-                  : timeEntry
-                  ? "Modifier"
-                  : "Créer"}
-              </Button>
-            </div>
           </form>
         </Form>
       </DialogContent>
