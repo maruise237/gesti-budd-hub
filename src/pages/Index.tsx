@@ -1,12 +1,29 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Check, ArrowRight, Users, Calendar, FileText, Clock } from "lucide-react";
+import { HeroSection } from "@/components/HeroSection";
+import { FeaturesSection } from "@/components/FeaturesSection";
+import { PricingSection } from "@/components/PricingSection";
+import { TestimonialsSection } from "@/components/TestimonialsSection";
+import { StatsSection } from "@/components/StatsSection";
+import { CTASection } from "@/components/CTASection";
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+      <Header />
+      <HeroSection />
+      <StatsSection />
+      <FeaturesSection />
+      <TestimonialsSection />
+      <PricingSection />
+      <CTASection />
+      <Footer />
     </div>
   );
 };
