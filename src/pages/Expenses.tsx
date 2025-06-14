@@ -144,7 +144,9 @@ const Expenses = () => {
     const matchesSearch = expense.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          expense.category.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = filterCategory === "all" || expense.category === filterCategory;
-    const matchesProject = filterProject === "all" || expense.project_id === filterProject;
+    const matchesProject = filterProject === "all" || 
+                          (filterProject === "no_project" && !expense.project_id) ||
+                          expense.project_id === filterProject;
     
     return matchesSearch && matchesCategory && matchesProject;
   });
@@ -241,7 +243,7 @@ const Expenses = () => {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">Tous les projets</SelectItem>
-                    <SelectItem value="">Aucun projet</SelectItem>
+                    <SelectItem value="no_project">Aucun projet</SelectItem>
                     {projects.map((project) => (
                       <SelectItem key={project.id} value={project.id}>
                         {project.name}
