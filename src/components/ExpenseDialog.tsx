@@ -1,14 +1,8 @@
 
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { ExpenseFormFields } from "./ExpenseFormFields";
+import { ExpenseDialogHeader } from "./ExpenseDialogHeader";
+import { ExpenseDialogFooter } from "./ExpenseDialogFooter";
 import { useExpenseForm } from "@/hooks/useExpenseForm";
 import { useExpenseSubmit } from "@/hooks/useExpenseSubmit";
 
@@ -47,17 +41,7 @@ export const ExpenseDialog = ({ open, onOpenChange, expense, projects, onExpense
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px]">
-        <DialogHeader>
-          <DialogTitle>
-            {expense ? "Modifier la dépense" : "Nouvelle dépense"}
-          </DialogTitle>
-          <DialogDescription>
-            {expense 
-              ? "Modifiez les informations de la dépense." 
-              : "Enregistrez une nouvelle dépense pour vos projets."
-            }
-          </DialogDescription>
-        </DialogHeader>
+        <ExpenseDialogHeader expense={expense} />
         
         <form onSubmit={onSubmit} className="space-y-4">
           <ExpenseFormFields 
@@ -66,14 +50,11 @@ export const ExpenseDialog = ({ open, onOpenChange, expense, projects, onExpense
             projects={projects}
           />
 
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Annuler
-            </Button>
-            <Button type="submit" disabled={loading} className="bg-orange-600 hover:bg-orange-700">
-              {loading ? "Sauvegarde..." : expense ? "Modifier" : "Enregistrer"}
-            </Button>
-          </DialogFooter>
+          <ExpenseDialogFooter 
+            expense={expense}
+            loading={loading}
+            onCancel={() => onOpenChange(false)}
+          />
         </form>
       </DialogContent>
     </Dialog>
