@@ -32,6 +32,25 @@ const translations: Translations = {
   'success': { fr: 'Succès', en: 'Success', es: 'Éxito', de: 'Erfolg', it: 'Successo', pt: 'Sucesso' },
   'error': { fr: 'Erreur', en: 'Error', es: 'Error', de: 'Fehler', it: 'Errore', pt: 'Erro' },
   
+  // Homepage specific
+  'get_started': { fr: 'Commencer', en: 'Get Started', es: 'Comenzar', de: 'Loslegen', it: 'Inizia', pt: 'Começar' },
+  'learn_more': { fr: 'En savoir plus', en: 'Learn More', es: 'Saber más', de: 'Mehr erfahren', it: 'Scopri di più', pt: 'Saber mais' },
+  'features': { fr: 'Fonctionnalités', en: 'Features', es: 'Características', de: 'Features', it: 'Caratteristiche', pt: 'Recursos' },
+  'pricing': { fr: 'Tarifs', en: 'Pricing', es: 'Precios', de: 'Preise', it: 'Prezzi', pt: 'Preços' },
+  'testimonials': { fr: 'Témoignages', en: 'Testimonials', es: 'Testimonios', de: 'Referenzen', it: 'Testimonianze', pt: 'Testemunhos' },
+  'login': { fr: 'Connexion', en: 'Login', es: 'Iniciar sesión', de: 'Anmelden', it: 'Accedi', pt: 'Entrar' },
+  'sign_up': { fr: 'S\'inscrire', en: 'Sign Up', es: 'Registrarse', de: 'Registrieren', it: 'Registrati', pt: 'Cadastrar' },
+  
+  // Hero section
+  'hero_title': { fr: 'Gérez vos projets de construction avec efficacité', en: 'Manage your construction projects efficiently', es: 'Gestiona tus proyectos de construcción de manera eficiente', de: 'Verwalten Sie Ihre Bauprojekte effizient', it: 'Gestisci i tuoi progetti di costruzione in modo efficiente', pt: 'Gerencie seus projetos de construção com eficiência' },
+  'hero_subtitle': { fr: 'Une solution complète pour planifier, suivre et optimiser tous vos chantiers', en: 'A complete solution to plan, track and optimize all your construction sites', es: 'Una solución completa para planificar, rastrear y optimizar todos tus sitios de construcción', de: 'Eine komplette Lösung zur Planung, Verfolgung und Optimierung aller Ihrer Baustellen', it: 'Una soluzione completa per pianificare, tracciare e ottimizzare tutti i tuoi cantieri', pt: 'Uma solução completa para planejar, rastrear e otimizar todos os seus canteiros de obras' },
+  
+  // Stats section
+  'projects_managed': { fr: 'Projets gérés', en: 'Projects Managed', es: 'Proyectos Gestionados', de: 'Verwaltete Projekte', it: 'Progetti Gestiti', pt: 'Projetos Gerenciados' },
+  'hours_tracked': { fr: 'Heures suivies', en: 'Hours Tracked', es: 'Horas Rastreadas', de: 'Verfolgte Stunden', it: 'Ore Tracciate', pt: 'Horas Rastreadas' },
+  'satisfied_clients': { fr: 'Clients satisfaits', en: 'Satisfied Clients', es: 'Clientes Satisfechos', de: 'Zufriedene Kunden', it: 'Clienti Soddisfatti', pt: 'Clientes Satisfeitos' },
+  'cost_savings': { fr: 'Économies réalisées', en: 'Cost Savings', es: 'Ahorros en Costos', de: 'Kosteneinsparungen', it: 'Risparmi sui Costi', pt: 'Economia de Custos' },
+  
   // Profile specific
   'personal_information': { fr: 'Informations personnelles', en: 'Personal Information', es: 'Información Personal', de: 'Persönliche Informationen', it: 'Informazioni Personali', pt: 'Informações Pessoais' },
   'manage_basic_info_and_avatar': { fr: 'Gérez vos informations de base et votre avatar', en: 'Manage your basic information and avatar', es: 'Gestiona tu información básica y avatar', de: 'Verwalten Sie Ihre Grunddaten und Avatar', it: 'Gestisci le tue informazioni di base e avatar', pt: 'Gerencie suas informações básicas e avatar' },

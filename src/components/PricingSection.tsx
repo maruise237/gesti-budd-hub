@@ -3,134 +3,100 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Check } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
+import { useCurrency } from "@/hooks/useCurrency";
 
 export const PricingSection = () => {
+  const { t } = useTranslation();
+  const { formatCurrency } = useCurrency();
+
   const plans = [
     {
       name: "Starter",
-      price: "29",
-      description: "Parfait pour débuter",
-      popular: false,
+      price: 29,
+      description: "Parfait pour les petites équipes",
       features: [
-        "1 chantier actif",
-        "5 utilisateurs max",
-        "10 GB de stockage",
-        "Support par email",
-        "Fonctionnalités de base",
-        "Application mobile"
+        "Jusqu'à 5 projets",
+        "Gestion de base des employés",
+        "Suivi des dépenses",
+        "Support par email"
       ]
     },
     {
       name: "Professional",
-      price: "79",
-      description: "Le plus populaire",
+      price: 79,
+      description: "Pour les entreprises en croissance",
       popular: true,
       features: [
-        "5 chantiers actifs",
-        "20 utilisateurs max",
-        "50 GB de stockage",
-        "Support prioritaire",
-        "Rapports avancés",
-        "Intégrations de base",
-        "Gestion des stocks",
-        "Paies automatisées"
+        "Projets illimités",
+        "Gestion avancée des employés",
+        "Rapports détaillés",
+        "Intégrations API",
+        "Support prioritaire"
       ]
     },
     {
       name: "Enterprise",
-      price: "159",
-      description: "Pour les grandes équipes",
-      popular: false,
+      price: 149,
+      description: "Pour les grandes organisations",
       features: [
-        "Chantiers illimités",
-        "Utilisateurs illimités",
-        "200 GB de stockage",
-        "Support téléphonique",
-        "Accès API complet",
-        "Intégrations avancées",
-        "Formation incluse",
+        "Toutes les fonctionnalités Pro",
+        "Sécurité avancée",
+        "Support dédié",
+        "Formation personnalisée",
         "SLA garanti"
-      ]
-    },
-    {
-      name: "Premium",
-      price: "299",
-      description: "Solution sur-mesure",
-      popular: false,
-      features: [
-        "Toutes les fonctionnalités",
-        "Stockage illimité",
-        "Support dédié 24/7",
-        "SLA premium",
-        "Formations illimitées",
-        "Développements custom",
-        "Onboarding personnalisé",
-        "Gestionnaire de compte"
       ]
     }
   ];
 
   return (
-    <section id="pricing" className="py-24 bg-white">
-      <div className="container mx-auto px-4">
+    <section id="pricing" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
+      <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            Des tarifs transparents pour chaque besoin
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            {t('pricing')}
           </h2>
-          <p className="text-xl text-gray-600 mb-8">
-            Commencez gratuitement, évoluez à votre rythme
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Choisissez le plan qui correspond le mieux à vos besoins
           </p>
-          <div className="inline-flex items-center space-x-2 bg-green-50 text-green-700 px-4 py-2 rounded-full text-sm font-medium">
-            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-            <span>30 jours d'essai gratuit sur tous les plans</span>
-          </div>
         </div>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {plans.map((plan, index) => (
-            <Card key={index} className={`relative ${plan.popular ? 'ring-2 ring-orange-500 shadow-xl scale-105' : 'shadow-lg'} hover:shadow-xl transition-all duration-300`}>
+            <Card key={index} className={`relative ${plan.popular ? 'border-orange-500 shadow-lg' : ''}`}>
               {plan.popular && (
-                <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-orange-500 to-orange-600">
-                  Le plus populaire
+                <Badge className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-orange-500">
+                  Populaire
                 </Badge>
               )}
-              <CardHeader className="text-center pb-4">
-                <CardTitle className="text-2xl font-bold text-gray-900">{plan.name}</CardTitle>
-                <CardDescription className="text-gray-600">{plan.description}</CardDescription>
-                <div className="mt-4">
-                  <span className="text-4xl font-bold text-gray-900">{plan.price}€</span>
-                  <span className="text-gray-600">/mois</span>
+              <CardHeader>
+                <CardTitle className="text-2xl">{plan.name}</CardTitle>
+                <CardDescription>{plan.description}</CardDescription>
+                <div className="text-3xl font-bold text-orange-600">
+                  {formatCurrency(plan.price)}
+                  <span className="text-sm text-gray-500 font-normal">/mois</span>
                 </div>
               </CardHeader>
-              <CardContent className="space-y-3">
-                {plan.features.map((feature, featureIndex) => (
-                  <div key={featureIndex} className="flex items-center space-x-3">
-                    <Check className="w-5 h-5 text-green-600 flex-shrink-0" />
-                    <span className="text-gray-700 text-sm">{feature}</span>
-                  </div>
-                ))}
+              <CardContent>
+                <ul className="space-y-3">
+                  {plan.features.map((feature, featureIndex) => (
+                    <li key={featureIndex} className="flex items-center">
+                      <Check className="h-4 w-4 text-green-500 mr-2" />
+                      <span className="text-sm">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
               </CardContent>
               <CardFooter>
                 <Button 
-                  className={`w-full ${plan.popular 
-                    ? 'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700' 
-                    : 'bg-gray-900 hover:bg-gray-800'
-                  }`}
+                  className={`w-full ${plan.popular ? 'bg-orange-600 hover:bg-orange-700' : ''}`}
+                  variant={plan.popular ? 'default' : 'outline'}
                 >
-                  Commencer l'essai
+                  {t('get_started')}
                 </Button>
               </CardFooter>
             </Card>
           ))}
-        </div>
-        
-        <div className="text-center mt-12">
-          <p className="text-gray-600 mb-4">
-            Besoin d'une solution sur-mesure ? Contactez-nous pour un devis personnalisé.
-          </p>
-          <Button variant="outline" size="lg" className="border-2">
-            Demander un devis
-          </Button>
         </div>
       </div>
     </section>

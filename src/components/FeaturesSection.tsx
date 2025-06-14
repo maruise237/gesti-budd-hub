@@ -1,58 +1,55 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, Calendar, FileText, Clock } from "lucide-react";
+import { Calendar, Users, FileText, Clock } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export const FeaturesSection = () => {
+  const { t } = useTranslation();
+
   const features = [
     {
-      icon: <Users className="w-8 h-8" />,
-      title: "Gestion d'équipe intelligente",
-      description: "Pointage géolocalisé, calcul automatique des paies, planning optimisé et suivi des compétences en temps réel."
+      icon: Calendar,
+      title: t('projects'),
+      description: "Planifiez et suivez vos projets de construction du début à la fin"
     },
     {
-      icon: <Calendar className="w-8 h-8" />,
-      title: "Planification de chantiers",
-      description: "Diagrammes de Gantt interactifs, gestion des dépendances et optimisation automatique des ressources."
+      icon: Users,
+      title: t('employees'),
+      description: "Gérez votre équipe et suivez les heures de travail"
     },
     {
-      icon: <FileText className="w-8 h-8" />,
-      title: "Suivi matériel et stocks",
-      description: "Inventaire centralisé, affectation dynamique, maintenance préventive et alertes de stock automatiques."
+      icon: FileText,
+      title: t('expenses'),
+      description: "Contrôlez les coûts et optimisez votre budget"
     },
     {
-      icon: <Clock className="w-8 h-8" />,
-      title: "Comptabilité temps réel",
-      description: "Suivi budgétaire instantané, facturation automatique et rapports financiers personnalisables."
+      icon: Clock,
+      title: t('time_entries'),
+      description: "Suivez le temps passé sur chaque tâche et projet"
     }
   ];
 
   return (
-    <section id="features" className="py-24 bg-white">
-      <div className="container mx-auto px-4">
+    <section id="features" className="py-20 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            Tout ce dont vous avez besoin pour gérer vos chantiers
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            {t('features')}
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Une solution complète qui s'adapte à votre métier et grandit avec votre entreprise
+            Découvrez tous les outils dont vous avez besoin pour gérer efficacement vos projets de construction
           </p>
         </div>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature, index) => (
-            <Card key={index} className="group hover:shadow-lg transition-shadow duration-300 border-0 shadow-md">
+            <Card key={index} className="hover:shadow-lg transition-shadow">
               <CardHeader>
-                <div className="w-16 h-16 bg-gradient-to-r from-orange-100 to-orange-200 rounded-xl flex items-center justify-center text-orange-600 group-hover:scale-110 transition-transform duration-300">
-                  {feature.icon}
-                </div>
-                <CardTitle className="text-xl font-bold text-gray-900">
-                  {feature.title}
-                </CardTitle>
+                <feature.icon className="h-12 w-12 text-orange-600 mb-4" />
+                <CardTitle>{feature.title}</CardTitle>
               </CardHeader>
               <CardContent>
-                <CardDescription className="text-gray-600 leading-relaxed">
-                  {feature.description}
-                </CardDescription>
+                <CardDescription>{feature.description}</CardDescription>
               </CardContent>
             </Card>
           ))}

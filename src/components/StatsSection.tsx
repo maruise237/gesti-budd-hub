@@ -1,21 +1,30 @@
 
+import { useTranslation } from "@/hooks/useTranslation";
+import { useCurrency } from "@/hooks/useCurrency";
+
 export const StatsSection = () => {
+  const { t } = useTranslation();
+  const { formatCurrency } = useCurrency();
+
   const stats = [
-    { number: "30%", label: "de temps économisé", sublabel: "sur les tâches administratives" },
-    { number: "50%", label: "d'erreurs en moins", sublabel: "dans la gestion de projet" },
-    { number: "99.9%", label: "de disponibilité", sublabel: "garantie avec notre SLA" },
-    { number: "300%", label: "de ROI moyen", sublabel: "dès la première année" }
+    { label: t('projects_managed'), value: '500+' },
+    { label: t('hours_tracked'), value: '10,000+' },
+    { label: t('satisfied_clients'), value: '98%' },
+    { label: t('cost_savings'), value: formatCurrency(250000) }, // Exemple de coût économisé
   ];
 
   return (
-    <section className="py-16 bg-gradient-to-br from-orange-50 to-blue-50">
-      <div className="container mx-auto px-4">
+    <section className="py-16 bg-orange-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map((stat, index) => (
             <div key={index} className="text-center">
-              <div className="text-4xl font-bold text-gray-900 mb-2">{stat.number}</div>
-              <div className="text-gray-700 font-medium mb-1">{stat.label}</div>
-              <div className="text-sm text-gray-500">{stat.sublabel}</div>
+              <div className="text-3xl md:text-4xl font-bold text-orange-600 mb-2">
+                {stat.value}
+              </div>
+              <div className="text-gray-600">
+                {stat.label}
+              </div>
             </div>
           ))}
         </div>

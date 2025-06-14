@@ -114,7 +114,9 @@ const Expenses = () => {
           {/* Graphiques - affichés seulement s'il y a des dépenses */}
           {expenses.length > 0 && (
             <div className="space-y-4">
-              <h2 className="text-xl font-semibold">Analyses graphiques</h2>
+              <h2 className="text-xl font-semibold">
+                {t('currentLanguage') === 'fr' ? 'Analyses graphiques' : 'Chart Analysis'}
+              </h2>
               <ExpensesCharts expenses={expenses} projects={projects} />
             </div>
           )}

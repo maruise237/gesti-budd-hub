@@ -1,67 +1,52 @@
 
+import { useTranslation } from "@/hooks/useTranslation";
+import { Link } from "react-router-dom";
+
 export const Footer = () => {
+  const { t } = useTranslation();
+
   return (
-    <footer className="bg-gray-900 text-white py-16">
-      <div className="container mx-auto px-4">
+    <footer className="bg-gray-900 text-white py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
         <div className="grid md:grid-cols-4 gap-8">
-          <div className="col-span-1">
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">GB</span>
-              </div>
-              <span className="text-xl font-bold">GestiBuld</span>
-            </div>
-            <p className="text-gray-400 mb-6">
-              La plateforme SaaS qui révolutionne la gestion des entreprises BTP.
+          <div>
+            <h3 className="text-2xl font-bold text-orange-400 mb-4">BuildPro</h3>
+            <p className="text-gray-400">
+              La solution complète pour gérer vos projets de construction avec efficacité.
             </p>
-            <div className="text-sm text-gray-400">
-              <p>© 2024 GestiBuld</p>
-              <p>Tous droits réservés</p>
-            </div>
           </div>
           
           <div>
             <h4 className="font-semibold mb-4">Produit</h4>
             <ul className="space-y-2 text-gray-400">
-              <li><a href="#" className="hover:text-white transition-colors">Fonctionnalités</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Tarifs</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Intégrations</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">API</a></li>
+              <li><Link to="/#features" className="hover:text-white">{t('features')}</Link></li>
+              <li><Link to="/#pricing" className="hover:text-white">{t('pricing')}</Link></li>
+              <li><Link to="/dashboard" className="hover:text-white">{t('dashboard')}</Link></li>
             </ul>
           </div>
-          
+
+          <div>
+            <h4 className="font-semibold mb-4">Fonctionnalités</h4>
+            <ul className="space-y-2 text-gray-400">
+              <li><Link to="/dashboard/projects" className="hover:text-white">{t('projects')}</Link></li>
+              <li><Link to="/dashboard/employees" className="hover:text-white">{t('employees')}</Link></li>
+              <li><Link to="/dashboard/expenses" className="hover:text-white">{t('expenses')}</Link></li>
+              <li><Link to="/dashboard/time-entries" className="hover:text-white">{t('time_entries')}</Link></li>
+            </ul>
+          </div>
+
           <div>
             <h4 className="font-semibold mb-4">Support</h4>
             <ul className="space-y-2 text-gray-400">
-              <li><a href="#" className="hover:text-white transition-colors">Centre d'aide</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Documentation</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Formation</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
-            </ul>
-          </div>
-          
-          <div>
-            <h4 className="font-semibold mb-4">Entreprise</h4>
-            <ul className="space-y-2 text-gray-400">
-              <li><a href="#" className="hover:text-white transition-colors">À propos</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Carrières</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Presse</a></li>
+              <li><a href="#" className="hover:text-white">Documentation</a></li>
+              <li><a href="#" className="hover:text-white">Support</a></li>
+              <li><a href="#" className="hover:text-white">Contact</a></li>
             </ul>
           </div>
         </div>
         
-        <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <div className="flex space-x-6 text-sm text-gray-400">
-            <a href="#" className="hover:text-white transition-colors">Mentions légales</a>
-            <a href="#" className="hover:text-white transition-colors">Politique de confidentialité</a>
-            <a href="#" className="hover:text-white transition-colors">CGU</a>
-          </div>
-          <div className="flex space-x-4 mt-4 md:mt-0">
-            <div className="text-sm text-gray-400">
-              Fait avec ❤️ en France
-            </div>
-          </div>
+        <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+          <p>&copy; 2024 BuildPro. Tous droits réservés.</p>
         </div>
       </div>
     </footer>
