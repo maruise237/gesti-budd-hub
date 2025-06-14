@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserPreferences } from "@/contexts/UserPreferencesContext";
+import { useTranslation } from "@/hooks/useTranslation";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Upload, User, Palette, Globe } from "lucide-react";
@@ -72,6 +74,7 @@ const OTHER_CURRENCIES = [
 export const ProfileCustomization = () => {
   const { user } = useAuth();
   const { preferences, updatePreferences } = useUserPreferences();
+  const { t } = useTranslation();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -110,8 +113,8 @@ export const ProfileCustomization = () => {
     } catch (error) {
       console.error('Error fetching profile:', error);
       toast({
-        title: "Erreur",
-        description: "Impossible de charger le profil",
+        title: t('error'),
+        description: t('unable_to_load_profile'),
         variant: "destructive",
       });
     }
@@ -144,14 +147,14 @@ export const ProfileCustomization = () => {
       setProfile(prev => ({ ...prev, avatar_url: data.publicUrl }));
       
       toast({
-        title: "Succès",
-        description: "Avatar mis à jour avec succès",
+        title: t('success'),
+        description: t('avatar_updated_successfully'),
       });
     } catch (error) {
       console.error('Error uploading avatar:', error);
       toast({
-        title: "Erreur",
-        description: "Impossible de télécharger l'avatar",
+        title: t('error'),
+        description: t('unable_to_upload_avatar'),
         variant: "destructive",
       });
     } finally {
@@ -177,14 +180,14 @@ export const ProfileCustomization = () => {
 
       console.log('Profile saved successfully');
       toast({
-        title: "Succès",
-        description: "Profil mis à jour avec succès",
+        title: t('success'),
+        description: t('profile_updated_successfully'),
       });
     } catch (error) {
       console.error('Error updating profile:', error);
       toast({
-        title: "Erreur",
-        description: "Impossible de mettre à jour le profil",
+        title: t('error'),
+        description: t('unable_to_update_profile'),
         variant: "destructive",
       });
     } finally {
@@ -194,16 +197,17 @@ export const ProfileCustomization = () => {
 
   const handlePreferenceChange = async (key: keyof typeof preferences, value: string) => {
     try {
+      console.log(`Updating ${key} to:`, value);
       await updatePreferences({ [key]: value });
       toast({
-        title: "Succès",
-        description: `${key === 'currency' ? 'Devise' : key === 'language' ? 'Langue' : 'Thème'} mis à jour avec succès`,
+        title: t('success'),
+        description: t('preferences_updated_successfully'),
       });
     } catch (error) {
       console.error(`Error updating ${key}:`, error);
       toast({
-        title: "Erreur",
-        description: `Impossible de mettre à jour ${key === 'currency' ? 'la devise' : key === 'language' ? 'la langue' : 'le thème'}`,
+        title: t('error'),
+        description: t('unable_to_update_preferences'),
         variant: "destructive",
       });
     }
@@ -216,10 +220,10 @@ export const ProfileCustomization = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <User className="w-5 h-5" />
-            Informations personnelles
+            {t('personal_information')}
           </CardTitle>
           <CardDescription>
-            Gérez vos informations de base et votre avatar
+            {t('manage_basic_info_and_avatar')}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -236,7 +240,7 @@ export const ProfileCustomization = () => {
                 <Label htmlFor="avatar" className="cursor-pointer">
                   <div className="flex items-center space-x-2 bg-secondary hover:bg-secondary/80 px-4 py-2 rounded-md transition-colors">
                     <Upload className="w-4 h-4" />
-                    <span>{uploading ? "Téléchargement..." : "Changer l'avatar"}</span>
+                    <span>{uploading ? t('uploading') : t('change_avatar')}</span>
                   </div>
                 </Label>
                 <Input
@@ -253,48 +257,48 @@ export const ProfileCustomization = () => {
             {/* Basic Info */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="first_name">Prénom</Label>
+                <Label htmlFor="first_name">{t('first_name')}</Label>
                 <Input
                   id="first_name"
                   value={profile.first_name || ""}
                   onChange={(e) => setProfile(prev => ({ ...prev, first_name: e.target.value }))}
-                  placeholder="Votre prénom"
+                  placeholder={t('your_first_name')}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="last_name">Nom</Label>
+                <Label htmlFor="last_name">{t('last_name')}</Label>
                 <Input
                   id="last_name"
                   value={profile.last_name || ""}
                   onChange={(e) => setProfile(prev => ({ ...prev, last_name: e.target.value }))}
-                  placeholder="Votre nom"
+                  placeholder={t('your_last_name')}
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="company_name">Nom de l'entreprise</Label>
+              <Label htmlFor="company_name">{t('company_name')}</Label>
               <Input
                 id="company_name"
                 value={profile.company_name || ""}
                 onChange={(e) => setProfile(prev => ({ ...prev, company_name: e.target.value }))}
-                placeholder="Nom de votre entreprise"
+                placeholder={t('your_company_name')}
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="bio">Biographie</Label>
+              <Label htmlFor="bio">{t('biography')}</Label>
               <Textarea
                 id="bio"
                 value={profile.bio || ""}
                 onChange={(e) => setProfile(prev => ({ ...prev, bio: e.target.value }))}
-                placeholder="Parlez-nous de vous..."
+                placeholder={t('tell_us_about_yourself')}
                 rows={3}
               />
             </div>
 
             <Button type="submit" disabled={loading} className="w-full">
-              {loading ? "Mise à jour..." : "Sauvegarder les modifications"}
+              {loading ? t('updating') : t('save_changes')}
             </Button>
           </form>
         </CardContent>
@@ -305,42 +309,42 @@ export const ProfileCustomization = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Palette className="w-5 h-5" />
-            Préférences d'apparence
+            {t('appearance_preferences')}
           </CardTitle>
           <CardDescription>
-            Personnalisez l'apparence de l'application
+            {t('customize_app_appearance')}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="theme">Thème</Label>
+            <Label htmlFor="theme">{t('theme')}</Label>
             <Select
               value={preferences.theme}
               onValueChange={(value) => handlePreferenceChange('theme', value)}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Sélectionner un thème" />
+                <SelectValue placeholder={t('select_theme')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="light">Clair</SelectItem>
-                <SelectItem value="dark">Sombre</SelectItem>
-                <SelectItem value="system">Système</SelectItem>
+                <SelectItem value="light">{t('light')}</SelectItem>
+                <SelectItem value="dark">{t('dark')}</SelectItem>
+                <SelectItem value="system">{t('system')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="currency">Devise</Label>
+            <Label htmlFor="currency">{t('currency')}</Label>
             <Select
               value={preferences.currency}
               onValueChange={(value) => handlePreferenceChange('currency', value)}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Sélectionner une devise" />
+                <SelectValue placeholder={t('select_currency')} />
               </SelectTrigger>
               <SelectContent className="max-h-[300px]">
                 <div className="px-2 py-1 text-sm font-semibold text-muted-foreground">
-                  Devises internationales
+                  {t('international_currencies')}
                 </div>
                 {OTHER_CURRENCIES.map((currency) => (
                   <SelectItem key={currency.value} value={currency.value}>
@@ -348,7 +352,7 @@ export const ProfileCustomization = () => {
                   </SelectItem>
                 ))}
                 <div className="px-2 py-1 text-sm font-semibold text-muted-foreground border-t mt-2 pt-2">
-                  Devises africaines
+                  {t('african_currencies')}
                 </div>
                 {AFRICAN_CURRENCIES.map((currency) => (
                   <SelectItem key={currency.value} value={currency.value}>
@@ -369,22 +373,22 @@ export const ProfileCustomization = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Globe className="w-5 h-5" />
-            Préférences régionales
+            {t('regional_preferences')}
           </CardTitle>
           <CardDescription>
-            Configurez votre langue et fuseau horaire
+            {t('configure_language_and_timezone')}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="timezone">Fuseau horaire</Label>
+              <Label htmlFor="timezone">{t('timezone')}</Label>
               <Select
                 value={profile.timezone || "Europe/Paris"}
                 onValueChange={(value) => setProfile(prev => ({ ...prev, timezone: value }))}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Sélectionner un fuseau horaire" />
+                  <SelectValue placeholder={t('select_timezone')} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Europe/Paris">Europe/Paris (GMT+1)</SelectItem>
@@ -397,13 +401,13 @@ export const ProfileCustomization = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="language">Langue</Label>
+              <Label htmlFor="language">{t('language')}</Label>
               <Select
                 value={preferences.language}
                 onValueChange={(value) => handlePreferenceChange('language', value)}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Sélectionner une langue" />
+                  <SelectValue placeholder={t('select_language')} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="fr">Français</SelectItem>

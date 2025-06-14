@@ -121,6 +121,9 @@ export const UserPreferencesProvider = ({ children }: { children: React.ReactNod
       console.log('Updating preferences:', newPreferences);
       const updatedPreferences = { ...preferences, ...newPreferences };
       
+      // Optimistically update the local state first
+      setPreferences(updatedPreferences);
+      
       const { error } = await supabase
         .from('profiles')
         .upsert({
@@ -131,9 +134,12 @@ export const UserPreferencesProvider = ({ children }: { children: React.ReactNod
           updated_at: new Date().toISOString()
         });
 
-      if (error) throw error;
+      if (error) {
+        // Revert local state if database update fails
+        setPreferences(preferences);
+        throw error;
+      }
 
-      setPreferences(updatedPreferences);
       console.log('Preferences updated successfully:', updatedPreferences);
     } catch (error) {
       console.error('Error updating preferences:', error);
