@@ -3,15 +3,18 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { Plus } from "lucide-react";
+import { Plus, FileDown } from "lucide-react";
 import { ExpenseDialog } from "@/components/ExpenseDialog";
 import { ExpenseStats } from "@/components/ExpenseStats";
 import { ExpenseFilters } from "@/components/ExpenseFilters";
 import { ExpensesList } from "@/components/ExpensesList";
 import { EmptyExpensesState } from "@/components/EmptyExpensesState";
+import { ExpensesExportDialog } from "@/components/ExpensesExportDialog";
+import { ExpensesCharts } from "@/components/ExpensesCharts";
 import { useExpenses } from "@/hooks/useExpenses";
 import { useProjects } from "@/hooks/useProjects";
 import { useExpenseFilters } from "@/hooks/useExpenseFilters";
+import { useExpensesExport } from "@/hooks/useExpensesExport";
 
 interface Expense {
   id: string;
@@ -26,10 +29,12 @@ interface Expense {
 
 const Expenses = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [exportDialogOpen, setExportDialogOpen] = useState(false);
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   
   const { expenses, loading, fetchExpenses, handleDelete } = useExpenses();
   const { projects } = useProjects();
+  const { handleExport } = useExpensesExport(projects);
   const {
     searchTerm,
     setSearchTerm,
@@ -80,19 +85,37 @@ const Expenses = () => {
                 Gérez les dépenses de vos projets
               </p>
             </div>
-            <Button 
-              onClick={handleCreateExpense}
-              className="bg-orange-600 hover:bg-orange-700"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Nouvelle dépense
-            </Button>
+            <div className="flex gap-2">
+              <Button 
+                variant="outline"
+                onClick={() => setExportDialogOpen(true)}
+                disabled={expenses.length === 0}
+              >
+                <FileDown className="h-4 w-4 mr-2" />
+                Exporter
+              </Button>
+              <Button 
+                onClick={handleCreateExpense}
+                className="bg-orange-600 hover:bg-orange-700"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Nouvelle dépense
+              </Button>
+            </div>
           </div>
 
           <ExpenseStats 
             totalExpenses={totalExpenses}
             expenseCount={filteredExpenses.length}
           />
+
+          {/* Graphiques - affichés seulement s'il y a des dépenses */}
+          {expenses.length > 0 && (
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold">Analyses graphiques</h2>
+              <ExpensesCharts expenses={expenses} projects={projects} />
+            </div>
+          )}
 
           <ExpenseFilters
             searchTerm={searchTerm}
@@ -125,6 +148,14 @@ const Expenses = () => {
           expense={editingExpense}
           projects={projects}
           onExpenseSaved={handleExpenseSaved}
+        />
+
+        <ExpensesExportDialog
+          open={exportDialogOpen}
+          onOpenChange={setExportDialogOpen}
+          expenses={expenses}
+          projects={projects}
+          onExport={handleExport}
         />
       </DashboardLayout>
     </ProtectedRoute>
