@@ -15,6 +15,7 @@ import {
   LogOut,
   Home,
   CheckSquare,
+  User,
 } from "lucide-react";
 
 interface DashboardLayoutProps {
@@ -29,6 +30,7 @@ const navigation = [
   { name: "Tâches", href: "/dashboard/tasks", icon: CheckSquare },
   { name: "Temps de travail", href: "/dashboard/time-entries", icon: Clock },
   { name: "Dépenses", href: "/dashboard/expenses", icon: CreditCard },
+  { name: "Profil", href: "/dashboard/profile", icon: User },
 ];
 
 export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
