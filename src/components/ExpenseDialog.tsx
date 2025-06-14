@@ -14,6 +14,7 @@ interface Expense {
   date: string;
   project_id: string | null;
   receipt_url: string | null;
+  created_at: string;
 }
 
 interface Project {
@@ -30,12 +31,29 @@ interface ExpenseDialogProps {
 }
 
 export const ExpenseDialog = ({ open, onOpenChange, expense, projects, onExpenseSaved }: ExpenseDialogProps) => {
-  const { formData, updateFormData } = useExpenseForm({ expense, open });
   const { loading, handleSubmit } = useExpenseSubmit({ expense, onExpenseSaved });
+  const { form, receiptUrl, handleSubmit: formHandleSubmit, handleReceiptChange } = useExpenseForm({ 
+    expense, 
+    onSubmit: handleSubmit 
+  });
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await handleSubmit(formData);
+    form.handleSubmit(formHandleSubmit)();
+  };
+
+  // Create formData object from form values for compatibility
+  const formData = {
+    description: form.watch('description'),
+    amount: form.watch('amount'),
+    category: form.watch('category'),
+    date: form.watch('date'),
+    project_id: form.watch('project_id'),
+    receipt_url: form.watch('receipt_url')
+  };
+
+  const updateFormData = (field: string, value: string) => {
+    form.setValue(field as keyof typeof formData, value);
   };
 
   return (

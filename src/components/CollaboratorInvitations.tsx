@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,7 +28,6 @@ interface Collaborator {
   profiles: {
     first_name: string | null;
     last_name: string | null;
-    email: string | null;
   } | null;
 }
 
@@ -73,20 +71,32 @@ export const CollaboratorInvitations = () => {
 
   const fetchCollaborators = async () => {
     try {
-      const { data, error } = await supabase
+      // First fetch collaborators
+      const { data: collaboratorsData, error: collaboratorsError } = await supabase
         .from('collaborators')
-        .select(`
-          *,
-          profiles:user_id (
-            first_name,
-            last_name
-          )
-        `)
+        .select('*')
         .eq('company_id', user?.id)
         .order('joined_at', { ascending: false });
 
-      if (error) throw error;
-      setCollaborators(data || []);
+      if (collaboratorsError) throw collaboratorsError;
+
+      // Then fetch profiles for each collaborator
+      const collaboratorsWithProfiles = await Promise.all(
+        (collaboratorsData || []).map(async (collaborator) => {
+          const { data: profileData } = await supabase
+            .from('profiles')
+            .select('first_name, last_name')
+            .eq('id', collaborator.user_id)
+            .single();
+
+          return {
+            ...collaborator,
+            profiles: profileData
+          };
+        })
+      );
+
+      setCollaborators(collaboratorsWithProfiles);
     } catch (error) {
       console.error('Error fetching collaborators:', error);
     }
