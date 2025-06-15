@@ -5,6 +5,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 import { useAuth } from "@/contexts/AuthContext";
 import { Link } from "react-router-dom";
 import { LanguageCurrencySelector } from "./LanguageCurrencySelector";
+import { ThemeToggle } from "./ThemeToggle";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -12,46 +13,46 @@ export const Header = () => {
   const { user } = useAuth();
 
   return (
-    <header className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-200 z-50">
+    <header className="fixed top-0 w-full bg-background/80 backdrop-blur-md border-b border-border/50 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-14 sm:h-16">
           <div className="flex items-center min-w-0">
-            <Link to="/" className="text-lg sm:text-2xl font-bold text-orange-600 truncate">
+            <Link to="/" className="text-lg sm:text-2xl font-bold text-primary truncate">
               Gestibud
             </Link>
           </div>
           
           <nav className="hidden md:flex space-x-6 lg:space-x-8">
-            <Link to="/#features" className="text-gray-700 hover:text-orange-600 transition-colors text-sm lg:text-base">
+            <Link to="/#features" className="text-foreground/80 hover:text-primary transition-colors text-sm lg:text-base">
               {t('features')}
             </Link>
-            <Link to="/#pricing" className="text-gray-700 hover:text-orange-600 transition-colors text-sm lg:text-base">
+            <Link to="/#pricing" className="text-foreground/80 hover:text-primary transition-colors text-sm lg:text-base">
               {t('pricing')}
             </Link>
-            <Link to="/#testimonials" className="text-gray-700 hover:text-orange-600 transition-colors text-sm lg:text-base">
+            <Link to="/#testimonials" className="text-foreground/80 hover:text-primary transition-colors text-sm lg:text-base">
               {t('testimonials')}
             </Link>
           </nav>
 
           <div className="hidden md:flex items-center space-x-2 lg:space-x-4 min-w-0">
-            {/* Sélecteurs de langue et devise compacts */}
+            <ThemeToggle />
             <LanguageCurrencySelector compact />
             
             {user ? (
               <Link to="/dashboard">
-                <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-sm">
+                <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground text-sm">
                   {t('dashboard')}
                 </Button>
               </Link>
             ) : (
               <>
                 <Link to="/auth">
-                  <Button variant="ghost" size="sm" className="text-gray-700 hover:text-orange-600 text-sm">
+                  <Button variant="ghost" size="sm" className="text-foreground/80 hover:text-primary text-sm">
                     {t('login')}
                   </Button>
                 </Link>
                 <Link to="/auth">
-                  <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-sm">
+                  <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground text-sm">
                     {t('sign_up')}
                   </Button>
                 </Link>
@@ -60,7 +61,8 @@ export const Header = () => {
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center space-x-2">
+            <ThemeToggle />
             <Button
               variant="ghost"
               size="sm"
@@ -76,32 +78,31 @@ export const Header = () => {
 
         {/* Mobile menu */}
         {isMenuOpen && (
-          <div className="md:hidden border-t border-gray-200">
-            <div className="px-2 pt-2 pb-3 space-y-1 bg-white">
+          <div className="md:hidden border-t border-border/50">
+            <div className="px-2 pt-2 pb-3 space-y-1 bg-background/95 backdrop-blur-sm">
               <Link 
                 to="/#features" 
-                className="block px-3 py-2 text-gray-700 hover:text-orange-600 text-sm"
+                className="block px-3 py-2 text-foreground/80 hover:text-primary text-sm"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {t('features')}
               </Link>
               <Link 
                 to="/#pricing" 
-                className="block px-3 py-2 text-gray-700 hover:text-orange-600 text-sm"
+                className="block px-3 py-2 text-foreground/80 hover:text-primary text-sm"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {t('pricing')}
               </Link>
               <Link 
                 to="/#testimonials" 
-                className="block px-3 py-2 text-gray-700 hover:text-orange-600 text-sm"
+                className="block px-3 py-2 text-foreground/80 hover:text-primary text-sm"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {t('testimonials')}
               </Link>
               
-              {/* Sélecteurs dans le menu mobile */}
-              <div className="border-t border-gray-100 pt-2 mt-2">
+              <div className="border-t border-border/50 pt-2 mt-2">
                 <div className="px-3 py-2">
                   <LanguageCurrencySelector />
                 </div>
@@ -110,23 +111,23 @@ export const Header = () => {
               {user ? (
                 <Link 
                   to="/dashboard"
-                  className="block px-3 py-2 text-orange-600 font-medium text-sm"
+                  className="block px-3 py-2 text-primary font-medium text-sm"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {t('dashboard')}
                 </Link>
               ) : (
-                <div className="space-y-1 pt-2 border-t border-gray-100">
+                <div className="space-y-1 pt-2 border-t border-border/50">
                   <Link 
                     to="/auth"
-                    className="block px-3 py-2 text-gray-700 hover:text-orange-600 text-sm"
+                    className="block px-3 py-2 text-foreground/80 hover:text-primary text-sm"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     {t('login')}
                   </Link>
                   <Link 
                     to="/auth"
-                    className="block px-3 py-2 text-orange-600 font-medium text-sm"
+                    className="block px-3 py-2 text-primary font-medium text-sm"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     {t('sign_up')}
