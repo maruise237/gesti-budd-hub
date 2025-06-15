@@ -1,7 +1,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import { PieChart, Pie, Cell } from "recharts";
 import { useCurrency } from "@/hooks/useCurrency";
 import { useTranslation } from "@/hooks/useTranslation";
 import { PieChart as PieChartIcon } from "lucide-react";
@@ -53,37 +53,35 @@ export const CategoryPieChart = ({ data, colors, chartConfig }: CategoryPieChart
         </div>
       </CardHeader>
       <CardContent className="pt-2">
-        <div className="w-full h-[250px] sm:h-[300px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={data}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ category, percent }) => {
-                  const isMobile = window.innerWidth < 640;
-                  return isMobile ? `${(percent * 100).toFixed(0)}%` : `${getCategoryTranslation(category)} ${(percent * 100).toFixed(0)}%`;
-                }}
-                outerRadius="70%"
-                fill="#8884d8"
-                dataKey="amount"
-              >
-                {data.map((entry, index) => (
-                  <Cell 
-                    key={`cell-${index}`} 
-                    fill={colors[index % colors.length]}
-                    className="hover:brightness-110 transition-all duration-200"
-                  />
-                ))}
-              </Pie>
-              <ChartTooltip 
-                content={<ChartTooltipContent />}
-                formatter={(value: number) => [formatCurrency(value), t('amount')]}
-              />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
+        <ChartContainer config={chartConfig} className="h-[250px] sm:h-[300px]">
+          <PieChart>
+            <Pie
+              data={data}
+              cx="50%"
+              cy="50%"
+              labelLine={false}
+              label={({ category, percent }) => {
+                const isMobile = window.innerWidth < 640;
+                return isMobile ? `${(percent * 100).toFixed(0)}%` : `${getCategoryTranslation(category)} ${(percent * 100).toFixed(0)}%`;
+              }}
+              outerRadius="70%"
+              fill="#8884d8"
+              dataKey="amount"
+            >
+              {data.map((entry, index) => (
+                <Cell 
+                  key={`cell-${index}`} 
+                  fill={colors[index % colors.length]}
+                  className="hover:brightness-110 transition-all duration-200"
+                />
+              ))}
+            </Pie>
+            <ChartTooltip 
+              content={<ChartTooltipContent />}
+              formatter={(value: number) => [formatCurrency(value), t('amount')]}
+            />
+          </PieChart>
+        </ChartContainer>
         
         {/* Progress indicator */}
         <div className="mt-3 sm:mt-4 w-full bg-gray-200 rounded-full h-1.5">

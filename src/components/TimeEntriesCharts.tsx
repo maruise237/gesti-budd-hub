@@ -1,7 +1,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, PieChart, Pie, Cell } from "recharts";
 import { Clock, Users, Calendar } from "lucide-react";
 
 interface ProjectStat {
@@ -68,37 +68,35 @@ export const TimeEntriesCharts = ({
         </CardHeader>
         <CardContent className="pt-2">
           <ChartContainer config={chartConfig} className="h-[300px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={topProjects}>
-                <defs>
-                  <linearGradient id="projectGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#8B5CF6" stopOpacity={0.8}/>
-                    <stop offset="95%" stopColor="#7C3AED" stopOpacity={0.6}/>
-                  </linearGradient>
-                </defs>
-                <XAxis 
-                  dataKey="name" 
-                  tick={{ fontSize: 12, fill: '#6B7280' }}
-                  angle={-45}
-                  textAnchor="end"
-                  height={80}
-                  axisLine={false}
-                  tickLine={false}
-                />
-                <YAxis 
-                  tick={{ fontSize: 12, fill: '#6B7280' }}
-                  axisLine={false}
-                  tickLine={false}
-                />
-                <ChartTooltip content={<ChartTooltipContent />} />
-                <Bar 
-                  dataKey="totalHours" 
-                  fill="url(#projectGradient)"
-                  radius={[4, 4, 0, 0]}
-                  className="hover:brightness-110 transition-all duration-200"
-                />
-              </BarChart>
-            </ResponsiveContainer>
+            <BarChart data={topProjects}>
+              <defs>
+                <linearGradient id="projectGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#8B5CF6" stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor="#7C3AED" stopOpacity={0.6}/>
+                </linearGradient>
+              </defs>
+              <XAxis 
+                dataKey="name" 
+                tick={{ fontSize: 12, fill: '#6B7280' }}
+                angle={-45}
+                textAnchor="end"
+                height={80}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis 
+                tick={{ fontSize: 12, fill: '#6B7280' }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <Bar 
+                dataKey="totalHours" 
+                fill="url(#projectGradient)"
+                radius={[4, 4, 0, 0]}
+                className="hover:brightness-110 transition-all duration-200"
+              />
+            </BarChart>
           </ChartContainer>
           
           {/* Progress indicator */}
@@ -120,29 +118,27 @@ export const TimeEntriesCharts = ({
         <CardContent className="pt-2">
           <div className="flex items-center justify-between">
             <ChartContainer config={chartConfig} className="h-[300px] w-[60%]">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={topEmployees}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={({ name, value }) => `${name}: ${value}h`}
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="totalHours"
-                  >
-                    {topEmployees.map((entry, index) => (
-                      <Cell 
-                        key={`cell-${index}`} 
-                        fill={COLORS[index % COLORS.length]}
-                        className="hover:brightness-110 transition-all duration-200"
-                      />
-                    ))}
-                  </Pie>
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                </PieChart>
-              </ResponsiveContainer>
+              <PieChart>
+                <Pie
+                  data={topEmployees}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  label={({ name, value }) => `${name}: ${value}h`}
+                  outerRadius={80}
+                  fill="#8884d8"
+                  dataKey="totalHours"
+                >
+                  {topEmployees.map((entry, index) => (
+                    <Cell 
+                      key={`cell-${index}`} 
+                      fill={COLORS[index % COLORS.length]}
+                      className="hover:brightness-110 transition-all duration-200"
+                    />
+                  ))}
+                </Pie>
+                <ChartTooltip content={<ChartTooltipContent />} />
+              </PieChart>
             </ChartContainer>
             
             <div className="space-y-3 flex-1">
@@ -187,42 +183,40 @@ export const TimeEntriesCharts = ({
         </CardHeader>
         <CardContent className="pt-2">
           <ChartContainer config={chartConfig} className="h-[300px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={recentDailyStats}>
-                <defs>
-                  <linearGradient id="dailyGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.8}/>
-                    <stop offset="95%" stopColor="#1E40AF" stopOpacity={0.6}/>
-                  </linearGradient>
-                </defs>
-                <XAxis 
-                  dataKey="date" 
-                  tick={{ fontSize: 12, fill: '#6B7280' }}
-                  tickFormatter={(value) => new Date(value).toLocaleDateString('fr-FR', { 
-                    month: 'short', 
-                    day: 'numeric' 
-                  })}
-                  axisLine={false}
-                  tickLine={false}
-                />
-                <YAxis 
-                  tick={{ fontSize: 12, fill: '#6B7280' }}
-                  axisLine={false}
-                  tickLine={false}
-                />
-                <ChartTooltip 
-                  content={<ChartTooltipContent />}
-                  labelFormatter={(value) => new Date(value).toLocaleDateString('fr-FR')}
-                />
-                <Bar 
-                  dataKey="hours" 
-                  fill="url(#dailyGradient)" 
-                  name="Heures"
-                  radius={[4, 4, 0, 0]}
-                  className="hover:brightness-110 transition-all duration-200"
-                />
-              </BarChart>
-            </ResponsiveContainer>
+            <BarChart data={recentDailyStats}>
+              <defs>
+                <linearGradient id="dailyGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor="#1E40AF" stopOpacity={0.6}/>
+                </linearGradient>
+              </defs>
+              <XAxis 
+                dataKey="date" 
+                tick={{ fontSize: 12, fill: '#6B7280' }}
+                tickFormatter={(value) => new Date(value).toLocaleDateString('fr-FR', { 
+                  month: 'short', 
+                  day: 'numeric' 
+                })}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis 
+                tick={{ fontSize: 12, fill: '#6B7280' }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <ChartTooltip 
+                content={<ChartTooltipContent />}
+                labelFormatter={(value) => new Date(value).toLocaleDateString('fr-FR')}
+              />
+              <Bar 
+                dataKey="hours" 
+                fill="url(#dailyGradient)" 
+                name="Heures"
+                radius={[4, 4, 0, 0]}
+                className="hover:brightness-110 transition-all duration-200"
+              />
+            </BarChart>
           </ChartContainer>
           
           {/* Progress indicator */}

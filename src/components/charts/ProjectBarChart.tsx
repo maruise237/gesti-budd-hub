@@ -1,7 +1,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, XAxis, YAxis } from "recharts";
 import { useCurrency } from "@/hooks/useCurrency";
 import { useTranslation } from "@/hooks/useTranslation";
 import { BarChart3 } from "lucide-react";
@@ -39,44 +39,42 @@ export const ProjectBarChart = ({ data, chartConfig }: ProjectBarChartProps) => 
         </div>
       </CardHeader>
       <CardContent className="pt-2">
-        <div className="w-full h-[250px] sm:h-[300px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data} margin={{ top: 20, right: 10, left: 10, bottom: 60 }}>
-              <defs>
-                <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.8}/>
-                  <stop offset="95%" stopColor="#1E40AF" stopOpacity={0.6}/>
-                </linearGradient>
-              </defs>
-              <XAxis 
-                dataKey="project" 
-                angle={-45}
-                textAnchor="end"
-                height={60}
-                interval={0}
-                tick={{ fontSize: 10, fill: '#6B7280' }}
-                axisLine={false}
-                tickLine={false}
-              />
-              <YAxis 
-                tick={{ fontSize: 10, fill: '#6B7280' }}
-                axisLine={false}
-                tickLine={false}
-                width={40}
-              />
-              <ChartTooltip 
-                content={<ChartTooltipContent />}
-                formatter={(value: number) => [formatCurrency(value), t('amount')]}
-              />
-              <Bar 
-                dataKey="amount" 
-                fill="url(#barGradient)"
-                radius={[4, 4, 0, 0]}
-                className="hover:brightness-110 transition-all duration-200"
-              />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
+        <ChartContainer config={chartConfig} className="h-[250px] sm:h-[300px]">
+          <BarChart data={data} margin={{ top: 20, right: 10, left: 10, bottom: 60 }}>
+            <defs>
+              <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.8}/>
+                <stop offset="95%" stopColor="#1E40AF" stopOpacity={0.6}/>
+              </linearGradient>
+            </defs>
+            <XAxis 
+              dataKey="project" 
+              angle={-45}
+              textAnchor="end"
+              height={60}
+              interval={0}
+              tick={{ fontSize: 10, fill: '#6B7280' }}
+              axisLine={false}
+              tickLine={false}
+            />
+            <YAxis 
+              tick={{ fontSize: 10, fill: '#6B7280' }}
+              axisLine={false}
+              tickLine={false}
+              width={40}
+            />
+            <ChartTooltip 
+              content={<ChartTooltipContent />}
+              formatter={(value: number) => [formatCurrency(value), t('amount')]}
+            />
+            <Bar 
+              dataKey="amount" 
+              fill="url(#barGradient)"
+              radius={[4, 4, 0, 0]}
+              className="hover:brightness-110 transition-all duration-200"
+            />
+          </BarChart>
+        </ChartContainer>
         
         {/* Progress indicator */}
         <div className="mt-3 sm:mt-4 w-full bg-gray-200 rounded-full h-1.5">
