@@ -1,18 +1,25 @@
 
 import { Button } from "@/components/ui/button";
 import { Moon, Sun, Palette } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useGlobalPreferences } from "@/hooks/useGlobalPreferences";
 
 export const ThemeToggle = () => {
-  const [theme, setTheme] = useState<'light' | 'dark' | 'modern'>('dark');
+  const { preferences, changeTheme } = useGlobalPreferences();
 
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | 'modern' || 'dark';
-    setTheme(savedTheme);
-    applyTheme(savedTheme);
-  }, []);
+  const handleThemeChange = async () => {
+    const themes: ('light' | 'dark' | 'modern')[] = ['light', 'dark', 'modern'];
+    const currentIndex = themes.indexOf(preferences.theme as 'light' | 'dark' | 'modern');
+    const nextTheme = themes[(currentIndex + 1) % themes.length];
+    
+    try {
+      await changeTheme(nextTheme);
+      applyTheme(nextTheme);
+    } catch (error) {
+      console.error('Failed to change theme:', error);
+    }
+  };
 
-  const applyTheme = (newTheme: 'light' | 'dark' | 'modern') => {
+  const applyTheme = (newTheme: string) => {
     document.documentElement.classList.remove('light', 'dark', 'theme-modern');
     
     if (newTheme === 'light') {
@@ -24,17 +31,8 @@ export const ThemeToggle = () => {
     }
   };
 
-  const toggleTheme = () => {
-    const themes: ('light' | 'dark' | 'modern')[] = ['light', 'dark', 'modern'];
-    const currentIndex = themes.indexOf(theme);
-    const nextTheme = themes[(currentIndex + 1) % themes.length];
-    setTheme(nextTheme);
-    localStorage.setItem('theme', nextTheme);
-    applyTheme(nextTheme);
-  };
-
   const getIcon = () => {
-    switch (theme) {
+    switch (preferences.theme) {
       case 'light':
         return <Sun className="h-4 w-4" />;
       case 'dark':
@@ -50,9 +48,9 @@ export const ThemeToggle = () => {
     <Button
       variant="ghost"
       size="sm"
-      onClick={toggleTheme}
+      onClick={handleThemeChange}
       className="rounded-full"
-      title={`Thème actuel: ${theme}`}
+      title={`Thème actuel: ${preferences.theme}`}
     >
       {getIcon()}
     </Button>

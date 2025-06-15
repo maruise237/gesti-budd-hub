@@ -82,7 +82,21 @@ const STORAGE_KEYS = {
 const DEFAULT_PREFERENCES: UserPreferences = {
   currency: 'EUR',
   language: 'fr',
-  theme: 'light'
+  theme: 'dark'
+};
+
+// Fonction pour appliquer le thème
+const applyTheme = (theme: string) => {
+  console.log('Applying theme:', theme);
+  document.documentElement.classList.remove('light', 'dark', 'theme-modern');
+  
+  if (theme === 'light') {
+    document.documentElement.classList.add('light');
+  } else if (theme === 'dark') {
+    document.documentElement.classList.add('dark');
+  } else if (theme === 'modern') {
+    document.documentElement.classList.add('dark', 'theme-modern');
+  }
 };
 
 // Fonctions utilitaires pour localStorage
@@ -108,27 +122,36 @@ export const UserPreferencesProvider = ({ children }: { children: React.ReactNod
   const [loading, setLoading] = useState(true);
   
   // Initialisation immédiate depuis localStorage
-  const [preferences, setPreferences] = useState<UserPreferences>(() => ({
-    currency: getStoredPreference(STORAGE_KEYS.CURRENCY, DEFAULT_PREFERENCES.currency),
-    language: getStoredPreference(STORAGE_KEYS.LANGUAGE, DEFAULT_PREFERENCES.language),
-    theme: getStoredPreference(STORAGE_KEYS.THEME, DEFAULT_PREFERENCES.theme)
-  }));
+  const [preferences, setPreferences] = useState<UserPreferences>(() => {
+    const initialPrefs = {
+      currency: getStoredPreference(STORAGE_KEYS.CURRENCY, DEFAULT_PREFERENCES.currency),
+      language: getStoredPreference(STORAGE_KEYS.LANGUAGE, DEFAULT_PREFERENCES.language),
+      theme: getStoredPreference(STORAGE_KEYS.THEME, DEFAULT_PREFERENCES.theme)
+    };
+    
+    // Appliquer le thème immédiatement
+    applyTheme(initialPrefs.theme);
+    
+    return initialPrefs;
+  });
 
   // Charger les préférences depuis la DB si utilisateur connecté
   useEffect(() => {
     if (user) {
       fetchUserPreferences();
     } else {
-      // Si pas connecté, utiliser uniquement localStorage
       setLoading(false);
     }
   }, [user]);
 
-  // Sauvegarder en localStorage à chaque changement
+  // Sauvegarder en localStorage et appliquer le thème à chaque changement
   useEffect(() => {
     setStoredPreference(STORAGE_KEYS.CURRENCY, preferences.currency);
     setStoredPreference(STORAGE_KEYS.LANGUAGE, preferences.language);
     setStoredPreference(STORAGE_KEYS.THEME, preferences.theme);
+    
+    // Appliquer le thème
+    applyTheme(preferences.theme);
   }, [preferences]);
 
   const fetchUserPreferences = async () => {
@@ -159,7 +182,6 @@ export const UserPreferencesProvider = ({ children }: { children: React.ReactNod
       }
     } catch (error) {
       console.error('Error fetching user preferences:', error);
-      // En cas d'erreur, garder les préférences localStorage
     } finally {
       setLoading(false);
     }
@@ -186,7 +208,6 @@ export const UserPreferencesProvider = ({ children }: { children: React.ReactNod
           });
 
         if (error) {
-          // Revert en cas d'erreur DB
           console.error('Error saving to DB, reverting:', error);
           setPreferences(preferences);
           throw error;
@@ -203,7 +224,6 @@ export const UserPreferencesProvider = ({ children }: { children: React.ReactNod
   const formatCurrency = (amount: number): string => {
     const symbol = CURRENCY_SYMBOLS[preferences.currency] || preferences.currency;
     
-    // Utiliser Intl.NumberFormat si supporté
     try {
       const currencyLocales: { [key: string]: string } = {
         'EUR': 'fr-FR',
@@ -230,7 +250,6 @@ export const UserPreferencesProvider = ({ children }: { children: React.ReactNod
         currency: preferences.currency,
       }).format(amount);
     } catch (error) {
-      // Fallback simple
       return `${amount.toLocaleString()} ${symbol}`;
     }
   };
