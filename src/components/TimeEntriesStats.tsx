@@ -28,7 +28,7 @@ interface TimeEntriesStatsProps {
   timeEntries: TimeEntry[];
 }
 
-export const Time EntriesStats = ({ timeEntries }: TimeEntriesStatsProps) => {
+export const TimeEntriesStats = ({ timeEntries }: TimeEntriesStatsProps) => {
   const { t } = useTranslation();
   const stats = useTimeEntriesStats(timeEntries);
 
