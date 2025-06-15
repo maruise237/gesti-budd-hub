@@ -95,6 +95,29 @@
     @apply bg-background text-foreground;
     transition: background-color 0.3s ease, color 0.3s ease;
   }
+
+  /* Improved theme transitions */
+  html {
+    transition: background-color 0.3s ease;
+  }
+
+  /* Ensure proper contrast for all interactive elements */
+  button, 
+  [role="button"], 
+  input, 
+  select, 
+  textarea {
+    transition: all 0.3s ease;
+  }
+
+  /* Fix dropdown and modal backgrounds */
+  [data-radix-portal] {
+    @apply bg-background text-foreground;
+  }
+
+  .dark [data-radix-portal] {
+    @apply bg-background text-foreground;
+  }
 }
 
 /* Custom animations for dashboard */
@@ -196,6 +219,10 @@
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
+.dark .hover-lift:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
 /* Chart hover effects */
 .chart-hover {
   transition: all 0.2s ease-in-out;
@@ -235,26 +262,21 @@
   animation: progress-fill 1.5s ease-out forwards;
 }
 
-/* Custom tooltip styles with dark mode support */
+/* Enhanced tooltip styles with proper dark mode support */
 .recharts-tooltip-wrapper {
   filter: drop-shadow(0 10px 8px rgb(0 0 0 / 0.04)) drop-shadow(0 4px 3px rgb(0 0 0 / 0.1));
 }
 
 .recharts-tooltip-content {
-  background: rgba(255, 255, 255, 0.95) !important;
-  backdrop-filter: blur(10px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  background: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+  border: 1px solid hsl(var(--border)) !important;
   border-radius: 12px !important;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+  backdrop-filter: blur(10px) !important;
 }
 
-.dark .recharts-tooltip-content {
-  background: rgba(17, 24, 39, 0.95) !important;
-  border: 1px solid rgba(75, 85, 99, 0.2) !important;
-  color: rgb(243, 244, 246) !important;
-}
-
-/* Chart animations */
+/* Chart animations with proper dark mode support */
 .recharts-bar-rectangle {
   transition: all 0.3s ease;
 }
@@ -271,27 +293,83 @@
   filter: brightness(1.1) drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
 }
 
-/* Dark mode specific styles for cards */
+/* Improved dark mode card styles */
 .dark .bg-white\/70 {
-  background: rgba(31, 41, 55, 0.7) !important;
+  @apply bg-gray-800/70 !important;
+}
+
+.dark .bg-white\/80 {
+  @apply bg-gray-800/80 !important;
 }
 
 .dark .bg-gray-50 {
-  background: rgb(55, 65, 81) !important;
+  @apply bg-gray-800 !important;
 }
 
 .dark .text-gray-800 {
-  color: rgb(243, 244, 246) !important;
+  @apply text-gray-100 !important;
+}
+
+.dark .text-gray-900 {
+  @apply text-gray-50 !important;
 }
 
 .dark .text-gray-600 {
-  color: rgb(156, 163, 175) !important;
+  @apply text-gray-300 !important;
 }
 
 .dark .text-gray-500 {
-  color: rgb(107, 114, 128) !important;
+  @apply text-gray-400 !important;
 }
 
 .dark .border-gray-200 {
-  border-color: rgb(75, 85, 99) !important;
+  @apply border-gray-700 !important;
+}
+
+.dark .bg-gradient-to-b {
+  @apply from-gray-900 to-gray-800 !important;
+}
+
+.dark .bg-gradient-to-br {
+  @apply from-gray-900 via-gray-800 to-purple-900/30 !important;
+}
+
+/* Enhanced form elements for dark mode */
+.dark input,
+.dark textarea,
+.dark select {
+  @apply bg-gray-800 border-gray-700 text-gray-100;
+}
+
+.dark input:focus,
+.dark textarea:focus,
+.dark select:focus {
+  @apply border-orange-500 ring-orange-500/20;
+}
+
+/* Modal and dropdown improvements */
+.dark .fixed.inset-0 {
+  @apply bg-gray-900/80;
+}
+
+/* Ensure proper contrast for all text elements */
+.dark h1, 
+.dark h2, 
+.dark h3, 
+.dark h4, 
+.dark h5, 
+.dark h6 {
+  @apply text-gray-50;
+}
+
+.dark p {
+  @apply text-gray-200;
+}
+
+.dark .text-sm {
+  @apply text-gray-300;
+}
+
+.dark .text-xs {
+  @apply text-gray-400;
 }

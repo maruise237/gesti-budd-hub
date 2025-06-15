@@ -22,17 +22,17 @@ export const ProjectBarChart = ({ data, chartConfig }: ProjectBarChartProps) => 
   const { t } = useTranslation();
 
   return (
-    <Card className="group bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animate-fade-in hover-lift">
+    <Card className="group bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl dark:hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-fade-in hover-lift">
       <CardHeader className="pb-2 sm:pb-3">
         <div className="flex items-center justify-between">
           <div className="flex-1">
-            <CardTitle className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-100 flex items-center space-x-2">
+            <CardTitle className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-100 flex items-center space-x-2 transition-colors duration-300">
               <div className="p-1.5 sm:p-2 rounded-xl bg-blue-50 dark:bg-blue-900/30 group-hover:scale-110 transition-transform duration-300">
                 <BarChart3 className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600 dark:text-blue-400" />
               </div>
               <span className="text-sm sm:text-base">{t('expenses_by_project')}</span>
             </CardTitle>
-            <CardDescription className="text-gray-600 dark:text-gray-400 mt-1 text-xs sm:text-sm">
+            <CardDescription className="text-gray-600 dark:text-gray-400 mt-1 text-xs sm:text-sm transition-colors duration-300">
               {t('total_expenses_by_project')}
             </CardDescription>
           </div>
@@ -60,14 +60,14 @@ export const ProjectBarChart = ({ data, chartConfig }: ProjectBarChartProps) => 
               tick={{ fontSize: 10, fill: 'currentColor' }}
               axisLine={false}
               tickLine={false}
-              className="text-gray-600 dark:text-gray-400"
+              className="text-gray-600 dark:text-gray-400 transition-colors duration-300"
             />
             <YAxis 
               tick={{ fontSize: 10, fill: 'currentColor' }}
               axisLine={false}
               tickLine={false}
               width={40}
-              className="text-gray-600 dark:text-gray-400"
+              className="text-gray-600 dark:text-gray-400 transition-colors duration-300"
             />
             <ChartTooltip 
               content={<ChartTooltipContent />}
@@ -83,8 +83,8 @@ export const ProjectBarChart = ({ data, chartConfig }: ProjectBarChartProps) => 
         </ChartContainer>
         
         {/* Progress indicator */}
-        <div className="mt-3 sm:mt-4 w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
-          <div className="bg-gradient-to-r from-blue-500 to-blue-600 h-1.5 rounded-full transition-all duration-1000 ease-out animate-progress" style={{ width: '65%' }}></div>
+        <div className="mt-3 sm:mt-4 w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 transition-colors duration-300">
+          <div className="bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500 h-1.5 rounded-full transition-all duration-1000 ease-out animate-progress" style={{ width: '65%' }}></div>
         </div>
       </CardContent>
     </Card>

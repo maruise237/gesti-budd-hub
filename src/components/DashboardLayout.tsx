@@ -57,17 +57,17 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           <Button
             key={item.name}
             variant={isActive ? "secondary" : "ghost"}
-            className={`w-full justify-start text-left ${
+            className={`w-full justify-start text-left transition-all duration-200 ${
               isActive
-                ? "bg-orange-100 text-orange-700 hover:bg-orange-200"
-                : "text-gray-600 hover:text-gray-900"
+                ? "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 hover:bg-orange-200 dark:hover:bg-orange-900/50"
+                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/50"
             }`}
             onClick={() => {
               navigate(item.href);
               setSidebarOpen(false);
             }}
           >
-            <Icon className="mr-3 h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+            <Icon className="mr-3 h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0 transition-colors duration-200" />
             <span className="truncate">{item.name}</span>
           </Button>
         );
@@ -76,17 +76,17 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
       {/* Mobile sidebar */}
       <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
-        <SheetContent side="left" className="w-64 p-0 sm:w-72">
+        <SheetContent side="left" className="w-64 p-0 sm:w-72 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 transition-colors duration-300">
           <div className="flex h-full flex-col">
-            <div className="flex h-14 sm:h-16 items-center px-4 border-b">
+            <div className="flex h-14 sm:h-16 items-center px-4 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
               <div className="flex items-center space-x-2">
                 <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
                   <span className="text-white font-bold text-xs sm:text-sm">GB</span>
                 </div>
-                <span className="text-lg sm:text-xl font-bold text-gray-900">Gestibud</span>
+                <span className="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100 transition-colors duration-300">Gestibud</span>
               </div>
             </div>
             <NavItems />
@@ -95,13 +95,13 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
         {/* Desktop sidebar */}
         <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
-          <div className="flex flex-col flex-grow bg-white border-r border-gray-200">
-            <div className="flex h-16 items-center px-4 border-b">
+          <div className="flex flex-col flex-grow bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-colors duration-300">
+            <div className="flex h-16 items-center px-4 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
               <div className="flex items-center space-x-2">
                 <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
                   <span className="text-white font-bold text-sm">GB</span>
                 </div>
-                <span className="text-xl font-bold text-gray-900">Gestibud</span>
+                <span className="text-xl font-bold text-gray-900 dark:text-gray-100 transition-colors duration-300">Gestibud</span>
               </div>
             </div>
             <NavItems />
@@ -111,21 +111,21 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         {/* Main content */}
         <div className="lg:pl-64">
           {/* Top header */}
-          <div className="sticky top-0 z-10 bg-white border-b border-gray-200">
+          <div className="sticky top-0 z-10 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
             <div className="flex h-14 sm:h-16 items-center justify-between px-3 sm:px-4">
               <div className="flex items-center">
                 <SheetTrigger asChild>
-                  <Button variant="ghost" size="sm" className="lg:hidden p-2">
+                  <Button variant="ghost" size="sm" className="lg:hidden p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors duration-200">
                     <Menu className="h-5 w-5" />
                   </Button>
                 </SheetTrigger>
               </div>
               
               <div className="flex items-center space-x-2 sm:space-x-4">
-                <span className="text-xs sm:text-sm text-gray-600 hidden sm:block">
+                <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 hidden sm:block transition-colors duration-300">
                   {t('currentLanguage') === 'fr' ? 'Bonjour' : 'Hello'}, {user?.user_metadata?.first_name || user?.email}
                 </span>
-                <Button variant="ghost" size="sm" onClick={handleSignOut} className="p-2">
+                <Button variant="ghost" size="sm" onClick={handleSignOut} className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors duration-200">
                   <LogOut className="h-4 w-4 sm:mr-2" />
                   <span className="hidden sm:inline">{t('logout')}</span>
                 </Button>
