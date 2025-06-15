@@ -47,12 +47,12 @@ export const ExpenseFilters = ({
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Filtres</CardTitle>
+      <CardHeader className="pb-3 sm:pb-4">
+        <CardTitle className="text-base sm:text-lg">Filtres</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="relative">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div className="relative col-span-1 sm:col-span-2 lg:col-span-1">
             <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
             <Input
               placeholder="Rechercher..."
@@ -91,7 +91,7 @@ export const ExpenseFilters = ({
             </SelectContent>
           </Select>
 
-          <Button variant="outline" onClick={resetFilters}>
+          <Button variant="outline" onClick={resetFilters} className="w-full">
             Réinitialiser
           </Button>
         </div>

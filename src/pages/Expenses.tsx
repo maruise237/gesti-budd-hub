@@ -79,26 +79,27 @@ const Expenses = () => {
   return (
     <ProtectedRoute>
       <DashboardLayout>
-        <div className="space-y-6">
-          <div className="flex justify-between items-center">
+        <div className="space-y-4 sm:space-y-6">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-4 sm:space-y-0">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">{t('expenses')}</h1>
-              <p className="text-gray-600">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{t('expenses')}</h1>
+              <p className="text-gray-600 text-sm sm:text-base">
                 {t('manage_project_expenses')}
               </p>
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <Button 
                 variant="outline"
                 onClick={() => setExportDialogOpen(true)}
                 disabled={expenses.length === 0}
+                className="w-full sm:w-auto"
               >
                 <FileDown className="h-4 w-4 mr-2" />
                 {t('export')}
               </Button>
               <Button 
                 onClick={handleCreateExpense}
-                className="bg-orange-600 hover:bg-orange-700"
+                className="bg-orange-600 hover:bg-orange-700 w-full sm:w-auto"
               >
                 <Plus className="h-4 w-4 mr-2" />
                 {t('new_expense')}
@@ -114,7 +115,7 @@ const Expenses = () => {
           {/* Graphiques - affichés seulement s'il y a des dépenses */}
           {expenses.length > 0 && (
             <div className="space-y-4">
-              <h2 className="text-xl font-semibold">
+              <h2 className="text-lg sm:text-xl font-semibold">
                 {t('currentLanguage') === 'fr' ? 'Analyses graphiques' : 'Chart Analysis'}
               </h2>
               <ExpensesCharts expenses={expenses} projects={projects} />

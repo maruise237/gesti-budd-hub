@@ -5,6 +5,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "@/contexts/AuthContext";
 import { useGlobalPreferences } from "@/hooks/useGlobalPreferences";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Building2,
   Users,
@@ -29,6 +30,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const { t } = useGlobalPreferences();
   const navigate = useNavigate();
   const location = useLocation();
+  const isMobile = useIsMobile();
 
   const navigation = [
     { name: t('dashboard'), href: "/dashboard", icon: Home },
@@ -55,7 +57,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           <Button
             key={item.name}
             variant={isActive ? "secondary" : "ghost"}
-            className={`w-full justify-start ${
+            className={`w-full justify-start text-left ${
               isActive
                 ? "bg-orange-100 text-orange-700 hover:bg-orange-200"
                 : "text-gray-600 hover:text-gray-900"
@@ -65,8 +67,8 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               setSidebarOpen(false);
             }}
           >
-            <Icon className="mr-3 h-5 w-5" />
-            {item.name}
+            <Icon className="mr-3 h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+            <span className="truncate">{item.name}</span>
           </Button>
         );
       })}
@@ -77,14 +79,14 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     <div className="min-h-screen bg-gray-50">
       {/* Mobile sidebar */}
       <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
-        <SheetContent side="left" className="w-64 p-0">
+        <SheetContent side="left" className="w-64 p-0 sm:w-72">
           <div className="flex h-full flex-col">
-            <div className="flex h-16 items-center px-4 border-b">
+            <div className="flex h-14 sm:h-16 items-center px-4 border-b">
               <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">GB</span>
+                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-xs sm:text-sm">GB</span>
                 </div>
-                <span className="text-xl font-bold text-gray-900">Gestibud</span>
+                <span className="text-lg sm:text-xl font-bold text-gray-900">Gestibud</span>
               </div>
             </div>
             <NavItems />
@@ -92,7 +94,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         </SheetContent>
 
         {/* Desktop sidebar */}
-        <div className="hidden md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col">
+        <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
           <div className="flex flex-col flex-grow bg-white border-r border-gray-200">
             <div className="flex h-16 items-center px-4 border-b">
               <div className="flex items-center space-x-2">
@@ -107,32 +109,32 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         </div>
 
         {/* Main content */}
-        <div className="md:pl-64">
+        <div className="lg:pl-64">
           {/* Top header */}
           <div className="sticky top-0 z-10 bg-white border-b border-gray-200">
-            <div className="flex h-16 items-center justify-between px-4">
+            <div className="flex h-14 sm:h-16 items-center justify-between px-3 sm:px-4">
               <div className="flex items-center">
                 <SheetTrigger asChild>
-                  <Button variant="ghost" size="sm" className="md:hidden">
+                  <Button variant="ghost" size="sm" className="lg:hidden p-2">
                     <Menu className="h-5 w-5" />
                   </Button>
                 </SheetTrigger>
               </div>
               
-              <div className="flex items-center space-x-4">
-                <span className="text-sm text-gray-600">
+              <div className="flex items-center space-x-2 sm:space-x-4">
+                <span className="text-xs sm:text-sm text-gray-600 hidden sm:block">
                   {t('currentLanguage') === 'fr' ? 'Bonjour' : 'Hello'}, {user?.user_metadata?.first_name || user?.email}
                 </span>
-                <Button variant="ghost" size="sm" onClick={handleSignOut}>
-                  <LogOut className="h-4 w-4 mr-2" />
-                  {t('logout')}
+                <Button variant="ghost" size="sm" onClick={handleSignOut} className="p-2">
+                  <LogOut className="h-4 w-4 sm:mr-2" />
+                  <span className="hidden sm:inline">{t('logout')}</span>
                 </Button>
               </div>
             </div>
           </div>
 
           {/* Page content */}
-          <main className="flex-1 p-6">
+          <main className="flex-1 p-3 sm:p-4 lg:p-6">
             {children}
           </main>
         </div>
