@@ -2,6 +2,7 @@
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UseFormReturn } from "react-hook-form";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface TimeEntryFormFieldsProps {
   form: UseFormReturn<any>;
@@ -10,19 +11,21 @@ interface TimeEntryFormFieldsProps {
 }
 
 export const TimeEntryFormFields = ({ form, projects, employees }: TimeEntryFormFieldsProps) => {
+  const { t } = useTranslation();
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <FormField
         control={form.control}
         name="project_id"
-        rules={{ required: "Le projet est requis" }}
+        rules={{ required: t('project_required') }}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Projet *</FormLabel>
+            <FormLabel>{t('project')} *</FormLabel>
             <Select onValueChange={field.onChange} value={field.value}>
               <FormControl>
                 <SelectTrigger>
-                  <SelectValue placeholder="Sélectionner un projet" />
+                  <SelectValue placeholder={t('select_project')} />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
@@ -41,14 +44,14 @@ export const TimeEntryFormFields = ({ form, projects, employees }: TimeEntryForm
       <FormField
         control={form.control}
         name="employee_id"
-        rules={{ required: "L'employé est requis" }}
+        rules={{ required: t('employee_required') }}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Employé *</FormLabel>
+            <FormLabel>{t('employee')} *</FormLabel>
             <Select onValueChange={field.onChange} value={field.value}>
               <FormControl>
                 <SelectTrigger>
-                  <SelectValue placeholder="Sélectionner un employé" />
+                  <SelectValue placeholder={t('select_employee')} />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>

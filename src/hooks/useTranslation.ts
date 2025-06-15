@@ -31,6 +31,8 @@ const translations: Translations = {
   'loading': { fr: 'Chargement...', en: 'Loading...', es: 'Cargando...', de: 'Laden...', it: 'Caricamento...', pt: 'Carregando...' },
   'success': { fr: 'Succès', en: 'Success', es: 'Éxito', de: 'Erfolg', it: 'Successo', pt: 'Sucesso' },
   'error': { fr: 'Erreur', en: 'Error', es: 'Error', de: 'Fehler', it: 'Errore', pt: 'Erro' },
+  'create': { fr: 'Créer', en: 'Create', es: 'Crear', de: 'Erstellen', it: 'Crea', pt: 'Criar' },
+  'update': { fr: 'Mettre à jour', en: 'Update', es: 'Actualizar', de: 'Aktualisieren', it: 'Aggiorna', pt: 'Atualizar' },
   
   // Homepage specific
   'get_started': { fr: 'Commencer', en: 'Get Started', es: 'Comenzar', de: 'Loslegen', it: 'Inizia', pt: 'Começar' },
@@ -40,6 +42,7 @@ const translations: Translations = {
   'testimonials': { fr: 'Témoignages', en: 'Testimonials', es: 'Testimonios', de: 'Referenzen', it: 'Testimonianze', pt: 'Testemunhos' },
   'login': { fr: 'Connexion', en: 'Login', es: 'Iniciar sesión', de: 'Anmelden', it: 'Accedi', pt: 'Entrar' },
   'sign_up': { fr: 'S\'inscrire', en: 'Sign Up', es: 'Registrarse', de: 'Registrieren', it: 'Registrati', pt: 'Cadastrar' },
+  'logout': { fr: 'Déconnexion', en: 'Logout', es: 'Cerrar sesión', de: 'Abmelden', it: 'Esci', pt: 'Sair' },
   
   // Hero section
   'hero_title': { fr: 'Gérez vos projets de construction avec efficacité', en: 'Manage your construction projects efficiently', es: 'Gestiona tus proyectos de construcción de manera eficiente', de: 'Verwalten Sie Ihre Bauprojekte effizient', it: 'Gestisci i tuoi progetti di costruzione in modo efficiente', pt: 'Gerencie seus projetos de construção com eficiência' },
@@ -105,6 +108,21 @@ const translations: Translations = {
   'category': { fr: 'Catégorie', en: 'Category', es: 'Categoría', de: 'Kategorie', it: 'Categoria', pt: 'Categoria' },
   'project': { fr: 'Projet', en: 'Project', es: 'Proyecto', de: 'Projekt', it: 'Progetto', pt: 'Projeto' },
   'date': { fr: 'Date', en: 'Date', es: 'Fecha', de: 'Datum', it: 'Data', pt: 'Data' },
+  'description': { fr: 'Description', en: 'Description', es: 'Descripción', de: 'Beschreibung', it: 'Descrizione', pt: 'Descrição' },
+  
+  // Employee specific
+  'new_employee': { fr: 'Nouvel employé', en: 'New Employee', es: 'Nuevo Empleado', de: 'Neuer Mitarbeiter', it: 'Nuovo Dipendente', pt: 'Novo Funcionário' },
+  'edit_employee': { fr: 'Modifier l\'employé', en: 'Edit Employee', es: 'Editar Empleado', de: 'Mitarbeiter bearbeiten', it: 'Modifica Dipendente', pt: 'Editar Funcionário' },
+  'employee_created_successfully': { fr: 'Employé créé avec succès', en: 'Employee created successfully', es: 'Empleado creado exitosamente', de: 'Mitarbeiter erfolgreich erstellt', it: 'Dipendente creato con successo', pt: 'Funcionário criado com sucesso' },
+  'employee_updated_successfully': { fr: 'Employé modifié avec succès', en: 'Employee updated successfully', es: 'Empleado actualizado exitosamente', de: 'Mitarbeiter erfolgreich aktualisiert', it: 'Dipendente aggiornato con successo', pt: 'Funcionário atualizado com sucesso' },
+  'unable_to_save_employee': { fr: 'Impossible de sauvegarder l\'employé', en: 'Unable to save employee', es: 'No se pudo guardar el empleado', de: 'Mitarbeiter konnte nicht gespeichert werden', it: 'Impossibile salvare il dipendente', pt: 'Não foi possível salvar o funcionário' },
+  'position': { fr: 'Poste', en: 'Position', es: 'Puesto', de: 'Position', it: 'Posizione', pt: 'Cargo' },
+  'email': { fr: 'Email', en: 'Email', es: 'Email', de: 'E-Mail', it: 'Email', pt: 'Email' },
+  'phone': { fr: 'Téléphone', en: 'Phone', es: 'Teléfono', de: 'Telefon', it: 'Telefono', pt: 'Telefone' },
+  'hourly_rate': { fr: 'Taux horaire', en: 'Hourly Rate', es: 'Tarifa por Hora', de: 'Stundensatz', it: 'Tariffa Oraria', pt: 'Taxa Horária' },
+  'hire_date': { fr: 'Date d\'embauche', en: 'Hire Date', es: 'Fecha de Contratación', de: 'Einstellungsdatum', it: 'Data di Assunzione', pt: 'Data de Contratação' },
+  'required_field': { fr: 'Champ obligatoire', en: 'Required field', es: 'Campo obligatorio', de: 'Pflichtfeld', it: 'Campo obbligatorio', pt: 'Campo obrigatório' },
+  'saving': { fr: 'Sauvegarde...', en: 'Saving...', es: 'Guardando...', de: 'Speichern...', it: 'Salvataggio...', pt: 'Salvando...' },
   
   // Categories
   'materials_category': { fr: 'Matériaux', en: 'Materials', es: 'Materiales', de: 'Materialien', it: 'Materiali', pt: 'Materiais' },
@@ -119,6 +137,32 @@ const translations: Translations = {
   'no_project': { fr: 'Aucun projet', en: 'No project', es: 'Sin proyecto', de: 'Kein Projekt', it: 'Nessun progetto', pt: 'Nenhum projeto' },
   'unknown_project': { fr: 'Projet inconnu', en: 'Unknown project', es: 'Proyecto desconocido', de: 'Unbekanntes Projekt', it: 'Progetto sconosciuto', pt: 'Projeto desconhecido' },
   'expense_count_text': { fr: 'Sur {count} dépense(s)', en: 'Out of {count} expense(s)', es: 'De {count} gasto(s)', de: 'Von {count} Ausgabe(n)', it: 'Su {count} spesa(e)', pt: 'De {count} despesa(s)' },
+  'select_category': { fr: 'Sélectionner la catégorie', en: 'Select category', es: 'Seleccionar categoría', de: 'Kategorie auswählen', it: 'Seleziona categoria', pt: 'Selecionar categoria' },
+  'select_project': { fr: 'Sélectionner un projet', en: 'Select a project', es: 'Seleccionar un proyecto', de: 'Projekt auswählen', it: 'Seleziona un progetto', pt: 'Selecionar um projeto' },
+  'expense_description_placeholder': { fr: 'Description de la dépense', en: 'Expense description', es: 'Descripción del gasto', de: 'Ausgabenbeschreibung', it: 'Descrizione della spesa', pt: 'Descrição da despesa' },
+  'receipt_url': { fr: 'URL du reçu (optionnel)', en: 'Receipt URL (optional)', es: 'URL del recibo (opcional)', de: 'Beleg-URL (optional)', it: 'URL ricevuta (opzionale)', pt: 'URL do recibo (opcional)' },
+  'receipt_url_placeholder': { fr: 'https://example.com/receipt.pdf', en: 'https://example.com/receipt.pdf', es: 'https://example.com/receipt.pdf', de: 'https://example.com/receipt.pdf', it: 'https://example.com/receipt.pdf', pt: 'https://example.com/receipt.pdf' },
+
+  // Time entries
+  'new_time_entry': { fr: 'Nouvelle entrée de temps', en: 'New Time Entry', es: 'Nueva Entrada de Tiempo', de: 'Neuer Zeiteintrag', it: 'Nuova Voce Tempo', pt: 'Nova Entrada de Tempo' },
+  'edit_time_entry': { fr: 'Modifier l\'entrée de temps', en: 'Edit Time Entry', es: 'Editar Entrada de Tiempo', de: 'Zeiteintrag bearbeiten', it: 'Modifica Voce Tempo', pt: 'Editar Entrada de Tempo' },
+  'start_time': { fr: 'Heure de début', en: 'Start Time', es: 'Hora de Inicio', de: 'Startzeit', it: 'Ora di Inizio', pt: 'Hora de Início' },
+  'end_time': { fr: 'Heure de fin', en: 'End Time', es: 'Hora de Fin', de: 'Endzeit', it: 'Ora di Fine', pt: 'Hora de Fim' },
+  'hours_worked': { fr: 'Heures travaillées', en: 'Hours Worked', es: 'Horas Trabajadas', de: 'Arbeitsstunden', it: 'Ore Lavorate',  pt: 'Horas Trabalhadas' },
+  'start_time_required': { fr: 'L\'heure de début est requise', en: 'Start time is required', es: 'La hora de inicio es obligatoria', de: 'Startzeit ist erforderlich', it: 'L\'ora di inizio è obbligatoria', pt: 'A hora de início é obrigatória' },
+  'project_required': { fr: 'Le projet est requis', en: 'Project is required', es: 'El proyecto es obligatorio', de: 'Projekt ist erforderlich', it: 'Il progetto è obbligatorio', pt: 'O projeto é obrigatório' },
+  'employee_required': { fr: 'L\'employé est requis', en: 'Employee is required', es: 'El empleado es obligatorio', de: 'Mitarbeiter ist erforderlich', it: 'Il dipendente è obbligatorio', pt: 'O funcionário é obrigatório' },
+  'select_employee': { fr: 'Sélectionner un employé', en: 'Select an employee', es: 'Seleccionar un empleado', de: 'Mitarbeiter auswählen', it: 'Seleziona un dipendente', pt: 'Selecionar um funcionário' },
+  'work_description_placeholder': { fr: 'Description du travail effectué', en: 'Description of work performed', es: 'Descripción del trabajo realizado', de: 'Beschreibung der geleisteten Arbeit', it: 'Descrizione del lavoro svolto', pt: 'Descrição do trabalho realizado' },
+  'hours_example': { fr: 'Ex: 8.5', en: 'Ex: 8.5', es: 'Ej: 8.5', de: 'z.B.: 8.5', it: 'Es: 8.5', pt: 'Ex: 8.5' },
+  'employee': { fr: 'Employé', en: 'Employee', es: 'Empleado', de: 'Mitarbeiter', it: 'Dipendente', pt: 'Funcionário' },
+  'position_placeholder': { fr: 'ex: Maçon, Électricien, Chef de chantier...', en: 'ex: Mason, Electrician, Site Manager...', es: 'ej: Albañil, Electricista, Jefe de obra...', de: 'z.B.: Maurer, Elektriker, Bauleiter...', it: 'es: Muratore, Elettricista, Capo cantiere...', pt: 'ex: Pedreiro, Eletricista, Chefe de obra...' },
+  'email_placeholder': { fr: 'email@exemple.com', en: 'email@example.com', es: 'email@ejemplo.com', de: 'email@beispiel.com', it: 'email@esempio.com', pt: 'email@exemplo.com' },
+  'phone_placeholder': { fr: '06 12 34 56 78', en: '06 12 34 56 78', es: '06 12 34 56 78', de: '06 12 34 56 78', it: '06 12 34 56 78', pt: '06 12 34 56 78' },
+  'hourly_rate_placeholder': { fr: '25.00', en: '25.00', es: '25.00', de: '25.00', it: '25.00', pt: '25.00' },
+  'modify': { fr: 'Modifier', en: 'Modify', es: 'Modificar', de: 'Ändern', it: 'Modifica', pt: 'Modificar' },
+  'add_employee_team_description': { fr: 'Ajoutez un nouvel employé à votre équipe', en: 'Add a new employee to your team', es: 'Agregar un nuevo empleado a tu equipo', de: 'Neuen Mitarbeiter zu Ihrem Team hinzufügen', it: 'Aggiungi un nuovo dipendente al tuo team', pt: 'Adicionar um novo funcionário à sua equipe' },
+  'edit_employee_info_description': { fr: 'Modifiez les informations de l\'employé', en: 'Edit employee information', es: 'Editar información del empleado', de: 'Mitarbeiterinformationen bearbeiten', it: 'Modifica informazioni dipendente', pt: 'Editar informações do funcionário' },
 
   // Chart translations
   'expenses_by_category': { fr: 'Répartition par catégorie', en: 'Expenses by Category', es: 'Gastos por Categoría', de: 'Ausgaben nach Kategorie', it: 'Spese per Categoria', pt: 'Despesas por Categoria' },

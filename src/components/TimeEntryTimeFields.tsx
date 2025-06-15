@@ -2,22 +2,25 @@
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface TimeEntryTimeFieldsProps {
   form: UseFormReturn<any>;
 }
 
 export const TimeEntryTimeFields = ({ form }: TimeEntryTimeFieldsProps) => {
+  const { t } = useTranslation();
+
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FormField
           control={form.control}
           name="start_time"
-          rules={{ required: "L'heure de début est requise" }}
+          rules={{ required: t('start_time_required') }}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Heure de début *</FormLabel>
+              <FormLabel>{t('start_time')} *</FormLabel>
               <FormControl>
                 <Input type="datetime-local" {...field} />
               </FormControl>
@@ -31,7 +34,7 @@ export const TimeEntryTimeFields = ({ form }: TimeEntryTimeFieldsProps) => {
           name="end_time"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Heure de fin</FormLabel>
+              <FormLabel>{t('end_time')}</FormLabel>
               <FormControl>
                 <Input type="datetime-local" {...field} />
               </FormControl>
@@ -46,13 +49,13 @@ export const TimeEntryTimeFields = ({ form }: TimeEntryTimeFieldsProps) => {
         name="hours_worked"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Heures travaillées</FormLabel>
+            <FormLabel>{t('hours_worked')}</FormLabel>
             <FormControl>
               <Input 
                 type="number" 
                 step="0.25"
                 min="0"
-                placeholder="Ex: 8.5"
+                placeholder={t('hours_example')}
                 {...field} 
               />
             </FormControl>

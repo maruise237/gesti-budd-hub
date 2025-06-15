@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTranslation } from "@/hooks/useTranslation";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   Building2,
@@ -22,22 +23,23 @@ interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
-const navigation = [
-  { name: "Tableau de bord", href: "/dashboard", icon: Home },
-  { name: "Projets", href: "/dashboard/projects", icon: FolderOpen },
-  { name: "Employés", href: "/dashboard/employees", icon: Users },
-  { name: "Matériaux", href: "/dashboard/materials", icon: Package },
-  { name: "Tâches", href: "/dashboard/tasks", icon: CheckSquare },
-  { name: "Temps de travail", href: "/dashboard/time-entries", icon: Clock },
-  { name: "Dépenses", href: "/dashboard/expenses", icon: CreditCard },
-  { name: "Profil", href: "/dashboard/profile", icon: User },
-];
-
 export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user, signOut } = useAuth();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
+
+  const navigation = [
+    { name: t('dashboard'), href: "/dashboard", icon: Home },
+    { name: t('projects'), href: "/dashboard/projects", icon: FolderOpen },
+    { name: t('employees'), href: "/dashboard/employees", icon: Users },
+    { name: t('materials'), href: "/dashboard/materials", icon: Package },
+    { name: t('tasks'), href: "/dashboard/tasks", icon: CheckSquare },
+    { name: t('time_entries'), href: "/dashboard/time-entries", icon: Clock },
+    { name: t('expenses'), href: "/dashboard/expenses", icon: CreditCard },
+    { name: t('profile'), href: "/dashboard/profile", icon: User },
+  ];
 
   const handleSignOut = async () => {
     await signOut();
@@ -119,11 +121,11 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               
               <div className="flex items-center space-x-4">
                 <span className="text-sm text-gray-600">
-                  Bonjour, {user?.user_metadata?.first_name || user?.email}
+                  {t('currentLanguage') === 'fr' ? 'Bonjour' : 'Hello'}, {user?.user_metadata?.first_name || user?.email}
                 </span>
                 <Button variant="ghost" size="sm" onClick={handleSignOut}>
                   <LogOut className="h-4 w-4 mr-2" />
-                  Déconnexion
+                  {t('logout')}
                 </Button>
               </div>
             </div>

@@ -1,5 +1,6 @@
 
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface TimeEntryDialogActionsProps {
   onCancel: () => void;
@@ -7,29 +8,25 @@ interface TimeEntryDialogActionsProps {
   isEditing: boolean;
 }
 
-export const TimeEntryDialogActions = ({ 
-  onCancel, 
-  isSubmitting, 
-  isEditing 
-}: TimeEntryDialogActionsProps) => {
+export const TimeEntryDialogActions = ({ onCancel, isSubmitting, isEditing }: TimeEntryDialogActionsProps) => {
+  const { t } = useTranslation();
+
   return (
-    <div className="flex justify-end space-x-2 pt-4">
-      <Button
-        type="button"
-        variant="outline"
-        onClick={onCancel}
-      >
-        Annuler
-      </Button>
+    <div className="flex justify-end gap-2 pt-4">
       <Button 
-        type="submit"
+        type="button" 
+        variant="outline" 
+        onClick={onCancel}
         disabled={isSubmitting}
       >
-        {isSubmitting
-          ? "Sauvegarde..."
-          : isEditing
-          ? "Modifier"
-          : "Créer"}
+        {t('cancel')}
+      </Button>
+      <Button 
+        type="submit" 
+        disabled={isSubmitting}
+        className="bg-orange-600 hover:bg-orange-700"
+      >
+        {isSubmitting ? t('saving') : (isEditing ? t('update') : t('create'))}
       </Button>
     </div>
   );

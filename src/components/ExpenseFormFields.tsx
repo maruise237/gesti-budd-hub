@@ -3,6 +3,8 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useTranslation } from "@/hooks/useTranslation";
+import { useCurrency } from "@/hooks/useCurrency";
 
 interface Project {
   id: string;
@@ -22,26 +24,41 @@ interface ExpenseFormFieldsProps {
   projects: Project[];
 }
 
-const categories = [
-  "Matériaux",
-  "Main-d'œuvre", 
-  "Transport",
-  "Équipement",
-  "Permis",
-  "Assurance",
-  "Autre"
-];
-
 export const ExpenseFormFields = ({ formData, updateFormData, projects }: ExpenseFormFieldsProps) => {
+  const { t } = useTranslation();
+  const { currency } = useCurrency();
+
+  const categories = [
+    { value: "Matériaux", label: t('materials_category') },
+    { value: "Main-d'œuvre", label: t('labor_category') },
+    { value: "Transport", label: t('transport_category') },
+    { value: "Équipement", label: t('equipment_category') },
+    { value: "Permis", label: t('permits_category') },
+    { value: "Assurance", label: t('insurance_category') },
+    { value: "Autre", label: t('other_category') }
+  ];
+
+  const getCurrencySymbol = () => {
+    const symbols: { [key: string]: string } = {
+      'EUR': '€',
+      'USD': '$',
+      'GBP': '£',
+      'CAD': 'CAD',
+      'CHF': 'CHF',
+      'XOF': 'F CFA'
+    };
+    return symbols[currency] || currency;
+  };
+
   return (
     <div className="space-y-4">
       <div>
-        <Label htmlFor="description">Description *</Label>
+        <Label htmlFor="description">{t('description')} *</Label>
         <Textarea
           id="description"
           value={formData.description}
           onChange={(e) => updateFormData("description", e.target.value)}
-          placeholder="Description de la dépense"
+          placeholder={t('expense_description_placeholder')}
           required
           rows={3}
         />
@@ -49,7 +66,7 @@ export const ExpenseFormFields = ({ formData, updateFormData, projects }: Expens
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="amount">Montant (€) *</Label>
+          <Label htmlFor="amount">{t('amount')} ({getCurrencySymbol()}) *</Label>
           <Input
             id="amount"
             type="number"
@@ -63,7 +80,7 @@ export const ExpenseFormFields = ({ formData, updateFormData, projects }: Expens
         </div>
         
         <div>
-          <Label htmlFor="date">Date</Label>
+          <Label htmlFor="date">{t('date')}</Label>
           <Input
             id="date"
             type="date"
@@ -75,15 +92,15 @@ export const ExpenseFormFields = ({ formData, updateFormData, projects }: Expens
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="category">Catégorie</Label>
+          <Label htmlFor="category">{t('category')}</Label>
           <Select value={formData.category} onValueChange={(value) => updateFormData("category", value)}>
             <SelectTrigger>
-              <SelectValue placeholder="Sélectionner la catégorie" />
+              <SelectValue placeholder={t('select_category')} />
             </SelectTrigger>
             <SelectContent>
               {categories.map((category) => (
-                <SelectItem key={category} value={category}>
-                  {category}
+                <SelectItem key={category.value} value={category.value}>
+                  {category.label}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -91,13 +108,13 @@ export const ExpenseFormFields = ({ formData, updateFormData, projects }: Expens
         </div>
         
         <div>
-          <Label htmlFor="project_id">Projet</Label>
+          <Label htmlFor="project_id">{t('project')}</Label>
           <Select value={formData.project_id} onValueChange={(value) => updateFormData("project_id", value)}>
             <SelectTrigger>
-              <SelectValue placeholder="Sélectionner un projet" />
+              <SelectValue placeholder={t('select_project')} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="no_project">Aucun projet</SelectItem>
+              <SelectItem value="no_project">{t('no_project')}</SelectItem>
               {projects.map((project) => (
                 <SelectItem key={project.id} value={project.id}>
                   {project.name}
@@ -109,13 +126,13 @@ export const ExpenseFormFields = ({ formData, updateFormData, projects }: Expens
       </div>
 
       <div>
-        <Label htmlFor="receipt_url">URL du reçu (optionnel)</Label>
+        <Label htmlFor="receipt_url">{t('receipt_url')}</Label>
         <Input
           id="receipt_url"
           type="url"
           value={formData.receipt_url}
           onChange={(e) => updateFormData("receipt_url", e.target.value)}
-          placeholder="https://example.com/receipt.pdf"
+          placeholder={t('receipt_url_placeholder')}
         />
       </div>
     </div>

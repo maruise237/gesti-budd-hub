@@ -13,6 +13,7 @@ import { TimeEntryDialogActions } from "./TimeEntryDialogActions";
 import { useTimeEntryForm } from "@/hooks/useTimeEntryForm";
 import { useTimeEntryMutations } from "@/hooks/useTimeEntryMutations";
 import { useTimeEntryData } from "@/hooks/useTimeEntryData";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface TimeEntryDialogProps {
   open: boolean;
@@ -29,6 +30,7 @@ interface TimeEntryDialogProps {
 }
 
 export const TimeEntryDialog = ({ open, onOpenChange, timeEntry }: TimeEntryDialogProps) => {
+  const { t } = useTranslation();
   const { form } = useTimeEntryForm({ timeEntry, open });
   const { projects, employees } = useTimeEntryData(open);
   
@@ -51,7 +53,7 @@ export const TimeEntryDialog = ({ open, onOpenChange, timeEntry }: TimeEntryDial
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle>
-            {timeEntry ? "Modifier l'Entrée de Temps" : "Nouvelle Entrée de Temps"}
+            {timeEntry ? t('edit_time_entry') : t('new_time_entry')}
           </DialogTitle>
         </DialogHeader>
 

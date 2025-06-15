@@ -14,6 +14,8 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "@/hooks/useTranslation";
+import { useCurrency } from "@/hooks/useCurrency";
 
 interface Employee {
   id: string;
@@ -53,6 +55,20 @@ export const EmployeeDialog = ({
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
   const { toast } = useToast();
+  const { t } = useTranslation();
+  const { currency } = useCurrency();
+
+  const getCurrencySymbol = () => {
+    const symbols: { [key: string]: string } = {
+      'EUR': '€',
+      'USD': '$',
+      'GBP': '£',
+      'CAD': 'CAD',
+      'CHF': 'CHF',
+      'XOF': 'F CFA'
+    };
+    return symbols[currency] || currency;
+  };
 
   useEffect(() => {
     if (employee) {
@@ -105,8 +121,8 @@ export const EmployeeDialog = ({
         if (error) throw error;
 
         toast({
-          title: "Succès",
-          description: "Employé modifié avec succès",
+          title: t('success'),
+          description: t('employee_updated_successfully'),
         });
       } else {
         const { error } = await supabase
@@ -116,8 +132,8 @@ export const EmployeeDialog = ({
         if (error) throw error;
 
         toast({
-          title: "Succès",
-          description: "Employé créé avec succès",
+          title: t('success'),
+          description: t('employee_created_successfully'),
         });
       }
 
@@ -125,8 +141,8 @@ export const EmployeeDialog = ({
     } catch (error) {
       console.error("Erreur lors de la sauvegarde:", error);
       toast({
-        title: "Erreur",
-        description: "Impossible de sauvegarder l'employé",
+        title: t('error'),
+        description: t('unable_to_save_employee'),
         variant: "destructive",
       });
     } finally {
@@ -139,12 +155,12 @@ export const EmployeeDialog = ({
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>
-            {employee ? "Modifier l'employé" : "Nouvel employé"}
+            {employee ? t('edit_employee') : t('new_employee')}
           </DialogTitle>
           <DialogDescription>
             {employee 
-              ? "Modifiez les informations de l'employé" 
-              : "Ajoutez un nouvel employé à votre équipe"
+              ? t('edit_employee_info_description')
+              : t('add_employee_team_description')
             }
           </DialogDescription>
         </DialogHeader>
@@ -152,56 +168,58 @@ export const EmployeeDialog = ({
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="first_name">Prénom *</Label>
+                <Label htmlFor="first_name">{t('first_name')} *</Label>
                 <Input
                   id="first_name"
                   value={formData.first_name}
                   onChange={(e) => setFormData(prev => ({ ...prev, first_name: e.target.value }))}
+                  placeholder={t('your_first_name')}
                   required
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="last_name">Nom *</Label>
+                <Label htmlFor="last_name">{t('last_name')} *</Label>
                 <Input
                   id="last_name"
                   value={formData.last_name}
                   onChange={(e) => setFormData(prev => ({ ...prev, last_name: e.target.value }))}
+                  placeholder={t('your_last_name')}
                   required
                 />
               </div>
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="position">Poste</Label>
+              <Label htmlFor="position">{t('position')}</Label>
               <Input
                 id="position"
                 value={formData.position}
                 onChange={(e) => setFormData(prev => ({ ...prev, position: e.target.value }))}
-                placeholder="ex: Maçon, Électricien, Chef de chantier..."
+                placeholder={t('position_placeholder')}
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{t('email')}</Label>
               <Input
                 id="email"
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                placeholder="email@exemple.com"
+                placeholder={t('email_placeholder')}
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="phone">Téléphone</Label>
+              <Label htmlFor="phone">{t('phone')}</Label>
               <Input
                 id="phone"
                 type="tel"
                 value={formData.phone}
                 onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                placeholder="06 12 34 56 78"
+                placeholder={t('phone_placeholder')}
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="hourly_rate">Taux horaire (€)</Label>
+                <Label htmlFor="hourly_rate">{t('hourly_rate')} ({getCurrencySymbol()})</Label>
                 <Input
                   id="hourly_rate"
                   type="number"
@@ -209,11 +227,11 @@ export const EmployeeDialog = ({
                   min="0"
                   value={formData.hourly_rate}
                   onChange={(e) => setFormData(prev => ({ ...prev, hourly_rate: e.target.value }))}
-                  placeholder="25.00"
+                  placeholder={t('hourly_rate_placeholder')}
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="hire_date">Date d'embauche</Label>
+                <Label htmlFor="hire_date">{t('hire_date')}</Label>
                 <Input
                   id="hire_date"
                   type="date"
@@ -230,14 +248,14 @@ export const EmployeeDialog = ({
               onClick={() => onOpenChange(false)}
               disabled={loading}
             >
-              Annuler
+              {t('cancel')}
             </Button>
             <Button 
               type="submit" 
               disabled={loading}
               className="bg-orange-600 hover:bg-orange-700"
             >
-              {loading ? "Sauvegarde..." : (employee ? "Modifier" : "Créer")}
+              {loading ? t('saving') : (employee ? t('modify') : t('create'))}
             </Button>
           </DialogFooter>
         </form>
