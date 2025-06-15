@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { UserPreferencesProvider } from "@/contexts/UserPreferencesContext";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
@@ -31,14 +32,46 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<Auth />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/dashboard/projects" element={<Projects />} />
-              <Route path="/dashboard/employees" element={<Employees />} />
-              <Route path="/dashboard/materials" element={<Materials />} />
-              <Route path="/dashboard/tasks" element={<Tasks />} />
-              <Route path="/dashboard/time-entries" element={<TimeEntries />} />
-              <Route path="/dashboard/expenses" element={<Expenses />} />
-              <Route path="/dashboard/profile" element={<Profile />} />
+              <Route path="/dashboard" element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              } />
+              <Route path="/dashboard/projects" element={
+                <ProtectedRoute>
+                  <Projects />
+                </ProtectedRoute>
+              } />
+              <Route path="/dashboard/employees" element={
+                <ProtectedRoute>
+                  <Employees />
+                </ProtectedRoute>
+              } />
+              <Route path="/dashboard/materials" element={
+                <ProtectedRoute>
+                  <Materials />
+                </ProtectedRoute>
+              } />
+              <Route path="/dashboard/tasks" element={
+                <ProtectedRoute>
+                  <Tasks />
+                </ProtectedRoute>
+              } />
+              <Route path="/dashboard/time-entries" element={
+                <ProtectedRoute>
+                  <TimeEntries />
+                </ProtectedRoute>
+              } />
+              <Route path="/dashboard/expenses" element={
+                <ProtectedRoute>
+                  <Expenses />
+                </ProtectedRoute>
+              } />
+              <Route path="/dashboard/profile" element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              } />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
