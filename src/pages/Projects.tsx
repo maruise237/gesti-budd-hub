@@ -10,6 +10,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Plus, Edit, Trash2, Calendar, DollarSign, MapPin } from "lucide-react";
 import { ProjectDialog } from "@/components/ProjectDialog";
 import { useToast } from "@/hooks/use-toast";
+import { useGlobalPreferences } from "@/hooks/useGlobalPreferences";
 
 interface Project {
   id: string;
@@ -33,6 +34,7 @@ const Projects = () => {
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const { user } = useAuth();
   const { toast } = useToast();
+  const { t, formatCurrency } = useGlobalPreferences();
 
   useEffect(() => {
     if (user) {
@@ -53,8 +55,8 @@ const Projects = () => {
     } catch (error) {
       console.error("Erreur lors du chargement des projets:", error);
       toast({
-        title: "Erreur",
-        description: "Impossible de charger les projets",
+        title: t('error'),
+        description: t('unable_to_load_profile'),
         variant: "destructive",
       });
     } finally {
@@ -63,7 +65,7 @@ const Projects = () => {
   };
 
   const handleDelete = async (projectId: string) => {
-    if (!confirm("Êtes-vous sûr de vouloir supprimer ce projet ?")) return;
+    if (!confirm(t('currentLanguage') === 'fr' ? "Êtes-vous sûr de vouloir supprimer ce projet ?" : "Are you sure you want to delete this project?")) return;
 
     try {
       const { error } = await supabase
@@ -75,14 +77,14 @@ const Projects = () => {
 
       setProjects(projects.filter(p => p.id !== projectId));
       toast({
-        title: "Succès",
-        description: "Projet supprimé avec succès",
+        title: t('success'),
+        description: t('currentLanguage') === 'fr' ? "Projet supprimé avec succès" : "Project deleted successfully",
       });
     } catch (error) {
       console.error("Erreur lors de la suppression:", error);
       toast({
-        title: "Erreur",
-        description: "Impossible de supprimer le projet",
+        title: t('error'),
+        description: t('currentLanguage') === 'fr' ? "Impossible de supprimer le projet" : "Unable to delete project",
         variant: "destructive",
       });
     }
@@ -106,15 +108,15 @@ const Projects = () => {
   const getStatusText = (status: string | null) => {
     switch (status) {
       case "completed":
-        return "Terminé";
+        return t('currentLanguage') === 'fr' ? "Terminé" : "Completed";
       case "in_progress":
-        return "En cours";
+        return t('currentLanguage') === 'fr' ? "En cours" : "In Progress";
       case "planning":
-        return "Planification";
+        return t('currentLanguage') === 'fr' ? "Planification" : "Planning";
       case "on_hold":
-        return "En pause";
+        return t('currentLanguage') === 'fr' ? "En pause" : "On Hold";
       default:
-        return "Non défini";
+        return t('currentLanguage') === 'fr' ? "Non défini" : "Not defined";
     }
   };
 
@@ -136,9 +138,9 @@ const Projects = () => {
         <div className="space-y-6">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Projets</h1>
+              <h1 className="text-3xl font-bold text-gray-900">{t('projects')}</h1>
               <p className="text-gray-600">
-                Gérez vos projets de construction
+                {t('currentLanguage') === 'fr' ? 'Gérez vos projets de construction' : 'Manage your construction projects'}
               </p>
             </div>
             <Button 
@@ -149,7 +151,7 @@ const Projects = () => {
               className="bg-orange-600 hover:bg-orange-700"
             >
               <Plus className="h-4 w-4 mr-2" />
-              Nouveau projet
+              {t('currentLanguage') === 'fr' ? 'Nouveau projet' : 'New Project'}
             </Button>
           </div>
 
@@ -161,10 +163,10 @@ const Projects = () => {
                     <Plus className="h-8 w-8 text-orange-600" />
                   </div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                    Aucun projet
+                    {t('currentLanguage') === 'fr' ? 'Aucun projet' : 'No projects'}
                   </h3>
                   <p className="text-gray-600 mb-4">
-                    Commencez par créer votre premier projet
+                    {t('currentLanguage') === 'fr' ? 'Commencez par créer votre premier projet' : 'Start by creating your first project'}
                   </p>
                   <Button 
                     onClick={() => {
@@ -174,7 +176,7 @@ const Projects = () => {
                     className="bg-orange-600 hover:bg-orange-700"
                   >
                     <Plus className="h-4 w-4 mr-2" />
-                    Créer un projet
+                    {t('currentLanguage') === 'fr' ? 'Créer un projet' : 'Create Project'}
                   </Button>
                 </div>
               </CardContent>
@@ -188,7 +190,7 @@ const Projects = () => {
                       <div className="flex-1">
                         <CardTitle className="text-lg">{project.name}</CardTitle>
                         <CardDescription className="mt-1">
-                          {project.client_name || "Client non défini"}
+                          {project.client_name || (t('currentLanguage') === 'fr' ? "Client non défini" : "No client defined")}
                         </CardDescription>
                       </div>
                       <Badge className={getStatusColor(project.status)}>
@@ -214,7 +216,7 @@ const Projects = () => {
                       {project.budget && (
                         <div className="flex items-center text-sm text-gray-600">
                           <DollarSign className="h-4 w-4 mr-2" />
-                          <span>{project.budget.toLocaleString()} €</span>
+                          <span>{formatCurrency(project.budget)}</span>
                         </div>
                       )}
                       
@@ -222,7 +224,7 @@ const Projects = () => {
                         <div className="flex items-center text-sm text-gray-600">
                           <Calendar className="h-4 w-4 mr-2" />
                           <span>
-                            Début: {new Date(project.start_date).toLocaleDateString()}
+                            {t('currentLanguage') === 'fr' ? 'Début:' : 'Start:'} {new Date(project.start_date).toLocaleDateString()}
                           </span>
                         </div>
                       )}
@@ -238,7 +240,7 @@ const Projects = () => {
                         }}
                       >
                         <Edit className="h-4 w-4 mr-1" />
-                        Modifier
+                        {t('modify')}
                       </Button>
                       <Button
                         variant="outline"
@@ -247,7 +249,7 @@ const Projects = () => {
                         className="text-red-600 hover:text-red-700"
                       >
                         <Trash2 className="h-4 w-4 mr-1" />
-                        Supprimer
+                        {t('delete')}
                       </Button>
                     </div>
                   </CardContent>

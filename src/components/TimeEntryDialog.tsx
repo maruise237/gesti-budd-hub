@@ -13,7 +13,7 @@ import { TimeEntryDialogActions } from "./TimeEntryDialogActions";
 import { useTimeEntryForm } from "@/hooks/useTimeEntryForm";
 import { useTimeEntryMutations } from "@/hooks/useTimeEntryMutations";
 import { useTimeEntryData } from "@/hooks/useTimeEntryData";
-import { useTranslation } from "@/hooks/useTranslation";
+import { useGlobalPreferences } from "@/hooks/useGlobalPreferences";
 
 interface TimeEntryDialogProps {
   open: boolean;
@@ -30,7 +30,7 @@ interface TimeEntryDialogProps {
 }
 
 export const TimeEntryDialog = ({ open, onOpenChange, timeEntry }: TimeEntryDialogProps) => {
-  const { t } = useTranslation();
+  const { t } = useGlobalPreferences();
   const { form } = useTimeEntryForm({ timeEntry, open });
   const { projects, employees } = useTimeEntryData(open);
   

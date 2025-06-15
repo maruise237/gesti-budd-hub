@@ -2,14 +2,14 @@
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
-import { useTranslation } from "@/hooks/useTranslation";
+import { useGlobalPreferences } from "@/hooks/useGlobalPreferences";
 
 interface TimeEntryTimeFieldsProps {
   form: UseFormReturn<any>;
 }
 
 export const TimeEntryTimeFields = ({ form }: TimeEntryTimeFieldsProps) => {
-  const { t } = useTranslation();
+  const { t } = useGlobalPreferences();
 
   return (
     <>

@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { useTranslation } from "@/hooks/useTranslation";
+import { useGlobalPreferences } from "@/hooks/useGlobalPreferences";
 
 interface TimeEntryDialogActionsProps {
   onCancel: () => void;
@@ -9,7 +9,7 @@ interface TimeEntryDialogActionsProps {
 }
 
 export const TimeEntryDialogActions = ({ onCancel, isSubmitting, isEditing }: TimeEntryDialogActionsProps) => {
-  const { t } = useTranslation();
+  const { t } = useGlobalPreferences();
 
   return (
     <div className="flex justify-end gap-2 pt-4">

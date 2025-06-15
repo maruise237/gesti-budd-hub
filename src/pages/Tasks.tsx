@@ -12,6 +12,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { TaskDialog } from "@/components/TaskDialog";
 import { format } from "date-fns";
 import { toast } from "@/hooks/use-toast";
+import { useGlobalPreferences } from "@/hooks/useGlobalPreferences";
 
 interface Task {
   id: string;
@@ -39,6 +40,7 @@ const Tasks = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const queryClient = useQueryClient();
+  const { t } = useGlobalPreferences();
 
   const { data: tasks, isLoading } = useQuery({
     queryKey: ["tasks"],
@@ -70,14 +72,14 @@ const Tasks = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
       toast({
-        title: "Tâche supprimée",
-        description: "La tâche a été supprimée avec succès.",
+        title: t('currentLanguage') === 'fr' ? "Tâche supprimée" : "Task Deleted",
+        description: t('currentLanguage') === 'fr' ? "La tâche a été supprimée avec succès." : "Task has been deleted successfully.",
       });
     },
     onError: (error) => {
       toast({
-        title: "Erreur",
-        description: "Impossible de supprimer la tâche.",
+        title: t('error'),
+        description: t('currentLanguage') === 'fr' ? "Impossible de supprimer la tâche." : "Unable to delete task.",
         variant: "destructive",
       });
       console.error("Error deleting task:", error);
@@ -113,26 +115,26 @@ const Tasks = () => {
   const getStatusLabel = (status: string | null) => {
     switch (status) {
       case "completed":
-        return "Terminé";
+        return t('currentLanguage') === 'fr' ? "Terminé" : "Completed";
       case "in_progress":
-        return "En cours";
+        return t('currentLanguage') === 'fr' ? "En cours" : "In Progress";
       case "todo":
-        return "À faire";
+        return t('currentLanguage') === 'fr' ? "À faire" : "To Do";
       default:
-        return "Non défini";
+        return t('currentLanguage') === 'fr' ? "Non défini" : "Not Defined";
     }
   };
 
   const getPriorityLabel = (priority: string | null) => {
     switch (priority) {
       case "high":
-        return "Élevée";
+        return t('currentLanguage') === 'fr' ? "Élevée" : "High";
       case "medium":
-        return "Moyenne";
+        return t('currentLanguage') === 'fr' ? "Moyenne" : "Medium";
       case "low":
-        return "Faible";
+        return t('currentLanguage') === 'fr' ? "Faible" : "Low";
       default:
-        return "Non définie";
+        return t('currentLanguage') === 'fr' ? "Non définie" : "Not Defined";
     }
   };
 
@@ -142,7 +144,7 @@ const Tasks = () => {
   };
 
   const handleDeleteTask = (taskId: string) => {
-    if (confirm("Êtes-vous sûr de vouloir supprimer cette tâche ?")) {
+    if (confirm(t('currentLanguage') === 'fr' ? "Êtes-vous sûr de vouloir supprimer cette tâche ?" : "Are you sure you want to delete this task?")) {
       deleteTaskMutation.mutate(taskId);
     }
   };
@@ -170,14 +172,14 @@ const Tasks = () => {
         <div className="space-y-6">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Gestion des Tâches</h1>
+              <h1 className="text-2xl font-bold text-gray-900">{t('tasks')}</h1>
               <p className="text-gray-600">
-                Gérez les tâches de vos projets et assignez-les à vos employés
+                {t('currentLanguage') === 'fr' ? 'Gérez les tâches de vos projets et assignez-les à vos employés' : 'Manage your project tasks and assign them to your employees'}
               </p>
             </div>
             <Button onClick={() => setIsDialogOpen(true)}>
               <Plus className="h-4 w-4 mr-2" />
-              Nouvelle Tâche
+              {t('currentLanguage') === 'fr' ? 'Nouvelle Tâche' : 'New Task'}
             </Button>
           </div>
 
@@ -209,7 +211,7 @@ const Tasks = () => {
                     <div className="space-y-2 text-sm text-gray-600">
                       {task.projects && (
                         <div className="flex items-center">
-                          <span className="font-medium">Projet:</span>
+                          <span className="font-medium">{t('project')}:</span>
                           <span className="ml-2">{task.projects.name}</span>
                         </div>
                       )}
@@ -227,16 +229,16 @@ const Tasks = () => {
                         <div className="flex items-center">
                           <Calendar className="h-4 w-4 mr-1" />
                           <span>
-                            Échéance: {format(new Date(task.due_date), "dd/MM/yyyy")}
+                            {t('currentLanguage') === 'fr' ? 'Échéance:' : 'Due:'} {format(new Date(task.due_date), "dd/MM/yyyy")}
                           </span>
                         </div>
                       )}
                       
                       {task.estimated_hours && (
                         <div className="flex items-center">
-                          <span>Estimation: {task.estimated_hours}h</span>
+                          <span>{t('currentLanguage') === 'fr' ? 'Estimation:' : 'Estimate:'} {task.estimated_hours}h</span>
                           {task.actual_hours && (
-                            <span className="ml-2">| Réel: {task.actual_hours}h</span>
+                            <span className="ml-2">| {t('currentLanguage') === 'fr' ? 'Réel:' : 'Actual:'} {task.actual_hours}h</span>
                           )}
                         </div>
                       )}
@@ -248,14 +250,14 @@ const Tasks = () => {
                         size="sm" 
                         onClick={() => handleEditTask(task)}
                       >
-                        Modifier
+                        {t('modify')}
                       </Button>
                       <Button 
                         variant="outline" 
                         size="sm" 
                         onClick={() => handleDeleteTask(task.id)}
                       >
-                        Supprimer
+                        {t('delete')}
                       </Button>
                     </div>
                   </CardContent>
@@ -267,14 +269,14 @@ const Tasks = () => {
               <CardContent className="flex flex-col items-center justify-center py-12">
                 <div className="text-center space-y-4">
                   <h3 className="text-lg font-medium text-gray-900">
-                    Aucune tâche trouvée
+                    {t('currentLanguage') === 'fr' ? 'Aucune tâche trouvée' : 'No tasks found'}
                   </h3>
                   <p className="text-gray-600">
-                    Commencez par créer votre première tâche.
+                    {t('currentLanguage') === 'fr' ? 'Commencez par créer votre première tâche.' : 'Start by creating your first task.'}
                   </p>
                   <Button onClick={() => setIsDialogOpen(true)}>
                     <Plus className="h-4 w-4 mr-2" />
-                    Créer une Tâche
+                    {t('currentLanguage') === 'fr' ? 'Créer une Tâche' : 'Create Task'}
                   </Button>
                 </div>
               </CardContent>

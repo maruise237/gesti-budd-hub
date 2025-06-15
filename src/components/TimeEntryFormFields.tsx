@@ -2,7 +2,7 @@
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UseFormReturn } from "react-hook-form";
-import { useTranslation } from "@/hooks/useTranslation";
+import { useGlobalPreferences } from "@/hooks/useGlobalPreferences";
 
 interface TimeEntryFormFieldsProps {
   form: UseFormReturn<any>;
@@ -11,7 +11,7 @@ interface TimeEntryFormFieldsProps {
 }
 
 export const TimeEntryFormFields = ({ form, projects, employees }: TimeEntryFormFieldsProps) => {
-  const { t } = useTranslation();
+  const { t } = useGlobalPreferences();
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

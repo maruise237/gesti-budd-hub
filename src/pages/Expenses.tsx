@@ -15,7 +15,7 @@ import { useExpenses } from "@/hooks/useExpenses";
 import { useProjects } from "@/hooks/useProjects";
 import { useExpenseFilters } from "@/hooks/useExpenseFilters";
 import { useExpensesExport } from "@/hooks/useExpensesExport";
-import { useTranslation } from "@/hooks/useTranslation";
+import { useGlobalPreferences } from "@/hooks/useGlobalPreferences";
 
 interface Expense {
   id: string;
@@ -29,7 +29,7 @@ interface Expense {
 }
 
 const Expenses = () => {
-  const { t } = useTranslation();
+  const { t } = useGlobalPreferences();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [exportDialogOpen, setExportDialogOpen] = useState(false);
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);

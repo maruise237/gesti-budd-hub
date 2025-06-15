@@ -16,6 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { useGlobalPreferences } from "@/hooks/useGlobalPreferences";
 
 interface Project {
   id: string;
@@ -54,6 +55,7 @@ export const ProjectDialog = ({ open, onOpenChange, project, onProjectSaved }: P
   });
   const { user } = useAuth();
   const { toast } = useToast();
+  const { t } = useGlobalPreferences();
 
   useEffect(() => {
     if (project) {
@@ -89,8 +91,8 @@ export const ProjectDialog = ({ open, onOpenChange, project, onProjectSaved }: P
     e.preventDefault();
     if (!formData.name.trim()) {
       toast({
-        title: "Erreur",
-        description: "Le nom du projet est obligatoire",
+        title: t('error'),
+        description: t('currentLanguage') === 'fr' ? "Le nom du projet est obligatoire" : "Project name is required",
         variant: "destructive",
       });
       return;
@@ -121,8 +123,8 @@ export const ProjectDialog = ({ open, onOpenChange, project, onProjectSaved }: P
         if (error) throw error;
 
         toast({
-          title: "Succès",
-          description: "Projet modifié avec succès",
+          title: t('success'),
+          description: t('currentLanguage') === 'fr' ? "Projet modifié avec succès" : "Project updated successfully",
         });
       } else {
         const { error } = await supabase
@@ -132,8 +134,8 @@ export const ProjectDialog = ({ open, onOpenChange, project, onProjectSaved }: P
         if (error) throw error;
 
         toast({
-          title: "Succès",
-          description: "Projet créé avec succès",
+          title: t('success'),
+          description: t('currentLanguage') === 'fr' ? "Projet créé avec succès" : "Project created successfully",
         });
       }
 
@@ -141,8 +143,8 @@ export const ProjectDialog = ({ open, onOpenChange, project, onProjectSaved }: P
     } catch (error) {
       console.error("Erreur lors de la sauvegarde:", error);
       toast({
-        title: "Erreur",
-        description: "Impossible de sauvegarder le projet",
+        title: t('error'),
+        description: t('currentLanguage') === 'fr' ? "Impossible de sauvegarder le projet" : "Unable to save project",
         variant: "destructive",
       });
     } finally {
@@ -155,12 +157,12 @@ export const ProjectDialog = ({ open, onOpenChange, project, onProjectSaved }: P
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            {project ? "Modifier le projet" : "Nouveau projet"}
+            {project ? t('currentLanguage') === 'fr' ? "Modifier le projet" : "Edit Project" : t('currentLanguage') === 'fr' ? "Nouveau projet" : "New Project"}
           </DialogTitle>
           <DialogDescription>
             {project 
-              ? "Modifiez les informations du projet." 
-              : "Créez un nouveau projet de construction."
+              ? t('currentLanguage') === 'fr' ? "Modifiez les informations du projet." : "Edit project information."
+              : t('currentLanguage') === 'fr' ? "Créez un nouveau projet de construction." : "Create a new construction project."
             }
           </DialogDescription>
         </DialogHeader>
@@ -168,46 +170,46 @@ export const ProjectDialog = ({ open, onOpenChange, project, onProjectSaved }: P
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="name">Nom du projet *</Label>
+              <Label htmlFor="name">{t('currentLanguage') === 'fr' ? 'Nom du projet' : 'Project Name'} *</Label>
               <Input
                 id="name"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="Nom du projet"
+                placeholder={t('currentLanguage') === 'fr' ? "Nom du projet" : "Project name"}
                 required
               />
             </div>
             
             <div>
-              <Label htmlFor="status">Statut</Label>
+              <Label htmlFor="status">{t('currentLanguage') === 'fr' ? 'Statut' : 'Status'}</Label>
               <Select value={formData.status} onValueChange={(value) => setFormData({ ...formData, status: value })}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Sélectionner le statut" />
+                  <SelectValue placeholder={t('currentLanguage') === 'fr' ? "Sélectionner le statut" : "Select status"} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="planning">Planification</SelectItem>
-                  <SelectItem value="in_progress">En cours</SelectItem>
-                  <SelectItem value="on_hold">En pause</SelectItem>
-                  <SelectItem value="completed">Terminé</SelectItem>
+                  <SelectItem value="planning">{t('currentLanguage') === 'fr' ? 'Planification' : 'Planning'}</SelectItem>
+                  <SelectItem value="in_progress">{t('currentLanguage') === 'fr' ? 'En cours' : 'In Progress'}</SelectItem>
+                  <SelectItem value="on_hold">{t('currentLanguage') === 'fr' ? 'En pause' : 'On Hold'}</SelectItem>
+                  <SelectItem value="completed">{t('currentLanguage') === 'fr' ? 'Terminé' : 'Completed'}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
 
           <div>
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description">{t('description')}</Label>
             <Textarea
               id="description"
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              placeholder="Description du projet"
+              placeholder={t('currentLanguage') === 'fr' ? "Description du projet" : "Project description"}
               rows={3}
             />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="budget">Budget (€)</Label>
+              <Label htmlFor="budget">{t('currentLanguage') === 'fr' ? 'Budget' : 'Budget'}</Label>
               <Input
                 id="budget"
                 type="number"
@@ -220,19 +222,19 @@ export const ProjectDialog = ({ open, onOpenChange, project, onProjectSaved }: P
             </div>
             
             <div>
-              <Label htmlFor="address">Adresse</Label>
+              <Label htmlFor="address">{t('currentLanguage') === 'fr' ? 'Adresse' : 'Address'}</Label>
               <Input
                 id="address"
                 value={formData.address}
                 onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                placeholder="Adresse du chantier"
+                placeholder={t('currentLanguage') === 'fr' ? "Adresse du chantier" : "Construction site address"}
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="start_date">Date de début</Label>
+              <Label htmlFor="start_date">{t('currentLanguage') === 'fr' ? 'Date de début' : 'Start Date'}</Label>
               <Input
                 id="start_date"
                 type="date"
@@ -242,7 +244,7 @@ export const ProjectDialog = ({ open, onOpenChange, project, onProjectSaved }: P
             </div>
             
             <div>
-              <Label htmlFor="end_date">Date de fin prévue</Label>
+              <Label htmlFor="end_date">{t('currentLanguage') === 'fr' ? 'Date de fin prévue' : 'Expected End Date'}</Label>
               <Input
                 id="end_date"
                 type="date"
@@ -253,21 +255,21 @@ export const ProjectDialog = ({ open, onOpenChange, project, onProjectSaved }: P
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-lg font-medium">Informations client</h3>
+            <h3 className="text-lg font-medium">{t('currentLanguage') === 'fr' ? 'Informations client' : 'Client Information'}</h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="client_name">Nom du client</Label>
+                <Label htmlFor="client_name">{t('currentLanguage') === 'fr' ? 'Nom du client' : 'Client Name'}</Label>
                 <Input
                   id="client_name"
                   value={formData.client_name}
                   onChange={(e) => setFormData({ ...formData, client_name: e.target.value })}
-                  placeholder="Nom du client"
+                  placeholder={t('currentLanguage') === 'fr' ? "Nom du client" : "Client name"}
                 />
               </div>
               
               <div>
-                <Label htmlFor="client_email">Email du client</Label>
+                <Label htmlFor="client_email">{t('currentLanguage') === 'fr' ? 'Email du client' : 'Client Email'}</Label>
                 <Input
                   id="client_email"
                   type="email"
@@ -279,22 +281,22 @@ export const ProjectDialog = ({ open, onOpenChange, project, onProjectSaved }: P
             </div>
             
             <div>
-              <Label htmlFor="client_phone">Téléphone du client</Label>
+              <Label htmlFor="client_phone">{t('currentLanguage') === 'fr' ? 'Téléphone du client' : 'Client Phone'}</Label>
               <Input
                 id="client_phone"
                 value={formData.client_phone}
                 onChange={(e) => setFormData({ ...formData, client_phone: e.target.value })}
-                placeholder="01 23 45 67 89"
+                placeholder={t('phone_placeholder')}
               />
             </div>
           </div>
 
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Annuler
+              {t('cancel')}
             </Button>
             <Button type="submit" disabled={loading} className="bg-orange-600 hover:bg-orange-700">
-              {loading ? "Sauvegarde..." : project ? "Modifier" : "Créer"}
+              {loading ? t('saving') : project ? t('modify') : t('create')}
             </Button>
           </DialogFooter>
         </form>

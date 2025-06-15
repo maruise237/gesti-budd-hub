@@ -2,14 +2,14 @@
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { UseFormReturn } from "react-hook-form";
-import { useTranslation } from "@/hooks/useTranslation";
+import { useGlobalPreferences } from "@/hooks/useGlobalPreferences";
 
 interface TimeEntryDescriptionFieldProps {
   form: UseFormReturn<any>;
 }
 
 export const TimeEntryDescriptionField = ({ form }: TimeEntryDescriptionFieldProps) => {
-  const { t } = useTranslation();
+  const { t } = useGlobalPreferences();
 
   return (
     <FormField
