@@ -10,7 +10,7 @@ import { Header } from "@/components/Header";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
       <Header />
       <HeroSection />
       <StatsSection />

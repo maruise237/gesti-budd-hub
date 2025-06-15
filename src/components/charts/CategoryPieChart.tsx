@@ -36,17 +36,17 @@ export const CategoryPieChart = ({ data, colors, chartConfig }: CategoryPieChart
   };
 
   return (
-    <Card className="group bg-white/70 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animate-fade-in hover-lift">
+    <Card className="group bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animate-fade-in hover-lift">
       <CardHeader className="pb-2 sm:pb-3">
         <div className="flex items-center justify-between">
           <div className="flex-1">
-            <CardTitle className="text-base sm:text-lg font-semibold text-gray-800 flex items-center space-x-2">
-              <div className="p-1.5 sm:p-2 rounded-xl bg-purple-50 group-hover:scale-110 transition-transform duration-300">
-                <PieChartIcon className="h-4 w-4 sm:h-5 sm:w-5 text-purple-600" />
+            <CardTitle className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-100 flex items-center space-x-2">
+              <div className="p-1.5 sm:p-2 rounded-xl bg-purple-50 dark:bg-purple-900/30 group-hover:scale-110 transition-transform duration-300">
+                <PieChartIcon className="h-4 w-4 sm:h-5 sm:w-5 text-purple-600 dark:text-purple-400" />
               </div>
               <span className="text-sm sm:text-base">{t('expenses_by_category')}</span>
             </CardTitle>
-            <CardDescription className="text-gray-600 mt-1 text-xs sm:text-sm">
+            <CardDescription className="text-gray-600 dark:text-gray-400 mt-1 text-xs sm:text-sm">
               {t('expenses_distribution_by_category')}
             </CardDescription>
           </div>
@@ -84,7 +84,7 @@ export const CategoryPieChart = ({ data, colors, chartConfig }: CategoryPieChart
         </ChartContainer>
         
         {/* Progress indicator */}
-        <div className="mt-3 sm:mt-4 w-full bg-gray-200 rounded-full h-1.5">
+        <div className="mt-3 sm:mt-4 w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
           <div className="bg-gradient-to-r from-purple-500 to-purple-600 h-1.5 rounded-full transition-all duration-1000 ease-out animate-progress" style={{ width: '75%' }}></div>
         </div>
       </CardContent>
