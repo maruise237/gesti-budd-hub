@@ -1,18 +1,16 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/contexts/AuthContext";
-import { useUserPreferences } from "@/contexts/UserPreferencesContext";
-import { useTranslation } from "@/hooks/useTranslation";
+import { useGlobalPreferences } from "@/hooks/useGlobalPreferences";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Upload, User, Palette, Globe } from "lucide-react";
+import { LanguageCurrencySelector } from "./LanguageCurrencySelector";
 
 interface ProfileData {
   first_name: string | null;
@@ -23,58 +21,9 @@ interface ProfileData {
   company_name: string | null;
 }
 
-const AFRICAN_CURRENCIES = [
-  { value: 'XOF', label: 'Franc CFA BCEAO (XOF)', countries: 'Bénin, Burkina Faso, Côte d\'Ivoire, Guinée-Bissau, Mali, Niger, Sénégal, Togo' },
-  { value: 'XAF', label: 'Franc CFA BEAC (XAF)', countries: 'Cameroun, République centrafricaine, Tchad, République du Congo, Guinée équatoriale, Gabon' },
-  { value: 'MAD', label: 'Dirham marocain (MAD)', countries: 'Maroc' },
-  { value: 'DZD', label: 'Dinar algérien (DZD)', countries: 'Algérie' },
-  { value: 'TND', label: 'Dinar tunisien (TND)', countries: 'Tunisie' },
-  { value: 'EGP', label: 'Livre égyptienne (EGP)', countries: 'Égypte' },
-  { value: 'ZAR', label: 'Rand sud-africain (ZAR)', countries: 'Afrique du Sud' },
-  { value: 'NGN', label: 'Naira nigérian (NGN)', countries: 'Nigeria' },
-  { value: 'GHS', label: 'Cedi ghanéen (GHS)', countries: 'Ghana' },
-  { value: 'KES', label: 'Shilling kényan (KES)', countries: 'Kenya' },
-  { value: 'UGX', label: 'Shilling ougandais (UGX)', countries: 'Ouganda' },
-  { value: 'TZS', label: 'Shilling tanzanien (TZS)', countries: 'Tanzanie' },
-  { value: 'RWF', label: 'Franc rwandais (RWF)', countries: 'Rwanda' },
-  { value: 'ETB', label: 'Birr éthiopien (ETB)', countries: 'Éthiopie' },
-  { value: 'MZN', label: 'Metical mozambicain (MZN)', countries: 'Mozambique' },
-  { value: 'BWP', label: 'Pula botswanais (BWP)', countries: 'Botswana' },
-  { value: 'SZL', label: 'Lilangeni eswatinien (SZL)', countries: 'Eswatini' },
-  { value: 'LSL', label: 'Loti lesothien (LSL)', countries: 'Lesotho' },
-  { value: 'NAD', label: 'Dollar namibien (NAD)', countries: 'Namibie' },
-  { value: 'AOA', label: 'Kwanza angolais (AOA)', countries: 'Angola' },
-  { value: 'MWK', label: 'Kwacha malawien (MWK)', countries: 'Malawi' },
-  { value: 'ZMW', label: 'Kwacha zambien (ZMW)', countries: 'Zambie' },
-  { value: 'ZWL', label: 'Dollar zimbabwéen (ZWL)', countries: 'Zimbabwe' },
-  { value: 'MGA', label: 'Ariary malgache (MGA)', countries: 'Madagascar' },
-  { value: 'MUR', label: 'Roupie mauricienne (MUR)', countries: 'Maurice' },
-  { value: 'SCR', label: 'Roupie seychelloise (SCR)', countries: 'Seychelles' },
-  { value: 'KMF', label: 'Franc comorien (KMF)', countries: 'Comores' },
-  { value: 'DJF', label: 'Franc djiboutien (DJF)', countries: 'Djibouti' },
-  { value: 'SOS', label: 'Shilling somalien (SOS)', countries: 'Somalie' },
-  { value: 'ERN', label: 'Nafka érythréen (ERN)', countries: 'Érythrée' },
-  { value: 'SLL', label: 'Leone sierra-léonais (SLL)', countries: 'Sierra Leone' },
-  { value: 'GMD', label: 'Dalasi gambien (GMD)', countries: 'Gambie' },
-  { value: 'GNF', label: 'Franc guinéen (GNF)', countries: 'Guinée' },
-  { value: 'LRD', label: 'Dollar libérien (LRD)', countries: 'Liberia' },
-  { value: 'CVE', label: 'Escudo cap-verdien (CVE)', countries: 'Cap-Vert' },
-  { value: 'STN', label: 'Dobra santoméen (STN)', countries: 'São Tomé-et-Príncipe' },
-  { value: 'SHP', label: 'Livre de Sainte-Hélène (SHP)', countries: 'Sainte-Hélène' }
-];
-
-const OTHER_CURRENCIES = [
-  { value: 'EUR', label: 'Euro (€)', countries: 'Zone Euro' },
-  { value: 'USD', label: 'Dollar américain ($)', countries: 'États-Unis' },
-  { value: 'GBP', label: 'Livre sterling (£)', countries: 'Royaume-Uni' },
-  { value: 'CAD', label: 'Dollar canadien (CAD)', countries: 'Canada' },
-  { value: 'CHF', label: 'Franc suisse (CHF)', countries: 'Suisse' }
-];
-
 export const ProfileCustomization = () => {
   const { user } = useAuth();
-  const { preferences, updatePreferences } = useUserPreferences();
-  const { t } = useTranslation();
+  const { t, changeTheme, preferences, loading: preferencesLoading } = useGlobalPreferences();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -195,16 +144,16 @@ export const ProfileCustomization = () => {
     }
   };
 
-  const handlePreferenceChange = async (key: keyof typeof preferences, value: string) => {
+  const handleThemeChange = async (value: string) => {
     try {
-      console.log(`Updating ${key} to:`, value);
-      await updatePreferences({ [key]: value });
+      console.log(`Updating theme to:`, value);
+      await changeTheme(value);
       toast({
         title: t('success'),
         description: t('preferences_updated_successfully'),
       });
     } catch (error) {
-      console.error(`Error updating ${key}:`, error);
+      console.error(`Error updating theme:`, error);
       toast({
         title: t('error'),
         description: t('unable_to_update_preferences'),
@@ -304,7 +253,7 @@ export const ProfileCustomization = () => {
         </CardContent>
       </Card>
 
-      {/* Appearance Preferences */}
+      {/* Appearance Preferences - Simplifié avec le nouveau composant */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -318,57 +267,24 @@ export const ProfileCustomization = () => {
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="theme">{t('theme')}</Label>
-            <Select
-              value={preferences.theme}
-              onValueChange={(value) => handlePreferenceChange('theme', value)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder={t('select_theme')} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="light">{t('light')}</SelectItem>
-                <SelectItem value="dark">{t('dark')}</SelectItem>
-                <SelectItem value="system">{t('system')}</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="currency">{t('currency')}</Label>
-            <Select
-              value={preferences.currency}
-              onValueChange={(value) => handlePreferenceChange('currency', value)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder={t('select_currency')} />
-              </SelectTrigger>
-              <SelectContent className="max-h-[300px]">
-                <div className="px-2 py-1 text-sm font-semibold text-muted-foreground">
-                  {t('international_currencies')}
-                </div>
-                {OTHER_CURRENCIES.map((currency) => (
-                  <SelectItem key={currency.value} value={currency.value}>
-                    {currency.label}
-                  </SelectItem>
-                ))}
-                <div className="px-2 py-1 text-sm font-semibold text-muted-foreground border-t mt-2 pt-2">
-                  {t('african_currencies')}
-                </div>
-                {AFRICAN_CURRENCIES.map((currency) => (
-                  <SelectItem key={currency.value} value={currency.value}>
-                    <div className="flex flex-col">
-                      <span>{currency.label}</span>
-                      <span className="text-xs text-muted-foreground">{currency.countries}</span>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <div className="flex gap-2">
+              {['light', 'dark', 'system'].map((theme) => (
+                <Button
+                  key={theme}
+                  variant={preferences.theme === theme ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => handleThemeChange(theme)}
+                  disabled={preferencesLoading}
+                >
+                  {t(theme)}
+                </Button>
+              ))}
+            </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Regional Preferences */}
+      {/* Regional Preferences - Utilise le nouveau composant global */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -379,47 +295,8 @@ export const ProfileCustomization = () => {
             {t('configure_language_and_timezone')}
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="timezone">{t('timezone')}</Label>
-              <Select
-                value={profile.timezone || "Europe/Paris"}
-                onValueChange={(value) => setProfile(prev => ({ ...prev, timezone: value }))}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder={t('select_timezone')} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Europe/Paris">Europe/Paris (GMT+1)</SelectItem>
-                  <SelectItem value="Europe/London">Europe/London (GMT+0)</SelectItem>
-                  <SelectItem value="America/New_York">America/New_York (GMT-5)</SelectItem>
-                  <SelectItem value="America/Los_Angeles">America/Los_Angeles (GMT-8)</SelectItem>
-                  <SelectItem value="Asia/Tokyo">Asia/Tokyo (GMT+9)</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="language">{t('language')}</Label>
-              <Select
-                value={preferences.language}
-                onValueChange={(value) => handlePreferenceChange('language', value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder={t('select_language')} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="fr">Français</SelectItem>
-                  <SelectItem value="en">English</SelectItem>
-                  <SelectItem value="es">Español</SelectItem>
-                  <SelectItem value="de">Deutsch</SelectItem>
-                  <SelectItem value="it">Italiano</SelectItem>
-                  <SelectItem value="pt">Português</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
+        <CardContent>
+          <LanguageCurrencySelector />
         </CardContent>
       </Card>
     </div>

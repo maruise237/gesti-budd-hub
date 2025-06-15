@@ -71,22 +71,65 @@ const CURRENCY_SYMBOLS: { [key: string]: string } = {
   'SHP': '£'
 };
 
+// Clés pour localStorage
+const STORAGE_KEYS = {
+  CURRENCY: 'gestibud_currency',
+  LANGUAGE: 'gestibud_language',  
+  THEME: 'gestibud_theme'
+};
+
+// Valeurs par défaut
+const DEFAULT_PREFERENCES: UserPreferences = {
+  currency: 'EUR',
+  language: 'fr',
+  theme: 'light'
+};
+
+// Fonctions utilitaires pour localStorage
+const getStoredPreference = (key: string, defaultValue: string): string => {
+  try {
+    return localStorage.getItem(key) || defaultValue;
+  } catch (error) {
+    console.warn(`Failed to read ${key} from localStorage:`, error);
+    return defaultValue;
+  }
+};
+
+const setStoredPreference = (key: string, value: string): void => {
+  try {
+    localStorage.setItem(key, value);
+  } catch (error) {
+    console.warn(`Failed to save ${key} to localStorage:`, error);
+  }
+};
+
 export const UserPreferencesProvider = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuth();
-  const [preferences, setPreferences] = useState<UserPreferences>({
-    currency: 'EUR',
-    language: 'fr',
-    theme: 'light'
-  });
   const [loading, setLoading] = useState(true);
+  
+  // Initialisation immédiate depuis localStorage
+  const [preferences, setPreferences] = useState<UserPreferences>(() => ({
+    currency: getStoredPreference(STORAGE_KEYS.CURRENCY, DEFAULT_PREFERENCES.currency),
+    language: getStoredPreference(STORAGE_KEYS.LANGUAGE, DEFAULT_PREFERENCES.language),
+    theme: getStoredPreference(STORAGE_KEYS.THEME, DEFAULT_PREFERENCES.theme)
+  }));
 
+  // Charger les préférences depuis la DB si utilisateur connecté
   useEffect(() => {
     if (user) {
       fetchUserPreferences();
     } else {
+      // Si pas connecté, utiliser uniquement localStorage
       setLoading(false);
     }
   }, [user]);
+
+  // Sauvegarder en localStorage à chaque changement
+  useEffect(() => {
+    setStoredPreference(STORAGE_KEYS.CURRENCY, preferences.currency);
+    setStoredPreference(STORAGE_KEYS.LANGUAGE, preferences.language);
+    setStoredPreference(STORAGE_KEYS.THEME, preferences.theme);
+  }, [preferences]);
 
   const fetchUserPreferences = async () => {
     try {
@@ -102,15 +145,21 @@ export const UserPreferencesProvider = ({ children }: { children: React.ReactNod
       }
 
       if (data) {
-        console.log('User preferences loaded:', data);
-        setPreferences({
-          currency: data.currency || 'EUR',
-          language: data.language || 'fr',
-          theme: data.theme || 'light'
-        });
+        console.log('User preferences loaded from DB:', data);
+        const dbPreferences = {
+          currency: data.currency || preferences.currency,
+          language: data.language || preferences.language,
+          theme: data.theme || preferences.theme
+        };
+        
+        // Mettre à jour seulement si différent
+        if (JSON.stringify(dbPreferences) !== JSON.stringify(preferences)) {
+          setPreferences(dbPreferences);
+        }
       }
     } catch (error) {
       console.error('Error fetching user preferences:', error);
+      // En cas d'erreur, garder les préférences localStorage
     } finally {
       setLoading(false);
     }
@@ -121,23 +170,27 @@ export const UserPreferencesProvider = ({ children }: { children: React.ReactNod
       console.log('Updating preferences:', newPreferences);
       const updatedPreferences = { ...preferences, ...newPreferences };
       
-      // Optimistically update the local state first
+      // Mise à jour optimiste immédiate
       setPreferences(updatedPreferences);
       
-      const { error } = await supabase
-        .from('profiles')
-        .upsert({
-          id: user?.id,
-          currency: updatedPreferences.currency,
-          language: updatedPreferences.language,
-          theme: updatedPreferences.theme,
-          updated_at: new Date().toISOString()
-        });
+      // Sauvegarder en DB si utilisateur connecté
+      if (user) {
+        const { error } = await supabase
+          .from('profiles')
+          .upsert({
+            id: user.id,
+            currency: updatedPreferences.currency,
+            language: updatedPreferences.language,
+            theme: updatedPreferences.theme,
+            updated_at: new Date().toISOString()
+          });
 
-      if (error) {
-        // Revert local state if database update fails
-        setPreferences(preferences);
-        throw error;
+        if (error) {
+          // Revert en cas d'erreur DB
+          console.error('Error saving to DB, reverting:', error);
+          setPreferences(preferences);
+          throw error;
+        }
       }
 
       console.log('Preferences updated successfully:', updatedPreferences);
@@ -149,7 +202,37 @@ export const UserPreferencesProvider = ({ children }: { children: React.ReactNod
 
   const formatCurrency = (amount: number): string => {
     const symbol = CURRENCY_SYMBOLS[preferences.currency] || preferences.currency;
-    return `${amount.toLocaleString()} ${symbol}`;
+    
+    // Utiliser Intl.NumberFormat si supporté
+    try {
+      const currencyLocales: { [key: string]: string } = {
+        'EUR': 'fr-FR',
+        'USD': 'en-US',
+        'GBP': 'en-GB',
+        'CAD': 'en-CA',
+        'CHF': 'de-CH',
+        'XOF': 'fr-FR',
+        'XAF': 'fr-FR',
+        'MAD': 'ar-MA',
+        'DZD': 'ar-DZ',
+        'TND': 'ar-TN',
+        'EGP': 'ar-EG',
+        'ZAR': 'en-ZA',
+        'NGN': 'en-NG',
+        'GHS': 'en-GH',
+        'KES': 'en-KE',
+      };
+
+      const locale = currencyLocales[preferences.currency] || 'fr-FR';
+      
+      return new Intl.NumberFormat(locale, {
+        style: 'currency',
+        currency: preferences.currency,
+      }).format(amount);
+    } catch (error) {
+      // Fallback simple
+      return `${amount.toLocaleString()} ${symbol}`;
+    }
   };
 
   const value = {

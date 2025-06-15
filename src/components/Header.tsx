@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useAuth } from "@/contexts/AuthContext";
 import { Link } from "react-router-dom";
+import { LanguageCurrencySelector } from "./LanguageCurrencySelector";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -33,6 +34,9 @@ export const Header = () => {
           </nav>
 
           <div className="hidden md:flex items-center space-x-2 lg:space-x-4 min-w-0">
+            {/* Sélecteurs de langue et devise compacts */}
+            <LanguageCurrencySelector compact />
+            
             {user ? (
               <Link to="/dashboard">
                 <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-sm">
@@ -95,6 +99,14 @@ export const Header = () => {
               >
                 {t('testimonials')}
               </Link>
+              
+              {/* Sélecteurs dans le menu mobile */}
+              <div className="border-t border-gray-100 pt-2 mt-2">
+                <div className="px-3 py-2">
+                  <LanguageCurrencySelector />
+                </div>
+              </div>
+              
               {user ? (
                 <Link 
                   to="/dashboard"

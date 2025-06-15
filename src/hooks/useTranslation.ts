@@ -110,7 +110,7 @@ const translations: Translations = {
   'materials_category': { fr: 'Matériaux', en: 'Materials', es: 'Materiales', de: 'Materialien', it: 'Materiali', pt: 'Materiais' },
   'labor_category': { fr: 'Main-d\'œuvre', en: 'Labor', es: 'Mano de obra', de: 'Arbeitskraft', it: 'Manodopera', pt: 'Mão de obra' },
   'transport_category': { fr: 'Transport', en: 'Transport', es: 'Transporte', de: 'Transport', it: 'Trasporto', pt: 'Transporte' },
-  'equipment_category': { fr: 'Équipement', en: 'Equipment', es: 'Equipo', de: 'Ausrüstung', it: 'Attrezzatura', pt: 'Equipamento' },
+  'equipment_category': { fr: 'Équipement', en: 'Equipment', es: 'Equipo', de: 'Ausrüst', it: 'Attrezzatura', pt: 'Equipamento' },
   'permits_category': { fr: 'Permis', en: 'Permits', es: 'Permisos', de: 'Genehmigungen', it: 'Permessi', pt: 'Licenças' },
   'insurance_category': { fr: 'Assurance', en: 'Insurance', es: 'Seguro', de: 'Versicherung', it: 'Assicurazione', pt: 'Seguro' },
   'other_category': { fr: 'Autre', en: 'Other', es: 'Otro', de: 'Andere', it: 'Altro', pt: 'Outro' },
