@@ -3,8 +3,8 @@ services:
     build:
       context: .
       args:
-        - VITE_SUPABASE_URL=${VITE_SUPABASE_URL:-https://ickdoazxyioajrgkydii.supabase.co}
-        - VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY:-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlja2RvYXp4eWlvYWpyZ2t5ZGlpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk4OTEzMTYsImV4cCI6MjA2NTQ2NzMxNn0.NusYeeeEbTH9MfNFKy6h3NIqSmYUtY6V7lZdc8UCSk8}
+        - VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
+        - VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}
     ports:
       - "8080:80"
     depends_on:
